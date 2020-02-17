@@ -18,7 +18,7 @@ public final class Preconditions {
           lowerBound = interval.low();
           upperBound = interval.high();
             
-            if(lowerBound <= value <= upperBound) {
+            if(lowerBound < value  && value< upperBound) {
                 return value;
             }
             
