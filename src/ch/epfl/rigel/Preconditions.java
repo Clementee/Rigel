@@ -1,18 +1,33 @@
 package ch.epfl.rigel;
 
 public final class Preconditions {
+    
+    /**
+     * Preconditions private constructor
+     *
+     */
     private Preconditions() {
     }
     
-        // public method checking if the argument selected is valid or not and if not, throwing an exception
-        public static void checkArgument (boolean isTrue) {
+    
+    /**
+     * Method checking if the argument selected is valid or not and if not, throwing an exception
+     *
+     * @param isTrue     (Boolean) : gives the argument of the checked value
+     */
+    public static void checkArgument (boolean isTrue) {
             
             if(!isTrue) {
                 throw new IllegalArgumentException();
             }
         }
         
-     // public method checking if the value chosen is valid in the interval studied. If not throwing exception, else throw the value
+    /**
+     * Method checking if the value chosen is in the interval studied and throw exception if not
+     *
+     * @param interval  (Interval) : gives the studied interval for which we check if the value is in
+     * @param value     (double) : gives the value of the studied number
+     */
      public static double checkInterval (Interval interval, double value) {
           
           double lowerBound;
@@ -22,7 +37,7 @@ public final class Preconditions {
           lowerBound = interval.low();
           upperBound = interval.high();
             
-            if(lowerBound < value  && value< upperBound) {
+            if(lowerBound <= value  && value<= upperBound) {
                 return value;
             }
             
