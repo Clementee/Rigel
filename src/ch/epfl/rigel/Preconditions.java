@@ -28,7 +28,7 @@ public final class Preconditions {
      * @param interval  (Interval) : gives the studied interval for which we check if the value is in
      * @param value     (double) : gives the value of the studied number
      */
-     public static double checkInterval (Interval interval, double value) {
+     public static double checkInInterval (Interval interval, double value) {
           
           double lowerBound;
           double upperBound;

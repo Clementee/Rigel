@@ -6,7 +6,7 @@ import ch.epfl.rigel.Interval;
 
 public class ClosedInterval extends Interval {
 
-    public ClosedInterval closedInterval;
+    public static ClosedInterval closedInterval;
     private double lowerBound;
     private double upperBound;
     
@@ -28,9 +28,9 @@ public class ClosedInterval extends Interval {
      * 
      * @return closedInterval (ClosedInterval) : return the closed interval 
      */
-    public ClosedInterval of(double low, double high) {
+    public static ClosedInterval of(double low, double high) {
         
-        if(low<=high) {
+        if(low<high) {
            closedInterval = new ClosedInterval(low,high);
            return closedInterval;
         }
@@ -46,13 +46,13 @@ public class ClosedInterval extends Interval {
      * 
      * @return closedInterval (ClosedInterval) : return the closed interval 
      */
-    public ClosedInterval symmetric(double size) {
+    public static ClosedInterval symmetric(double size) {
         
-        if(size==0) {
+        if(size<=0) {
             throw new IllegalArgumentException();
         }
         else {
-        closedInterval = new ClosedInterval(-size,size);
+        closedInterval = new ClosedInterval(-size/2,size/2);
         return closedInterval;
     }
     }
@@ -71,7 +71,7 @@ public class ClosedInterval extends Interval {
         }
     }
     
-    private double clip(double v) {
+    double clip(double v) {
         
         if(v<lowerBound) {
             return lowerBound;
