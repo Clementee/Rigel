@@ -28,7 +28,7 @@ public abstract class Interval {
     }
     
     @Override
-    public final boolean equals() {
+    public final boolean equals(Object obj) {
         throw new UnsupportedOperationException();
     }
 }
