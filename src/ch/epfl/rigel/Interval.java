@@ -24,9 +24,10 @@ public abstract class Interval {
 
     @Override
     public final int hashCode() {
-        return super.hashCode();
+        throw new UnsupportedOperationException();
     }
     
+    @Override
     public final boolean equals() {
         throw new UnsupportedOperationException();
     }
