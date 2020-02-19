@@ -28,6 +28,6 @@ public abstract class Interval {
     }
     
     public final boolean equals() {
-        
+        throw new UnsupportedOperationException();
     }
 }
