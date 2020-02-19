@@ -2,23 +2,26 @@ package ch.epfl.rigel.math;
 
 public final class Polynomial extends Object {
     
-    private double[] coeff;
+    private static double[] coeff;
     private double valuePolynomial;
-    private Polynomial polynomial;
     
     private Polynomial() {}
     
     
     // clairement à compléter !!
-    public Polynomial of(double coefficientN, double... coefficients) {
+    public static Polynomial of(double coefficientN, double... coefficients) {
         
         if(coefficientN == 0) {
             throw new IllegalArgumentException();
         }
         
+        if(coefficients == null) {
+            throw new NullPointerException();
+        }
+        
         else {
             coeff[0]=coefficientN;
-            polynomial = new Polynomial();
+            Polynomial polynomial = new Polynomial();
             
             for(int i = 0 ; i<coefficients.length;i++) {
                 coeff[i+1] = coefficients[i];
@@ -58,8 +61,12 @@ public final class Polynomial extends Object {
                     continue;
                 }
                
-                if(coeff[j] != 0) {
-                    string = string + " " + coeff[j];
+                if(coeff[j] > 0) {
+                    string = string + " + " + coeff[j];
+                }
+                
+                if(coeff[j] < 0) {
+                    string = string + " - " + (-coeff[j]);
                 }
                 
                 if(j==1) {
@@ -73,7 +80,6 @@ public final class Polynomial extends Object {
             return string;
             
         }
-        
     }
 
     @Override
