@@ -6,26 +6,29 @@ import ch.epfl.rigel.Interval;
 
 public final class RightOpenInterval extends Interval {
     private double lowerBound, upperBound;
-    public RightOpenInterval rightOpenInterval;
+    public static RightOpenInterval rightOpenInterval;
 
     // pose des problèmes de duplications, cf closed interval
-    protected RightOpenInterval(double lowerBound, double higherBound) {
-        super(lowerBound, higherBound);
+    protected RightOpenInterval(double low, double high) {
+        super(low, high);
+        lowerBound = low;
+        upperBound = high;
+        
     }
 
-    public RightOpenInterval symmetric(double size) {
+    public static RightOpenInterval symmetric(double size) {
 
-        if (size == 0) {
+        if (size <= 0) {
             throw new IllegalArgumentException();
         } else {
-            rightOpenInterval = new RightOpenInterval(-size, size);
+            rightOpenInterval = new RightOpenInterval(-size/2, size/2);
             return rightOpenInterval;
         }
     }
 
-    public RightOpenInterval of(double low, double high) {
+    public static RightOpenInterval of(double low, double high) {
 
-        if (low <= high) {
+        if (low < high) {
             rightOpenInterval = new RightOpenInterval(low, high);
             return rightOpenInterval;
         }
@@ -37,7 +40,12 @@ public final class RightOpenInterval extends Interval {
 
     @Override
     public boolean contains(double v) {
-        return (v >= lowerBound && v < upperBound);
+        if(lowerBound<=v && v<upperBound) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -49,8 +57,9 @@ public final class RightOpenInterval extends Interval {
      */
     public double reduce(double v) {
         double x = v - lowerBound;
-        double y = upperBound - v;
-        return lowerBound + (x - y * x / y);
+        double y = upperBound-lowerBound;
+        double floorMod = x-(y*Math.floor(x/y)) ;
+        return lowerBound+floorMod;
     }
 
     @Override
