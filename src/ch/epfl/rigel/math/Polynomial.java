@@ -1,96 +1,105 @@
 package ch.epfl.rigel.math;
 
-public final class Polynomial extends Object {
-    
-    private static double[] coeff;
-    private double valuePolynomial;
-    
-    private Polynomial() {}
-    
-    
-    // clairement à compléter !!
+import ch.epfl.rigel.Preconditions;
+
+public final class Polynomial {
+    private double[] tab;
+
+    private Polynomial(double coefficientN, double[] coefficients) {
+        tab = new double[coefficients.length + 1];
+        tab[0] = coefficientN;
+        System.arraycopy(coefficients, 0, tab, 1, coefficients.length);
+    }
+
     public static Polynomial of(double coefficientN, double... coefficients) {
-        
-        if(coefficientN == 0) {
-            throw new IllegalArgumentException();
-        }
-        
-        if(coefficients == null) {
-            throw new NullPointerException();
-        }
-        
-        else {
-            coeff[0]=coefficientN;
-            Polynomial polynomial = new Polynomial();
-            
-            for(int i = 0 ; i<coefficients.length;i++) {
-                coeff[i+1] = coefficients[i];
-        }
-            return polynomial;
-        }
+        Preconditions.checkArgument(coefficientN != 0);
+        return new Polynomial(coefficientN, coefficients);
     }
-    
+
     public double at(double x) {
-        
-        valuePolynomial = coeff[0];
-        for(int i = coeff.length ;i>2;i--) {
-            valuePolynomial =+ ((coeff[i]*x+coeff[i-1])*x);
+        double value = tab[0];
+        for (int i = 1; i < tab.length; i++) {
+            value = value * x + tab[i];
         }
-        return valuePolynomial;
+        return value;
     }
-    
+
     @Override
     public String toString() {
-        String string = new String();
-        
-        if(coeff.length==0) {
-            return "0";
-        }
-        else if(coeff.length==1) {
-            return "" + coeff[0];
-        }
-        else if(coeff.length==2){
-            return coeff[1]+ "x" +coeff[0];
-        }
-       
-        else {
-            for(int j = coeff.length;j>=0;j--) {
-                string = coeff[j]+ "x^" + (j-1);
-               
-                if(coeff[j] ==0) {
-                    continue;
+        String text = "";
+        for (int i = 0; i < tab.length; i++) {
+            if (i == 0) {
+                if (tab.length == 1) {
+                    text += tab[i];
+                } else {
+                    if (tab.length == 2) {
+                        if(tab[i]!=1&&tab[i]!=-1){
+                            text += tab[i] + "x";
+                        }else{
+                            if(tab[i]==1){
+                                text+= "x";
+                            }else{
+                                text+="-x";
+                            }
+                        }
+                    } else {
+                        if(tab[i]!=1 && tab[i]!=-1){
+                            text += tab[i] + "x^" + (tab.length - 1);
+                        }else{
+                            if(tab[i]==1){
+                                text+="x^"+(tab.length-1);
+                            }else{
+                                text+="-x^"+(tab.length-1);
+                            }
+                        }
+
+                    }
                 }
-               
-                if(coeff[j] > 0) {
-                    string = string + " + " + coeff[j];
+            } else {
+                if (i == tab.length - 1) {
+                    if (tab[i] > 0) {
+                        text += "+" + tab[i];
+                    } if(tab[i]<0) {
+                        text += tab[i];
+                    }
+                } else {
+                    if (i == tab.length - 2) {
+                        if (tab[i] > 0) {
+                            text += "+" + tab[i] + "x";
+                        } if(tab[i]<0) {
+                            text += tab[i] + "x";
+                        }
+                    } else {
+                        if (tab[i] > 0 && tab[i] != 1) {
+                            text += "+" + tab[i] + "x^" + (tab.length - i-1);
+                        }
+                        if (tab[i] < 0 && tab[i] != -1) {
+                            text += tab[i] + "x^" + (tab.length - i-1);
+                        }
+                        if(tab[i]==1){
+                            text+= "+x^"+(tab.length-i-1);
+                        }
+                        if(tab[i]==-1){
+                            text+= "-x^"+(tab.length-i-1);
+                        }
+                    }
                 }
-                
-                if(coeff[j] < 0) {
-                    string = string + " - " + (-coeff[j]);
-                }
-                
-                if(j==1) {
-                    string = string + "x";
-                }
-                
-                if(j>1) {
-                    string = string + "x^" + j;
-                }
+
+
             }
-            return string;
-            
         }
+        return text;
     }
 
     @Override
     public int hashCode() {
-        super.hashCode();
         throw new UnsupportedOperationException();
     }
-    
-    
-    public boolean equals() {
-        super.equals(null);
+
+
+    @Override
+    public boolean equals(Object obj) {
         throw new UnsupportedOperationException();
     }
+
 }
