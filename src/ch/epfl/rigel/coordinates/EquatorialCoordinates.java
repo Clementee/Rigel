@@ -30,7 +30,7 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
      */
     public static EquatorialCoordinates of(double ra, double dec) {
         
-        if(DECINTERVAL.contains(Angle.toDeg(dec)) && RAINTERVAL.contains(Angle.toDeg(ra))) {
+        if(DECINTERVAL.contains(dec) && RAINTERVAL.contains(ra)) {
             return new EquatorialCoordinates(ra,dec);
         }
         else {
