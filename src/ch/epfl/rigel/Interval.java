@@ -1,5 +1,10 @@
 package ch.epfl.rigel;
-
+/**
+ * An Interval
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public abstract class Interval {
     private final double LOWERBOUND, UPPERBOUND;
 
@@ -27,7 +32,7 @@ public abstract class Interval {
     }
 
     /**
-     *Method giving the size of the interval
+     * Method giving the size of the interval
      *
      * @return (double) :  the size of the interval
      */
@@ -37,6 +42,7 @@ public abstract class Interval {
 
     /**
      * (To be redefined) : Method allowing to know if a value v is contained in the interval
+     *
      * @param v (double) : the value
      * @return (boolean) : if the value is contained (true) or not (false)
      */
@@ -46,6 +52,7 @@ public abstract class Interval {
      * Method throwing an UnsupportedOperationException (UOE)
      *
      * @return (int) : nothing because an error has already been thrown
+     * @throw UnsupportedOperationException
      */
     @Override
     public final int hashCode() {
@@ -54,8 +61,10 @@ public abstract class Interval {
 
     /**
      * Method throwing an UOE
+     *
      * @param obj (Object) : any object
      * @return (boolean) : nothing because an error has already been thrown
+     * @throws UnsupportedOperationException
      */
     @Override
     public final boolean equals(Object obj) {

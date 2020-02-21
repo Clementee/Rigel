@@ -1,7 +1,10 @@
 package ch.epfl.rigel.math;
-
-//non instanciable == abstract?
-
+/**
+ * An angle
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class Angle {
     public final static double TAU = 2 * Math.PI;
     private final static double SEC_PER_DEG = 3600;
@@ -41,6 +44,7 @@ public final class Angle {
      * @param min (int) : the number of minutes in the interval [0,60[
      * @param sec (double) : the number of seconds in the interval [0,60[
      * @return (double) : the normalized angle in radians
+     * @throws IllegalArgumentException
      */
     public static double ofDMS(int deg, int min, double sec) {
         if (min < 0 || min >= 60 || sec < 0 || sec >= 60) {

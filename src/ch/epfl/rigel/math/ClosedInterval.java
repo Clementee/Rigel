@@ -4,6 +4,12 @@ import java.util.Locale;
 
 import ch.epfl.rigel.Interval;
 
+/**
+ * A Closed Interval
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public class ClosedInterval extends Interval {
 
     public static ClosedInterval closedInterval;
@@ -28,6 +34,7 @@ public class ClosedInterval extends Interval {
      * @param low  (double) : gives the lower bound of the closed interval
      * @param high (double) : gives the upper bound of the closed interval
      * @return closedInterval (ClosedInterval) : return the closed interval
+     * @throws IllegalArgumentException
      */
     public static ClosedInterval of(double low, double high) {
 

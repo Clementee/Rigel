@@ -4,6 +4,12 @@ import java.util.Locale;
 
 import ch.epfl.rigel.Interval;
 
+/**
+ * A Right Open Interval
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class RightOpenInterval extends Interval {
     private double lowerBound, upperBound;
     public static RightOpenInterval rightOpenInterval;

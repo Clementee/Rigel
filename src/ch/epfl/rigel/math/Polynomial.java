@@ -1,7 +1,12 @@
 package ch.epfl.rigel.math;
 
 import ch.epfl.rigel.Preconditions;
-
+/**
+ * A Polynomial function
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class Polynomial {
     private double[] tab;
 
@@ -115,6 +120,7 @@ public final class Polynomial {
      * Method throwing an UnsupportedOperationException (UOE)
      *
      * @return (int) : nothing because an error has already been thrown
+     * @throw UnsupportedOperationException
      */
     @Override
     public int hashCode() {
@@ -126,6 +132,7 @@ public final class Polynomial {
      *
      * @param obj (Object) : any object
      * @return (boolean) : nothing because an error has already been thrown
+     * @throws UnsupportedOperationException
      */
     @Override
     public boolean equals(Object obj) {
