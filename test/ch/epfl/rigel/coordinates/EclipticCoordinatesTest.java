@@ -1,12 +1,10 @@
 package ch.epfl.rigel.coordinates;
 
-import ch.epfl.rigel.coordinates.EclipticCoordinates;
 import ch.epfl.rigel.math.Angle;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.Test;
 
 
 class EclipticCoordinatesTest {
@@ -15,7 +13,7 @@ class EclipticCoordinatesTest {
     EclipticCoordinates eclipticCoordinates2 = EclipticCoordinates.of(Angle.ofDeg(350), Angle.ofDeg(80));
 
     @Test
-    void ofDeg() {
+    void ofDegFailsWithWrongValues() {
         assertThrows(IllegalArgumentException.class, () -> {
                     EclipticCoordinates.of(23, 180);
         });
@@ -29,13 +27,22 @@ class EclipticCoordinatesTest {
     }
 
     @Test
+    void ofDegWorksWithValidValues(){
+        assertEquals(23, eclipticCoordinates.lonDeg());
+        assertEquals(45, eclipticCoordinates.latDeg());
+        assertEquals(350, eclipticCoordinates2.lonDeg());
+        assertEquals(80, eclipticCoordinates2.latDeg());
+
+    }
+
+    @Test
     void lon() {
         assertEquals(Angle.ofDeg(23), eclipticCoordinates.lon());
         assertEquals(Angle.ofDeg(350), eclipticCoordinates2.lon());
     }
 
     @Test
-    void lonDeg() {
+    void lonDegWorksWithValidValues() {
         assertEquals(23, eclipticCoordinates.lonDeg());
     }
 
@@ -54,4 +61,5 @@ class EclipticCoordinatesTest {
     void testToString() {
         assertEquals("(λ=23.0000°, β=45.0000°)", eclipticCoordinates.toString());
     }
+
 }
