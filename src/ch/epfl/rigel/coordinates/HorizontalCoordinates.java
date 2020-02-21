@@ -79,6 +79,7 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
         switch((int)valueOctant) {
         
         case 0 : 
+            case 8 :
             string= n;
             break;
         case 1 : 
