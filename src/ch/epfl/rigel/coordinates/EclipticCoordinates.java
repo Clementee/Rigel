@@ -29,10 +29,9 @@ public final class EclipticCoordinates extends SphericalCoordinates {
      */
     public static EclipticCoordinates of(double lon, double lat) {
         
-        if(LONINTERVAL.contains(Angle.toDeg(lon)) && LATINTERVAL.contains(Angle.toDeg(lat))) {
-            return new EclipticCoordinates(lon,lat);
-        }
-        else {
+        if(LONINTERVAL.contains(lon) && LATINTERVAL.contains(lat)) {
+            return new EclipticCoordinates(lon, lat);
+        } else {
             throw new IllegalArgumentException();
         }
     }
