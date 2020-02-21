@@ -61,6 +61,6 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
     
     @Override
     public String toString() {
-        return String.format(Locale.ROOT,"(ra=%.4f°, dec=%.4f°)",raHr(),decDeg());
+        return String.format(Locale.ROOT,"(ra=%.4fh, dec=%.4f°)",raHr(),decDeg());
     }
 }
