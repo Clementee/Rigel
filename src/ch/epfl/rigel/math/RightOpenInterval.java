@@ -13,7 +13,7 @@ public final class RightOpenInterval extends Interval {
         super(low, high);
         lowerBound = low;
         upperBound = high;
-        
+
     }
 
     public static RightOpenInterval symmetric(double size) {
@@ -21,7 +21,7 @@ public final class RightOpenInterval extends Interval {
         if (size <= 0) {
             throw new IllegalArgumentException();
         } else {
-            rightOpenInterval = new RightOpenInterval(-size/2, size/2);
+            rightOpenInterval = new RightOpenInterval(-size / 2, size / 2);
             return rightOpenInterval;
         }
     }
@@ -31,37 +31,38 @@ public final class RightOpenInterval extends Interval {
         if (low < high) {
             rightOpenInterval = new RightOpenInterval(low, high);
             return rightOpenInterval;
-        }
-
-        else {
+        } else {
             throw new IllegalArgumentException();
         }
     }
 
     @Override
     public boolean contains(double v) {
-        if(lowerBound<=v && v<upperBound) {
+        if (lowerBound <= v && v < upperBound) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     /**
      * Applies the "reduce" mathematical function, to a variable.
-     * 
-     * @param v
-     *            (double) : the variable chosen.
+     *
+     * @param v (double) : the variable chosen.
      * @return the numerical application of this function
      */
     public double reduce(double v) {
         double x = v - lowerBound;
-        double y = upperBound-lowerBound;
-        double floorMod = x-(y*Math.floor(x/y)) ;
-        return lowerBound+floorMod;
+        double y = upperBound - lowerBound;
+        double floorMod = x - (y * Math.floor(x / y));
+        return lowerBound + floorMod;
     }
 
+    /**
+     * Method that redefine the toString method
+     *
+     * @return (String) : a readable version of the Interval
+     */
     @Override
     public String toString() {
         return String.format(Locale.ROOT,

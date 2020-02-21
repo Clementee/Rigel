@@ -9,86 +9,92 @@ public class ClosedInterval extends Interval {
     public static ClosedInterval closedInterval;
     private double lowerBound;
     private double upperBound;
-    
+
     /**
      * ClosedInterval private constructor
-     * @param low   (double) : gives the lower bound of the closed interval
-     * @param high  (double) : gives the upper bound of the closed interval
+     *
+     * @param low  (double) : gives the lower bound of the closed interval
+     * @param high (double) : gives the upper bound of the closed interval
      */
     private ClosedInterval(double low, double high) {
-        super(low,high);
+        super(low, high);
         lowerBound = low;
-        upperBound = high;     
+        upperBound = high;
     }
-    
+
     /**
      * ClosedInterval method returning the closed interval between the two bounds if possible and else throw an exception
-     * @param low   (double) : gives the lower bound of the closed interval
-     * @param high  (double) : gives the upper bound of the closed interval
-     * 
-     * @return closedInterval (ClosedInterval) : return the closed interval 
+     *
+     * @param low  (double) : gives the lower bound of the closed interval
+     * @param high (double) : gives the upper bound of the closed interval
+     * @return closedInterval (ClosedInterval) : return the closed interval
      */
     public static ClosedInterval of(double low, double high) {
-        
-        if(low<high) {
-           closedInterval = new ClosedInterval(low,high);
-           return closedInterval;
-        }
-         
-        else {
+
+        if (low < high) {
+            closedInterval = new ClosedInterval(low, high);
+            return closedInterval;
+        } else {
             throw new IllegalArgumentException();
-        }   
+        }
     }
-    
+
     /**
      * ClosedInterval method returning the closed interval centered in 0 and of radius size if possible and else throw an exception
-     * @param size   (double) : gives the value for half the size of the interval
-     * 
-     * @return closedInterval (ClosedInterval) : return the closed interval 
+     *
+     * @param size (double) : gives the value for half the size of the interval
+     * @return closedInterval (ClosedInterval) : return the closed interval
      */
     public static ClosedInterval symmetric(double size) {
-        
-        if(size<=0) {
+
+        if (size <= 0) {
             throw new IllegalArgumentException();
+        } else {
+            closedInterval = new ClosedInterval(-size / 2, size / 2);
+            return closedInterval;
         }
-        else {
-        closedInterval = new ClosedInterval(-size/2,size/2);
-        return closedInterval;
     }
-    }
-    
+
     /**
      * Method returning a boolean following the presence or the absence of a value in an interval
-     * @param v   (double) : gives the chosen value
+     *
+     * @param v (double) : gives the chosen value
      */
     @Override
     public boolean contains(double v) {
-        if(lowerBound<=v && v<=upperBound) {
+        if (lowerBound <= v && v <= upperBound) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
-    
+
+    /**
+     * Method that applies the clip-function to a value
+     *
+     * @param v (double) the value to clipper
+     * @return (double) : the image of the clip function
+     */
     double clip(double v) {
-        
-        if(v<lowerBound) {
+
+        if (v < lowerBound) {
             return lowerBound;
-        }
-        else if(v>upperBound) {
+        } else if (v > upperBound) {
             return upperBound;
-        }
-        else {
+        } else {
             return v;
         }
     }
-    
+
+    /**
+     * Method that redefine the toString method
+     *
+     * @return (String) : the readable version of our interval
+     */
     @Override
     public String toString() {
-        return String.format(Locale.ROOT,"The closed interval chosen can be represented as [%s,%s]",lowerBound,upperBound);
+        return String.format(Locale.ROOT, "The closed interval chosen can be represented as [%s,%s]", lowerBound, upperBound);
     }
-    
-    
-    
+
+
 }
