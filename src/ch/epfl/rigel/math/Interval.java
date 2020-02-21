@@ -1,4 +1,4 @@
-package ch.epfl.rigel;
+package ch.epfl.rigel.math;
 /**
  * An Interval
  *

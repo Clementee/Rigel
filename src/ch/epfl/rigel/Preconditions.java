@@ -1,5 +1,7 @@
 package ch.epfl.rigel;
 
+import ch.epfl.rigel.math.Interval;
+
 /**
  * A Precondition-class with useful methods
  *

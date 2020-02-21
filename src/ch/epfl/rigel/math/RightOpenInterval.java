@@ -2,8 +2,6 @@ package ch.epfl.rigel.math;
 
 import java.util.Locale;
 
-import ch.epfl.rigel.Interval;
-
 /**
  * A Right Open Interval
  *

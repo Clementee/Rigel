@@ -2,8 +2,6 @@ package ch.epfl.rigel.math;
 
 import java.util.Locale;
 
-import ch.epfl.rigel.Interval;
-
 /**
  * A Closed Interval
  *
@@ -82,7 +80,7 @@ public class ClosedInterval extends Interval {
      * @param v (double) the value to clipper
      * @return (double) : the image of the clip function
      */
-    double clip(double v) {
+    public double clip(double v) {
 
         if (v < lowerBound) {
             return lowerBound;
