@@ -1,4 +1,4 @@
-package ch.epfl.rigelTest.coordinates;
+package ch.epfl.rigel.coordinates;
 
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.math.Angle;

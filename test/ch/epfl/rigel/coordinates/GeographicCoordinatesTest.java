@@ -13,7 +13,6 @@ import ch.epfl.rigel.math.Angle;
 class GeographicCoordinatesTest {
     GeographicCoordinates geographicCoordinates = GeographicCoordinates.ofDeg(23, 45);
 
-    //allo
     @Test
     public void ofDegWorksForValidValues() {
         assertEquals(23,geographicCoordinates.lonDeg());

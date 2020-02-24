@@ -48,7 +48,7 @@ public final class GeographicCoordinates extends SphericalCoordinates {
         
     /**
      * Method validating if the entered value is valid
-     * @param lonDeg  (double) : gives the longitude of the position in degrees
+     * @param latDeg  (double) : gives the latitude of the position in degrees
      */
     public static boolean isValidLatDeg(double latDeg) {
         return LATINTERVAL.contains(latDeg);

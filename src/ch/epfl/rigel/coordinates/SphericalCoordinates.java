@@ -30,6 +30,7 @@ abstract class SphericalCoordinates {
     }
     
     double latDeg() {
+        System.out.println(latitudeCoords);
         return Angle.toDeg(latitudeCoords);
     }
     
