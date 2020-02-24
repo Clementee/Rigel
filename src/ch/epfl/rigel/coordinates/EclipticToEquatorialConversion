@@ -19,6 +19,8 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
         obliquityEcliptic = 0.00181*Math.pow(nbJulianCycles,3)-0.0006*Math.pow(nbJulianCycles,2)-46.815*nbJulianCycles+Angle.ofHr(23)*26*21.45;
     }
 
+
+    // A modifier
     @Override
     public EquatorialCoordinates apply(EclipticCoordinates eclipticCoordinates){
         equatorialRA = Math.atan2((Math.sin(eclipticCoordinates.lon())*Math.cos(obliquityEcliptic)-Math.tan(eclipticCoordinates.lat())*Math.sin(obliquityEcliptic)),(Math.cos(eclipticCoordinates.lon())));
