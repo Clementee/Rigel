@@ -31,7 +31,8 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
         throw new UnsupportedOperationException();
     }
 
-    public final boolean equals(){
+    @Override
+    public final boolean equals(Object object){
         throw new UnsupportedOperationException();
     }
 }
