@@ -19,7 +19,7 @@ public enum Epoch {
 
     public double daysUntil(ZonedDateTime when){
         
-        deltaDays = when.until(thisZoneTime, MILLIS);
+        deltaDays = when.until(thisZoneTime, ChronoUnit.MILLIS);
         deltaDays = deltaDays*1000;
         deltaDays = deltaDays*3600;
         deltaDays = deltaDays*24;
