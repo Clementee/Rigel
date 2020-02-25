@@ -8,24 +8,22 @@ import java.util.function.Function;
 
 public final class EclipticToEquatorialConversion implements Function<EclipticCoordinates,EquatorialCoordinates> {
 
-    private double equatorialRA;
-    private double equatorialDec;
-    private double obliquityEcliptic;
-    private double nbJulianCycles;
-
-
+    private double cosObliquity;
+    
     public EclipticToEquatorialConversion(ZonedDateTime when){
-        nbJulianCycles = Epoch.julianCenturiesUntil(when);
-        obliquityEcliptic = 0.00181*Math.pow(nbJulianCycles,3)-0.0006*Math.pow(nbJulianCycles,2)-46.815*nbJulianCycles+Angle.ofHr(23)*26*21.45;
+        double nbJulianCycles = Epoch.julianCenturiesUntil(when);
+        double obliquityEcliptic = ((0.00181 * Math.pow(nbJulianCycles, 3)) - (0.0006 * Math.pow(nbJulianCycles, 2)) - (46.815 * nbJulianCycles)) + (Angle.toHr(Angle.ofDeg(23)) * 26 * 21.45);
+        cosObliquity = Math.cos(obliquityEcliptic);
     }
 
-
-    // A modifier
     @Override
     public EquatorialCoordinates apply(EclipticCoordinates eclipticCoordinates){
-        equatorialRA = Math.atan2((Math.sin(eclipticCoordinates.lon())*Math.cos(obliquityEcliptic)-Math.tan(eclipticCoordinates.lat())*Math.sin(obliquityEcliptic)),(Math.cos(eclipticCoordinates.lon())));
-        equatorialDec = Math.asin((Math.sin(eclipticCoordinates.lat()))*Math.cos(obliquityEcliptic)+Math.cos(eclipticCoordinates.lat())*Math.sin(obliquityEcliptic)*Math.sin(eclipticCoordinates.lon()));
-        return new EquatorialCoordinates(equatorialRA,equatorialDec);
+
+        double latitudeEcliptic = eclipticCoordinates.lat();
+        double longitudeEcliptic = eclipticCoordinates.lon();
+        double equatorialRA = Math.atan2((Math.sin(longitudeEcliptic) * cosObliquity - Math.tan(latitudeEcliptic) * cosObliquity), (longitudeEcliptic));
+        double equatorialDec = Math.asin((Math.sin(latitudeEcliptic)) * cosObliquity + Math.cos(latitudeEcliptic) * cosObliquity * Math.sin(longitudeEcliptic));
+        return new EquatorialCoordinates(equatorialRA, equatorialDec);
     }
 
     @Override
