@@ -30,6 +30,7 @@ public enum Epoch {
     /**
      * Public method returning the number of days between the parameter value and a settled time in the enumeration
      * @param when       (ZonedDateTime) : select the zoned date time 
+     *
      * @return deltaDays (double) : return the difference of days
      */
     public double daysUntil(ZonedDateTime when){
@@ -43,6 +44,7 @@ public enum Epoch {
     /**
      * Public method returning the number of julian centuries between the parameter value and a settled time in the enumeration
      * @param when       (ZonedDateTime) : select the zoned date time 
+     *
      * @return julianCenturies (double) : return the number of julian centuries between the two dates
      */
     public double julianCenturiesUntil(ZonedDateTime when){ return daysUntil(when)/36525;}
