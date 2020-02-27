@@ -6,6 +6,12 @@ import ch.epfl.rigel.math.Angle;
 import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.rigel.math.RightOpenInterval;
 
+/**
+ * Ecliptic Coordinates
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class EclipticCoordinates extends SphericalCoordinates {
    
     private final static RightOpenInterval LONINTERVAL = RightOpenInterval.symmetric(360);
