@@ -1,4 +1,5 @@
 package ch.epfl.rigel.math;
+
 /**
  * An Interval
  *
