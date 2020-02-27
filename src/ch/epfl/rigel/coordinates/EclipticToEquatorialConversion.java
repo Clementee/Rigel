@@ -15,12 +15,21 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
 
     private double cosObliquity;
 
+    /**
+     * EclipticToEquatorialConversion public constructor, initializing few values
+     * @param when  (ZonedDateTime) : gives the zoned date time used to settle the conversion
+     */
     public EclipticToEquatorialConversion(ZonedDateTime when){
         double nbJulianCycles = J2000.julianCenturiesUntil(when);
         double obliquityEcliptic = ((0.00181 * Math.pow(nbJulianCycles, 3)) - (0.0006 * Math.pow(nbJulianCycles, 2)) - (46.815 * nbJulianCycles)) + (Angle.toHr(Angle.ofDeg(23)) * 26 * 21.45);
         cosObliquity = Math.cos(obliquityEcliptic);
     }
 
+    /**
+     * Method calculating the values to return the equatorial coordinates related to the ecliptic entered in parameters
+     * @param ecl  (EclipticCoordinates) : gives the ecliptic coordinates that we search to convert
+     * @return equ (EquatorialCoordinates) : return the equatorial coordinates related to ecl
+     */
     @Override
     public EquatorialCoordinates apply(EclipticCoordinates ecl){
 
@@ -36,4 +45,5 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
 
     @Override
     public final boolean equals(Object object){ throw new UnsupportedOperationException();}
+    
 }
