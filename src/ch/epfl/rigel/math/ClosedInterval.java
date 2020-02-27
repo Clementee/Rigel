@@ -49,6 +49,7 @@ public class ClosedInterval extends Interval {
      *
      * @param size (double) : gives the value for half the size of the interval
      * @return closedInterval (ClosedInterval) : return the closed interval
+     * @throws IllegalArgumentException
      */
     public static ClosedInterval symmetric(double size) {
 
