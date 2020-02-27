@@ -10,16 +10,20 @@ import java.time.temporal.ChronoUnit;
 import static ch.epfl.rigel.math.Angle.*;
 //import ch.epfl.rigel.astronomy.Epoch;
 
-
-
-
+/**
+ * A sidereal time
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class SiderealTime {
     private final static int MILLITOSECONDS = 1000;
     private final static int SECONDSTOHOURS = 3600;
     private SiderealTime(){}
     /**
      * Method giving the sidereal Greenwich time
- * @param when (ZonedDateTime) : a date/hour couple with a time zone
+     * @param when (ZonedDateTime) : a date/hour couple with a time zone
+     *
      * @return (double) : the Sidereal Greenwich time in radians(in the interval [0, PI[
      */
     public static double greenwich(ZonedDateTime when){
@@ -37,10 +41,12 @@ public final class SiderealTime {
         System.out.println("Sg = "+Sg);
         return ofHr(Sg);
     }
-
+    
+    //need to comment
     public static double local(ZonedDateTime when, GeographicCoordinates where){
         double Sg = greenwich(when);
         double λ = ofDeg(where.lonDeg());
-        return Sg + λ; }
+        return Sg + λ; 
+    }
 
 }
