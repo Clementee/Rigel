@@ -1,11 +1,16 @@
 package ch.epfl.rigel.coordinates;
 
 import java.util.Locale;
-
 import ch.epfl.rigel.math.Angle;
 import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.rigel.math.RightOpenInterval;
 
+/**
+ * A geographic coordinate
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class GeographicCoordinates extends SphericalCoordinates {
     
     private final static RightOpenInterval LONINTERVAL = RightOpenInterval.symmetric(360);
@@ -16,9 +21,7 @@ public final class GeographicCoordinates extends SphericalCoordinates {
      * @param longitude  (double) : gives the longitude of the position
      * @param latitude   (double) : gives the latitude of the position
      */
-     GeographicCoordinates(double longitude, double latitude) {
-        super(longitude,latitude);
-    }
+     GeographicCoordinates(double longitude, double latitude) { super(longitude,latitude);}
         
      /**
       * Public method used to call the private constructor while throwing an exception if not working 
@@ -42,27 +45,19 @@ public final class GeographicCoordinates extends SphericalCoordinates {
      * Method validating if the entered value is valid
      * @param lonDeg  (double) : gives the longitude of the position in degrees
      */
-    public static boolean isValidLonDeg(double lonDeg) {
-        return LONINTERVAL.contains(lonDeg);
-    }
+    public static boolean isValidLonDeg(double lonDeg) { return LONINTERVAL.contains(lonDeg);}
         
     /**
      * Method validating if the entered value is valid
      * @param latDeg  (double) : gives the latitude of the position in degrees
      */
-    public static boolean isValidLatDeg(double latDeg) {
-        return LATINTERVAL.contains(latDeg);
-    }
+    public static boolean isValidLatDeg(double latDeg) { return LATINTERVAL.contains(latDeg);}
     
     @Override
-    public double lon() {
-        return super.lon();
-    }
+    public double lon() { return super.lon();}
     
     @Override
-    public double lonDeg() {
-        return super.lonDeg();
-    }
+    public double lonDeg() { return super.lonDeg();}
     
     @Override
     public double lat() {
@@ -70,13 +65,9 @@ public final class GeographicCoordinates extends SphericalCoordinates {
     }
     
     @Override
-    public double latDeg() {
-        return super.latDeg();
-    }
+    public double latDeg() { return super.latDeg();}
     
     @Override
-    public String toString() {
-        return String.format(Locale.ROOT,"(lon=%.4f°, lat=%.4f°)",lonDeg(),latDeg());
-    }
+    public String toString() { return String.format(Locale.ROOT,"(lon=%.4f°, lat=%.4f°)",lonDeg(),latDeg());}
 
 }
