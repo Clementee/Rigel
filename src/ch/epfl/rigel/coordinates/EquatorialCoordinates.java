@@ -14,7 +14,6 @@ import ch.epfl.rigel.math.RightOpenInterval;
  */
 public final class EquatorialCoordinates extends SphericalCoordinates {
 
-    
     private final static RightOpenInterval RAINTERVAL = RightOpenInterval.of(0, 360);
     private final static ClosedInterval DECINTERVAL =  ClosedInterval.symmetric(180);
     
@@ -23,9 +22,7 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
      * @param rightAscension  (double) : gives the longitude/right ascension of the position
      * @param declination     (double) : gives the latitude/declination of the position
      */
-    EquatorialCoordinates(double rightAscension, double declination) {
-        super(rightAscension, declination);
-    }
+    EquatorialCoordinates(double rightAscension, double declination) { super(rightAscension, declination);}
     
     /**
      * Public method used to call the private constructor while throwing an exception if not working 
@@ -44,29 +41,19 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
         }
     }
     
-    public double ra() {
-        return super.lon();
-    }
+    public double ra() { return super.lon();}
     
-    public double raDeg() {
-        return super.lonDeg();
-    }
+    public double raDeg() { return super.lonDeg();}
     
     public double raHr() {
         double ra = super.lon();
         return Angle.toHr(ra);
     }
     
-    public double dec() {
-        return super.lat();
-    }
+    public double dec() { return super.lat();}
     
-    public double decDeg() {
-        return super.latDeg();
-    }
+    public double decDeg() { return super.latDeg();}
     
     @Override
-    public String toString() {
-        return String.format(Locale.ROOT,"(ra=%.4fh, dec=%.4f°)",raHr(),decDeg());
-    }
+    public String toString() { return String.format(Locale.ROOT,"(ra=%.4fh, dec=%.4f°)",raHr(),decDeg()); }
 }
