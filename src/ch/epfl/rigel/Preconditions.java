@@ -36,12 +36,9 @@ public final class Preconditions {
      * @throws IllegalArgumentException
      */
     public static double checkInInterval(Interval interval, double value) {
-
-        double lowerBound;
-        double upperBound;
-
-        lowerBound = interval.low();
-        upperBound = interval.high();
+        
+        double lowerBound = interval.low();
+        double upperBound = interval.high();
 
         if (lowerBound <= value && value <= upperBound) {
             return value;
