@@ -1,6 +1,7 @@
 package ch.epfl.rigel.math;
 
 import ch.epfl.rigel.Preconditions;
+
 /**
  * A Polynomial function
  *
