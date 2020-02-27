@@ -3,7 +3,12 @@ package ch.epfl.rigel.astronomy;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
-
+/**
+ * Enumeration Epoch
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public enum Epoch {
     
     //values of the enumeration with its characteristics
@@ -18,7 +23,7 @@ public enum Epoch {
      * @param currentHour     (LocalTime) : gives the hour of the specific term of the enumeration
      * @param zone            (ZoneId) : gives the name of the time zone for the date
      */
-    Epoch(LocalDate currentDate, LocalTime currentHour, ZoneId zone) {
+    Epoch(LocalDate currentDate, LocalTime currentHour, ZoneId zone) { 
         thisZoneTime = ZonedDateTime.of(currentDate, currentHour, zone);
     }
 
@@ -40,7 +45,5 @@ public enum Epoch {
      * @param when       (ZonedDateTime) : select the zoned date time 
      * @return julianCenturies (double) : return the number of julian centuries between the two dates
      */
-    public double julianCenturiesUntil(ZonedDateTime when){
-        return daysUntil(when)/36525;
-    }
+    public double julianCenturiesUntil(ZonedDateTime when){ return daysUntil(when)/36525;}
 }
