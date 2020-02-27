@@ -12,7 +12,12 @@ public final class RightOpenInterval extends Interval {
     private double lowerBound, upperBound;
     public static RightOpenInterval rightOpenInterval;
 
-    // pose des problèmes de duplications, cf closed interval
+    /**
+     * RightOpenInterval private constructor
+     *
+     * @param low  (double) : gives the lower bound of the right open interval
+     * @param high (double) : gives the upper bound of the right open interval
+     */
     protected RightOpenInterval(double low, double high) {
         super(low, high);
         lowerBound = low;
@@ -20,6 +25,14 @@ public final class RightOpenInterval extends Interval {
 
     }
 
+    /**
+     * RightOpenInterval method returning the right open interval between the two bounds if possible and else throw an exception
+     *
+     * @param low  (double) : gives the lower bound of the right open interval
+     * @param high (double) : gives the upper bound of the right open interval
+     * @return RightOpenInterval (RightOpenInterval) : return the right open interval
+     * @throws IllegalArgumentException
+     */
     public static RightOpenInterval symmetric(double size) {
 
         if (size <= 0) {
@@ -30,6 +43,13 @@ public final class RightOpenInterval extends Interval {
         }
     }
 
+    /**
+     * RightOpenInterval method returning the right open interval centered in 0 and of radius size if possible and else throw an exception
+     *
+     * @param size (double) : gives the value for half the size of the interval
+     * @return RightOpenInterval (RightOpenInterval) : return the right open interval
+     * @throws IllegalArgumentException
+     */
     public static RightOpenInterval of(double low, double high) {
 
         if (low < high) {
@@ -40,6 +60,12 @@ public final class RightOpenInterval extends Interval {
         }
     }
 
+    /**
+     * Applies the "reduce" mathematical function, to a variable.
+     *
+     * @param v (double) : the variable chosen.
+     * @return the boolean value of the method, depending on the presence or the absence 
+     */
     @Override
     public boolean contains(double v) {
         if (lowerBound <= v && v < upperBound) {
