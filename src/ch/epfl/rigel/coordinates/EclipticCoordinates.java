@@ -7,7 +7,7 @@ import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.rigel.math.RightOpenInterval;
 
 /**
- * Ecliptic Coordinates
+ * An ecliptic coordinate
  *
  * @author Baptiste Lecoeur (316223)
  * @author Clement Sanh (311427)
