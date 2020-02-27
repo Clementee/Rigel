@@ -13,9 +13,7 @@ public final class Preconditions {
     /**
      * Preconditions private constructor
      */
-    private Preconditions() {
-    }
-
+    private Preconditions() {}
 
     /**
      * Method checking if the argument selected is valid or not and if not, throwing an exception
@@ -41,7 +39,6 @@ public final class Preconditions {
 
         double lowerBound;
         double upperBound;
-
 
         lowerBound = interval.low();
         upperBound = interval.high();
