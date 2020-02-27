@@ -22,9 +22,7 @@ public final class EclipticCoordinates extends SphericalCoordinates {
      * @param longitude  (double) : gives the longitude of the position
      * @param latitude   (double) : gives the latitude of the position
      */
-    EclipticCoordinates(double longitude, double latitude) {
-        super(longitude, latitude);
-    }
+    EclipticCoordinates(double longitude, double latitude) { super(longitude, latitude);}
     
     /**
      * Public method used to call the private constructor while throwing an exception if not working 
@@ -43,28 +41,17 @@ public final class EclipticCoordinates extends SphericalCoordinates {
     }
     
     @Override
-    public double lon() {
-        return super.lon();
-    }
+    public double lon() { return super.lon();}
     
     @Override
-    public double lonDeg() {
-        return super.lonDeg();
-    }
+    public double lonDeg() { return super.lonDeg();}
     
     @Override
-    public double lat() {
-        return super.lat();
-    }
+    public double lat() { return super.lat();}
     
     @Override
-    public double latDeg() {
-        return super.latDeg();
-    }
+    public double latDeg() { return super.latDeg();}
     
     @Override
-    public String toString() {
-        return String.format(Locale.ROOT,"(λ=%.4f°, β=%.4f°)",lonDeg(),latDeg());
-    }
-
+    public String toString() { return String.format(Locale.ROOT,"(λ=%.4f°, β=%.4f°)",lonDeg(),latDeg());}
 }
