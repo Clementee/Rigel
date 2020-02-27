@@ -1,12 +1,16 @@
 package ch.epfl.rigel.coordinates;
 
 import ch.epfl.rigel.math.Angle;
-
 import java.time.ZonedDateTime;
 import java.util.function.Function;
-
 import static ch.epfl.rigel.astronomy.Epoch.J2000;
 
+/**
+ * A conversion from an ecliptic to an equatorial coordinate
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class EclipticToEquatorialConversion implements Function<EclipticCoordinates,EquatorialCoordinates> {
 
     private double cosObliquity;
@@ -28,12 +32,8 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
     }
 
     @Override
-    public final int hashCode(){
-        throw new UnsupportedOperationException();
-    }
+    public final int hashCode(){ throw new UnsupportedOperationException();}
 
     @Override
-    public final boolean equals(Object object){
-        throw new UnsupportedOperationException();
-    }
+    public final boolean equals(Object object){ throw new UnsupportedOperationException();}
 }
