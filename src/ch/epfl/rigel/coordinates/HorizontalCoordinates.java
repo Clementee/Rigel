@@ -1,13 +1,17 @@
 package ch.epfl.rigel.coordinates;
 
 import java.util.Locale;
-
 import ch.epfl.rigel.math.Angle;
 import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.rigel.math.RightOpenInterval;
 
+/**
+ * An horizontal coordinate
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class HorizontalCoordinates extends SphericalCoordinates {
-
     
     private final static RightOpenInterval AZINTERVAL = RightOpenInterval.of(0, 360);
     private final static ClosedInterval ALTINTERVAL =  ClosedInterval.symmetric(180);
@@ -17,9 +21,7 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
      * @param azimuth     (double) : gives the azimuth of the position
      * @param altitude   (double) : gives the altitude of the position
      */
-    private HorizontalCoordinates(double azimuth, double altitude) {
-        super(azimuth, altitude);
-    }
+    private HorizontalCoordinates(double azimuth, double altitude) { super(azimuth, altitude);}
     
     /**
      * Public method used to call the private constructor while throwing an exception if not working 
@@ -53,13 +55,19 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
         }
     }
     
-    public double az() {
-        return super.lon();
-    }
+    /**
+     * Public method used to return the value of the azimuth in radians
+     *
+     * @return      call the super method for the longitude
+     */
+    public double az() { return super.lon();}
     
-    public double azDeg() {
-        return super.lonDeg();
-    }
+    /**
+     * Public method used to return the value of the azimuth in degrees
+     *
+     * @return      call the super method for the longitude in degrees
+     */
+    public double azDeg() { return super.lonDeg();}
     
     /**
      * Public method used to return the correct string for the direction following the position
@@ -109,14 +117,19 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
         return string;
     }
     
+    /**
+     * Public method used to return the value of the altitude in radians
+     *
+     * @return      call the super method for the latitude
+     */
+    public double alt() { return super.lat();}
     
-    public double alt() {
-        return super.lat();
-    }
-    
-    public double altDeg() {
-        return super.latDeg();
-    }
+    /**
+     * Public method used to return the value of the altitude in degrees
+     *
+     * @return      call the super method for the latitude in degrees
+     */
+    public double altDeg() { return super.latDeg();}
     
     /**
      * Public method used to call the private constructor while throwing an exception if not working 
@@ -132,9 +145,6 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
     }
     
     @Override
-    public String toString() {
-        return String.format(Locale.ROOT,"(az=%.4f°, alt=%.4f°)",azDeg(),altDeg());
-    }
+    public String toString() { return String.format(Locale.ROOT,"(az=%.4f°, alt=%.4f°)",azDeg(),altDeg());}
     
-
 }
