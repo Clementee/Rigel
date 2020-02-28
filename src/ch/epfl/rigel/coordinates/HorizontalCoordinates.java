@@ -13,8 +13,8 @@ import ch.epfl.rigel.math.RightOpenInterval;
  */
 public final class HorizontalCoordinates extends SphericalCoordinates {
     
-    private final static RightOpenInterval AZINTERVAL = RightOpenInterval.of(0, Angle.TAU);
-    private final static ClosedInterval ALTINTERVAL =  ClosedInterval.symmetric(Angle.TAU/2.0);
+    private final static RightOpenInterval AZINTERVAL = RightOpenInterval.of(0, 360);
+    private final static ClosedInterval ALTINTERVAL =  ClosedInterval.symmetric(180);
     
     /**
      * HorizontalCoordinates private constructor
@@ -31,7 +31,7 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
      * @return      call the constructor with the entered parameters or throw exception
      */
     public static HorizontalCoordinates of(double az, double alt) {
-        if(AZINTERVAL.contains(az)&&ALTINTERVAL.contains(alt)) {
+        if(AZINTERVAL.contains(Angle.toDeg(az))&&ALTINTERVAL.contains(Angle.toDeg(alt))) {
             return new HorizontalCoordinates(az,alt);
         }
         else {
@@ -41,13 +41,13 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
     
     /**
      * Public method used to call the private constructor while throwing an exception if not working 
-     * @param azDeg    (double) : gives the azimuth value in degrees of the position
-     * @param altDeg   (double) : gives the altitude value in degrees of the position
+     * @param az    (double) : gives the azimuth value in degrees of the position
+     * @param alt   (double) : gives the altitude value in degrees of the position
      * 
      * @return      call the constructor with the entered parameters or throw exception
      */
     public static HorizontalCoordinates ofDeg(double azDeg,double altDeg) {
-        if(AZINTERVAL.contains(Angle.ofDeg(azDeg))&&ALTINTERVAL.contains(Angle.ofDeg(altDeg))) {
+        if(AZINTERVAL.contains(azDeg)&&ALTINTERVAL.contains(altDeg)) {
             return new HorizontalCoordinates(Angle.ofDeg(azDeg),Angle.ofDeg(altDeg));
         }
         else {
