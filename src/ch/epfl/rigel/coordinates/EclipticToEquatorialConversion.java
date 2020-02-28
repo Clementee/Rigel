@@ -1,6 +1,8 @@
 package ch.epfl.rigel.coordinates;
 
 import ch.epfl.rigel.math.Angle;
+import ch.epfl.rigel.math.Polynomial;
+
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 import static ch.epfl.rigel.astronomy.Epoch.J2000;
@@ -23,13 +25,15 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
      */
     public EclipticToEquatorialConversion(ZonedDateTime when){
         double nbJulianCycles = J2000.julianCenturiesUntil(when);
-        double obliquityEcliptic = epsilonPoly.at(nbJulianCycles)+Angle.toHr(Angle.ofDeg(23))*3600*26*60*21.45;
+        double obliquityEcliptic = Angle.ofHr(epsilonPoly.at(nbJulianCycles)+Angle.toHr(Angle.ofDeg(23))*3600*26*60*21.45);
         cosObliquity = Math.cos(obliquityEcliptic);
+        sinObliquity = Math.sin(obliquityEcliptic);
     }
 
     /**
      * Method calculating the values to return the equatorial coordinates related to the ecliptic entered in parameters
      * @param ecl  (EclipticCoordinates) : gives the ecliptic coordinates that we search to convert
+     *
      * @return equ (EquatorialCoordinates) : return the equatorial coordinates related to ecl
      */
     @Override
@@ -43,9 +47,13 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
     }
 
     @Override
-    public final int hashCode(){ throw new UnsupportedOperationException();}
+    public final int hashCode(){
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public final boolean equals(Object object){ throw new UnsupportedOperationException();}
-    
+    public final boolean equals(Object object){
+        throw new UnsupportedOperationException();
+    }
 }
+
