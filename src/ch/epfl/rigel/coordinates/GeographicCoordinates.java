@@ -40,7 +40,6 @@ public final class GeographicCoordinates extends SphericalCoordinates {
         }
     }
     
-
     /**
      * Method validating if the entered value is valid
      * @param lonDeg  (double) : gives the longitude of the position in degrees
