@@ -13,8 +13,8 @@ import ch.epfl.rigel.math.RightOpenInterval;
  */
 public final class GeographicCoordinates extends SphericalCoordinates {
     
-    private final static RightOpenInterval LONINTERVAL = RightOpenInterval.symmetric(360);
-    private final static ClosedInterval LATINTERVAL = ClosedInterval.symmetric(180);
+    private final static RightOpenInterval LONINTERVAL = RightOpenInterval.symmetric(Angle.TAU);
+    private final static ClosedInterval LATINTERVAL = ClosedInterval.symmetric(Angle.TAU/2.0);
     
     /**
      * GeographicCoordinates package-private constructor
@@ -45,13 +45,13 @@ public final class GeographicCoordinates extends SphericalCoordinates {
      * Method validating if the entered value is valid
      * @param lonDeg  (double) : gives the longitude of the position in degrees
      */
-    public static boolean isValidLonDeg(double lonDeg) { return LONINTERVAL.contains(lonDeg);}
+    public static boolean isValidLonDeg(double lonDeg) { return LONINTERVAL.contains(Angle.ofDeg(lonDeg));}
         
     /**
      * Method validating if the entered value is valid
      * @param latDeg  (double) : gives the latitude of the position in degrees
      */
-    public static boolean isValidLatDeg(double latDeg) { return LATINTERVAL.contains(latDeg);}
+    public static boolean isValidLatDeg(double latDeg) { return LATINTERVAL.contains(Angle.ofDeg(latDeg));}
     
     @Override
     public double lon() { return super.lon();}
