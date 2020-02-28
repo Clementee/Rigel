@@ -17,7 +17,8 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
 
     private static double cosObliquity;
     private static double sinObliquity;
-    private final static Polynomial epsilonPoly = Polynomial.of(0.00181, -0.0006,-46.815);
+    private final static double COEFFOBLI = Angle.ofDMS(23, 26, 21.45);
+    private final static Polynomial epsilonPoly = Polynomial.of(0.00181, -0.0006,-46.815,0);
 
     /**
      * EclipticToEquatorialConversion public constructor, initializing few values
@@ -25,7 +26,7 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
      */
     public EclipticToEquatorialConversion(ZonedDateTime when){
         double nbJulianCycles = J2000.julianCenturiesUntil(when);
-        double obliquityEcliptic = Angle.ofHr((epsilonPoly.at(nbJulianCycles)+Angle.toHr(Angle.ofDeg(23))*3600*26*60*21.45)*3600);
+        double obliquityEcliptic = Angle.ofHr(epsilonPoly.at(nbJulianCycles)/3600)+COEFFOBLI;
         cosObliquity = Math.cos(obliquityEcliptic);
         sinObliquity = Math.sin(obliquityEcliptic);
     }

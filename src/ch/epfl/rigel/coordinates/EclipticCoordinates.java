@@ -14,8 +14,8 @@ import ch.epfl.rigel.math.RightOpenInterval;
  */
 public final class EclipticCoordinates extends SphericalCoordinates {
    
-    private final static RightOpenInterval LONINTERVAL = RightOpenInterval.symmetric(360);
-    private final static ClosedInterval LATINTERVAL = ClosedInterval.symmetric(180);
+    private final static RightOpenInterval LONINTERVAL = RightOpenInterval.symmetric(2*Math.PI);
+    private final static ClosedInterval LATINTERVAL = ClosedInterval.symmetric(Math.PI);
     
     /**
      * EclipticCoordinates package-private constructor
@@ -32,7 +32,9 @@ public final class EclipticCoordinates extends SphericalCoordinates {
      * @return      call the constructor with the entered parameters or throw exception
      */
     public static EclipticCoordinates of(double lon, double lat) {
-        
+        System.out.println(LONINTERVAL);
+        System.out.println(LATINTERVAL);
+        System.out.println("lon = "+lon+" lat= "+lat);
         if(LONINTERVAL.contains(lon) && LATINTERVAL.contains(lat)) {
             return new EclipticCoordinates(lon, lat);
         } else {

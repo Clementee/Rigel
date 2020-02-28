@@ -14,8 +14,8 @@ import ch.epfl.rigel.math.RightOpenInterval;
  */
 public final class EquatorialCoordinates extends SphericalCoordinates {
 
-    private final static RightOpenInterval RAINTERVAL = RightOpenInterval.of(0, 360);
-    private final static ClosedInterval DECINTERVAL =  ClosedInterval.symmetric(180);
+    private final static RightOpenInterval RAINTERVAL = RightOpenInterval.of(0, Angle.TAU);
+    private final static ClosedInterval DECINTERVAL =  ClosedInterval.symmetric(Math.PI);
     
     /**
      * EquatorialCoordinates package-private constructor
@@ -32,8 +32,9 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
      * @return      call the constructor with the entered parameters or throw exception
      */
     public static EquatorialCoordinates of(double ra, double dec) {
-        
-        if(DECINTERVAL.contains(dec) && RAINTERVAL.contains(ra)) {
+        System.out.println(DECINTERVAL + "dec = "+ dec);
+        System.out.println(RAINTERVAL + "dec = "+ ra);
+        if(DECINTERVAL.contains(dec) && RAINTERVAL.contains(ra)){
             return new EquatorialCoordinates(ra,dec);
         }
         else {
