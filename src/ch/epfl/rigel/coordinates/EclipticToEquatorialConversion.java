@@ -25,7 +25,7 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
      */
     public EclipticToEquatorialConversion(ZonedDateTime when){
         double nbJulianCycles = J2000.julianCenturiesUntil(when);
-        double obliquityEcliptic = Angle.ofHr(epsilonPoly.at(nbJulianCycles)+Angle.toHr(Angle.ofDeg(23))*3600*26*60*21.45);
+        double obliquityEcliptic = Angle.ofHr((epsilonPoly.at(nbJulianCycles)+Angle.toHr(Angle.ofDeg(23))*3600*26*60*21.45)*3600);
         cosObliquity = Math.cos(obliquityEcliptic);
         sinObliquity = Math.sin(obliquityEcliptic);
     }
@@ -41,7 +41,7 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
 
         double latitudeEcliptic = ecl.lat();
         double longitudeEcliptic = ecl.lon();
-        double equatorialRA = Math.atan2((Math.sin(longitudeEcliptic)*cosObliquity - Math.tan(latitudeEcliptic) * sinObliquity), longitudeEcliptic);
+        double equatorialRA = Math.atan2((Math.sin(longitudeEcliptic)*cosObliquity - Math.tan(latitudeEcliptic) * sinObliquity), Math.cos(longitudeEcliptic));
         double equatorialDec = Math.asin(((Math.sin(latitudeEcliptic)) * cosObliquity) + (Math.cos(latitudeEcliptic) * sinObliquity * Math.sin(longitudeEcliptic)));
         return new EquatorialCoordinates(equatorialRA, equatorialDec);
     }
@@ -56,4 +56,3 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
         throw new UnsupportedOperationException();
     }
 }
-
