@@ -18,7 +18,7 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
     
     /**
      * HorizontalCoordinates private constructor
-     * @param azimuth     (double) : gives the azimuth of the position
+     * @param azimuth    (double) : gives the azimuth of the position
      * @param altitude   (double) : gives the altitude of the position
      */
     private HorizontalCoordinates(double azimuth, double altitude) { super(azimuth, altitude);}
