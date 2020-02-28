@@ -40,9 +40,9 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
     }
     
     /**
-     * Public method used to call the private constructor while throwing an exception if not working 
-     * @param az    (double) : gives the azimuth value in degrees of the position
-     * @param alt   (double) : gives the altitude value in degrees of the position
+     * Public method used to call the private constructor if the values are in the intervals or throw an exception if not working 
+     * @param azDeg    (double) : gives the azimuth value in degrees of the position
+     * @param altDeg   (double) : gives the altitude value in degrees of the position
      * 
      * @return      call the constructor with the entered parameters or throw exception
      */
