@@ -21,7 +21,7 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
      */
     public EclipticToEquatorialConversion(ZonedDateTime when){
         double nbJulianCycles = J2000.julianCenturiesUntil(when);
-        double obliquityEcliptic = ((0.00181 * Math.pow(nbJulianCycles, 3)) - (0.0006 * Math.pow(nbJulianCycles, 2)) - (46.815 * nbJulianCycles)) + (Angle.toHr(Angle.ofDeg(23)) * 26 * 21.45);
+        double obliquityEcliptic = ((0.00181 * Math.pow(nbJulianCycles, 3)) - (0.0006 * Math.pow(nbJulianCycles, 2)) - (46.815 * nbJulianCycles)) + (Angle.toHr(Angle.ofDeg(23)) * 26 * 60* 21.45);
         cosObliquity = Math.cos(obliquityEcliptic);
     }
 
