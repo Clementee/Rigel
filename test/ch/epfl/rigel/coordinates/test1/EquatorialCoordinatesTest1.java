@@ -1,5 +1,6 @@
-package ch.epfl.rigel.coordinates;
+package ch.epfl.rigel.coordinates.test1;
 
+import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 import ch.epfl.rigel.math.Angle;
 import org.junit.jupiter.api.Test;
 

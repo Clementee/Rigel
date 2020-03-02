@@ -15,7 +15,7 @@
     public final class EclipticCoordinates extends SphericalCoordinates {
 
         private final static RightOpenInterval LONINTERVAL = RightOpenInterval.of(0,Angle.TAU);
-        private final static ClosedInterval LATINTERVAL = ClosedInterval.symmetric(Angle.TAU/2.0));
+        private final static ClosedInterval LATINTERVAL = ClosedInterval.symmetric(Angle.TAU/2.0);
 
         /**
          * EclipticCoordinates package-private constructor

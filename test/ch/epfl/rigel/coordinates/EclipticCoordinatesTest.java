@@ -12,7 +12,7 @@ import java.util.SplittableRandom;
 import static ch.epfl.test.TestRandomizer.RANDOM_ITERATIONS;
 
 public class EclipticCoordinatesTest {
-    private static final RightOpenInterval LON_INTERVAL = RightOpenInterval.symmetric(Angle.TAU);
+    private static final RightOpenInterval LON_INTERVAL = RightOpenInterval.of(0,Angle.TAU);
     private static final ClosedInterval LAT_INTERVAL = ClosedInterval.symmetric(Angle.TAU/2.0);
 
     @Test

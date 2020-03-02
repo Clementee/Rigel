@@ -47,7 +47,7 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
      * @return      call the constructor with the entered parameters or throw exception
      */
     public static HorizontalCoordinates ofDeg(double azDeg,double altDeg) {
-        if(AZINTERVAL.contains(Angle.toDeg(azDeg))&&ALTINTERVAL.contains(Angle.toDeg(altDeg))) {
+        if(AZINTERVAL.contains(Angle.ofDeg(azDeg))&&ALTINTERVAL.contains(Angle.ofDeg(altDeg))) {
             return new HorizontalCoordinates(Angle.ofDeg(azDeg),Angle.ofDeg(altDeg));
         }
         else {

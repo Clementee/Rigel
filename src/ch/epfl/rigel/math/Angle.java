@@ -21,7 +21,6 @@ public final class Angle {
         if (rad < 0) {
             rad = -rad;
         }
-
         return rad % TAU;
     }
 

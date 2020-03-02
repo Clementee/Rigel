@@ -1,4 +1,4 @@
-package ch.epfl.rigel.coordinates;
+package ch.epfl.rigel.coordinates.test1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

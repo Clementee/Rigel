@@ -18,9 +18,9 @@
         @Test
         void apply() {
             assertEquals(9.581478170200256, (new  EclipticToEquatorialConversion(ZonedDateTime.of(2009,7,6,0,0,0,0, ZoneOffset.UTC)))
-                  .apply(EclipticCoordinates.of(Angle.ofDMS(139,41,10), Angle.ofDMS(4,52,31))).raHr());
+                  .apply(EclipticCoordinates.of(Angle.ofDMS(139,41,10), Angle.ofDMS(4,52,31))).raHr(), 10e-7);
             assertEquals( 0.34095012064184566 , (new  EclipticToEquatorialConversion(ZonedDateTime.of(2009,7,6,0,0,0,0,ZoneOffset.UTC)))
-                    .apply(EclipticCoordinates.of(Angle.ofDMS(139,41,10),Angle.ofDMS(4,52,31))).dec());
+                    .apply(EclipticCoordinates.of(Angle.ofDMS(139,41,10),Angle.ofDMS(4,52,31))).dec(), 10e-7);
         }
         @Test
         void epsilonCalculusWorks(){
