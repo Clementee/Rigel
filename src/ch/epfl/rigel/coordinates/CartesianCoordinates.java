@@ -37,4 +37,9 @@ public final class CartesianCoordinates {
     public final boolean equals(Object obj) {
         throw new UnsupportedOperationException();
     }
+     
+    @Override
+    public final String toString(){
+        return String.format(Locale.ROOT,"(abscisse =%.4f°, ordonnée =%.4f°)",x(),y());
+    }
 }
