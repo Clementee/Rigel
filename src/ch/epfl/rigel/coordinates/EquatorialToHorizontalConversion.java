@@ -39,10 +39,11 @@ public final class EquatorialToHorizontalConversion implements Function<Equatori
         final double sinLat = Math.sin(latObserver);
         final double cosDelta = Math.cos(equ.lat());
         final double cosLat = Math.cos(latObserver);
-        final double hourAngle = siderealTime-lonObserver;
-        final double heightHoriz = Math.asin(sinDelta*Math.sin(sinLat)+cosDelta*cosLat*Math.cos(hourAngle));
+        final double hourAngle = siderealTime-equ.lon();
+        final double heightHoriz = Math.asin(sinDelta*sinLat+cosDelta*cosLat*Math.cos(hourAngle));
+        System.out.println(heightHoriz);
         final double azimuthHoriz = Math.atan2(-cosDelta*cosLat*Math.sin(hourAngle),sinDelta-sinLat*Math.sin(heightHoriz));
-
+        System.out.println(azimuthHoriz);
         return HorizontalCoordinates.of(azimuthHoriz,heightHoriz);
     }
     

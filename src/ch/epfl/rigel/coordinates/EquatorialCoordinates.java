@@ -32,8 +32,6 @@
          * @return      call the constructor with the entered parameters or throw exception
          */
         public static EquatorialCoordinates of(double ra, double dec) {
-            System.out.println(DECINTERVAL + "dec = "+ dec);
-            System.out.println(RAINTERVAL + "dec = "+ ra);
             if(DECINTERVAL.contains(dec) && RAINTERVAL.contains(ra)){
                 return new EquatorialCoordinates(ra,dec);
             }

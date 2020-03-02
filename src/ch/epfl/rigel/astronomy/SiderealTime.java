@@ -43,9 +43,6 @@ public final class SiderealTime {
         }else{
             Sg=Sg%24;
         }
-
-        System.out.println(Sg);
-        System.out.println(ofHr(Sg));
         return ofHr(Sg);
     }
 
