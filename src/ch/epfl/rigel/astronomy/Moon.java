@@ -17,7 +17,13 @@ public final class Moon extends CelestialObject {
     private static float moonPhase;
     private final static String moonName = "Lune";
 
-    // possiblement à corriger
+        /**
+         * Moon package-private constructor returning a celestial object and more precisely the moon except if the phase isn't in the interval
+         * @param equatorialPos   (EquatorialCoordinates) : gives the equatorial coordinates of the planet
+         * @param angularSize     (float) : gives the angular size of the planet
+         * @param magnitude       (float) : gives the magnitude of the planet
+         * @param phase           (float) : gives the phase 
+         */
     Moon(EquatorialCoordinates equatorialPos, float angularSize, float magnitude, float phase) {
 
         super(moonName, equatorialPos, angularSize, magnitude);
@@ -30,7 +36,7 @@ public final class Moon extends CelestialObject {
             moonPhase = phase*100;
         }
     }
-
+    
     @Override
     public String info(){
         return moonName + " (" +String.format(Locale.ROOT,"(%.1f)",moonPhase)+ "%)";
