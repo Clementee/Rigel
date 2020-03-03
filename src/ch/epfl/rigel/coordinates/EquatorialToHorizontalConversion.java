@@ -4,6 +4,7 @@ import ch.epfl.rigel.astronomy.SiderealTime;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 
+
 /**
  * A conversion from an equatorial to a horizontal coordinate
  *
@@ -13,7 +14,6 @@ import java.util.function.Function;
 public final class EquatorialToHorizontalConversion implements Function<EquatorialCoordinates, HorizontalCoordinates> {
 
     private double latObserver;
-    private double lonObserver;
     private double siderealTime;
 
     /**
@@ -23,8 +23,8 @@ public final class EquatorialToHorizontalConversion implements Function<Equatori
      */
     public EquatorialToHorizontalConversion (ZonedDateTime when, GeographicCoordinates where) {
         latObserver = where.lat();
-        lonObserver = where.lon();
-        siderealTime = SiderealTime.greenwich(when);
+        double lonObserver = where.lon();
+        siderealTime = SiderealTime.greenwich(when)+lonObserver;
     }
 
     /**
@@ -35,22 +35,22 @@ public final class EquatorialToHorizontalConversion implements Function<Equatori
     @Override
     public HorizontalCoordinates apply(EquatorialCoordinates equ) {
 
-        final double sinDelta = Math.sin(equ.lat());
-        final double sinLat = Math.sin(latObserver);
-        final double cosDelta = Math.cos(equ.lat());
-        final double cosLat = Math.cos(latObserver);
-        final double hourAngle = siderealTime-equ.lon();
-        final double heightHoriz = Math.asin(sinDelta*sinLat+cosDelta*cosLat*Math.cos(hourAngle));
+        double sinDelta = Math.sin(equ.lat());
+        double sinLat = Math.sin(latObserver);
+        double cosDelta = Math.cos(equ.lat());
+        double cosLat = Math.cos(latObserver);
+        double hourAngle = siderealTime-equ.lat();
+        double heightHoriz = Math.asin(sinDelta*sinLat+cosDelta*cosLat*Math.cos(hourAngle));
         System.out.println(heightHoriz);
         final double azimuthHoriz = Math.atan2(-cosDelta*cosLat*Math.sin(hourAngle),sinDelta-sinLat*Math.sin(heightHoriz));
         System.out.println(azimuthHoriz);
         return HorizontalCoordinates.of(azimuthHoriz,heightHoriz);
     }
-    
+
+
     @Override
     public final boolean equals(Object object){ throw new UnsupportedOperationException();}
 
     @Override
     public final int hashCode(){ throw new UnsupportedOperationException();}
-    
 }
