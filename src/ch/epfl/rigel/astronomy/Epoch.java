@@ -17,7 +17,7 @@ public enum Epoch {
     J2000(LocalDate.of(2000, 1,1),LocalTime.of(12,0), ZoneOffset.UTC),
     J2010(LocalDate.of(2010, 1, 1).minusDays(1),LocalTime.of(0,0),ZoneOffset.UTC);
 
-    public ZonedDateTime thisZoneTime;
+    private ZonedDateTime thisZoneTime;
 
     /**
      * Epoch package-private constructor
