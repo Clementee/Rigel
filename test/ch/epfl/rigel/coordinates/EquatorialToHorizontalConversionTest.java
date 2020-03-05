@@ -15,13 +15,13 @@ public class EquatorialToHorizontalConversionTest {
     //-135.352088857
     @Test
     void applyLatWorks() {
-        assertEquals(Angle.ofDeg(19.334345), convert.apply(EquatorialCoordinates.of(Angle.ofDMS(5 * 360 / 24, 51, 44),
+        assertEquals(Angle.ofDeg(19.334345), convert.apply(EquatorialCoordinates.of(Angle.ofDMS(5 * 15, 51, 44),
                 Angle.ofDMS(23, 13, 10))).lat());
     }
 
     @Test
     void applyLonWorks() {
-        assertEquals(Angle.ofDeg(283.271027), convert.apply(EquatorialCoordinates.of(Angle.ofDMS(5 * 360 / 24, 51, 44),
+        assertEquals(Angle.ofDeg(283.271027), convert.apply(EquatorialCoordinates.of(Angle.ofDMS(5 * 15, 51, 44),
                 Angle.ofDMS(23, 13, 10))).lon());
     }
 }

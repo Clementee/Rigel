@@ -24,21 +24,17 @@ public final class Moon extends CelestialObject {
          * @param magnitude       (float) : gives the magnitude of the planet
          * @param phase           (float) : gives the phase 
          */
-    Moon(EquatorialCoordinates equatorialPos, float angularSize, float magnitude, float phase) {
+    public Moon(EquatorialCoordinates equatorialPos, float angularSize, float magnitude, float phase) {
 
         super(moonName, equatorialPos, angularSize, magnitude);
 
         if (!(ClosedInterval.of(0, 1).contains(phase))) {
             throw new IllegalArgumentException();
         }
-
-        else {
-            moonPhase = phase*100;
-        }
     }
     
     @Override
     public String info(){
-        return moonName + " (" +String.format(Locale.ROOT,"(%.1f)",moonPhase)+ "%)";
+        return moonName + " (" +String.format(Locale.ROOT,"(%.1f)",moonPhase*100)+ "%)";
     }
 }

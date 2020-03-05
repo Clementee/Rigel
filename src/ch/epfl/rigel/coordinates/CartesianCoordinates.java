@@ -1,5 +1,7 @@
 package ch.epfl.rigel.coordinates;
 
+import java.util.Locale;
+
 /**
  * CartesianCoordinates
  *
