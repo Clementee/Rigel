@@ -62,7 +62,7 @@ public final class SiderealTime {
      */
     public static double local(ZonedDateTime when, GeographicCoordinates where){
         double Sg = greenwich(when);
-        double λ = ofDeg(where.lonDeg());
-        return Sg + λ; 
+        double lambda = ofDeg(where.lonDeg());
+        return Angle.normalizePositive(Sg + lambda);
     }
 }
