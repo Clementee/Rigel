@@ -3,6 +3,7 @@ package ch.epfl.rigel.coordinates;
 import ch.epfl.rigel.astronomy.SiderealTime;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
+import ch.epfl.rigel.math.Angle;
 
 
 /**
