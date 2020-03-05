@@ -18,10 +18,8 @@ public final class Angle {
      * @return (double) : the angle in radians belonging to the interval [0,2*pi]
      */
     public static double normalizePositive(double rad) {
-        if (rad < 0) {
-            rad = -rad;
-        }
-        return rad % TAU;
+        RightOpenInterval ROI = RightOpenInterval.of(0,TAU);
+        return ROI.reduce(rad);
     }
 
     /**
