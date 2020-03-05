@@ -44,7 +44,7 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
         double longitudeEcliptic = ecl.lon();
         double equatorialRA = Math.atan2((Math.sin(longitudeEcliptic)*cosObliquity - Math.tan(latitudeEcliptic) * sinObliquity), Math.cos(longitudeEcliptic));
         double equatorialDec = Math.asin(((Math.sin(latitudeEcliptic)) * cosObliquity) + (Math.cos(latitudeEcliptic) * sinObliquity * Math.sin(longitudeEcliptic)));
-        return new EquatorialCoordinates(equatorialRA, equatorialDec);
+        return new EquatorialCoordinates(Angle.normalizePositive(equatorialRA), equatorialDec);
     }
 
     @Override
