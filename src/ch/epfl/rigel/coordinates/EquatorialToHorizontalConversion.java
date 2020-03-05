@@ -1,9 +1,10 @@
 package ch.epfl.rigel.coordinates;
 
 import ch.epfl.rigel.astronomy.SiderealTime;
+import ch.epfl.rigel.math.Angle;
+
 import java.time.ZonedDateTime;
 import java.util.function.Function;
-import ch.epfl.rigel.math.Angle;
 
 
 /**
@@ -14,8 +15,9 @@ import ch.epfl.rigel.math.Angle;
  */
 public final class EquatorialToHorizontalConversion implements Function<EquatorialCoordinates, HorizontalCoordinates> {
 
-    private double latObserver;
-    private double siderealTime;
+    private final double siderealTime;
+    private final double cosPhy;
+    private final double sinPhy;
 
     /**
      * EquatorialToHorizontalConversion public constructor, initializing few values
@@ -23,9 +25,10 @@ public final class EquatorialToHorizontalConversion implements Function<Equatori
      * @param where (GeographicCoordinates) : gives the localisation of the observer
      */
     public EquatorialToHorizontalConversion (ZonedDateTime when, GeographicCoordinates where) {
-        latObserver = where.lat();
-        double lonObserver = where.lon();
-        siderealTime = SiderealTime.greenwich(when)+lonObserver;
+        double latObserver = where.lat();
+        siderealTime = SiderealTime.local(when,where);
+        cosPhy = Math.cos(latObserver);
+        sinPhy = Math.sin(latObserver);
     }
 
     /**
@@ -36,18 +39,13 @@ public final class EquatorialToHorizontalConversion implements Function<Equatori
     @Override
     public HorizontalCoordinates apply(EquatorialCoordinates equ) {
 
-        double sinDelta = Math.sin(equ.lat());
-        double sinLat = Math.sin(latObserver);
-        double cosDelta = Math.cos(equ.lat());
-        double cosLat = Math.cos(latObserver);
-        double hourAngle = siderealTime-equ.lat();
-        double heightHoriz = Math.asin(sinDelta*sinLat+cosDelta*cosLat*Math.cos(hourAngle));
-        System.out.println(heightHoriz);
-        final double azimuthHoriz = Math.atan2(-cosDelta*cosLat*Math.sin(hourAngle),sinDelta-sinLat*Math.sin(heightHoriz));
-        System.out.println(azimuthHoriz);
+        double sinDelta = Math.sin(equ.dec());
+        double cosDelta = Math.cos(equ.dec());
+        double hourAngle = siderealTime-equ.ra();
+        double heightHoriz = Math.asin(sinDelta*sinPhy+cosDelta*cosPhy*Math.cos(hourAngle));
+        final double azimuthHoriz = Math.atan2(-cosDelta*cosPhy*Math.sin(hourAngle),sinDelta-sinPhy*Math.sin(heightHoriz));
         return HorizontalCoordinates.of(Angle.normalizePositive(azimuthHoriz),heightHoriz);
     }
-
 
     @Override
     public final boolean equals(Object object){ throw new UnsupportedOperationException();}
