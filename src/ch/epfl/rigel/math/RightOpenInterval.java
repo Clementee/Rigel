@@ -25,11 +25,11 @@ public final class RightOpenInterval extends Interval {
 
     }
 
+    
     /**
-     * RightOpenInterval method returning the right open interval between the two bounds if possible and else throw an exception
+     * RightOpenInterval method returning the right open interval centered in 0 and of radius size if possible and else throw an exception
      *
-     * @param low  (double) : gives the lower bound of the right open interval
-     * @param high (double) : gives the upper bound of the right open interval
+     * @param size (double) : gives the value for half the size of the interval
      * @return RightOpenInterval (RightOpenInterval) : return the right open interval
      * @throws IllegalArgumentException
      */
@@ -44,9 +44,10 @@ public final class RightOpenInterval extends Interval {
     }
 
     /**
-     * RightOpenInterval method returning the right open interval centered in 0 and of radius size if possible and else throw an exception
+     * RightOpenInterval method returning the right open interval between the two bounds if possible and else throw an exception
      *
-     * @param size (double) : gives the value for half the size of the interval
+     * @param low  (double) : gives the lower bound of the right open interval
+     * @param high (double) : gives the upper bound of the right open interval
      * @return RightOpenInterval (RightOpenInterval) : return the right open interval
      * @throws IllegalArgumentException
      */
@@ -61,7 +62,7 @@ public final class RightOpenInterval extends Interval {
     }
 
     /**
-     * Applies the "reduce" mathematical function, to a variable.
+     * Applies the method returning the boolean linked to the presence or absence of the value in the interval.
      *
      * @param v (double) : the variable chosen.
      * @return the boolean value of the method, depending on the presence or the absence 
