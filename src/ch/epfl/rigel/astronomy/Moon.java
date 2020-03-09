@@ -33,6 +33,11 @@ public final class Moon extends CelestialObject {
         }
     }
     
+    /**
+     * Moon method returning a string with the informations around the moon
+     *
+     * @return stringMoon (String) : returining the name of the moon with its phase
+     */
     @Override
     public String info(){
         return moonName + " (" +String.format(Locale.ROOT,"(%.1f)",moonPhase*100)+ "%)";
