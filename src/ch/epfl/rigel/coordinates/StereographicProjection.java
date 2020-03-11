@@ -9,7 +9,7 @@ public final class StereographicProjection implements Function<HorizontalCoordin
     private static double radius;
     private static double cosPhy;
     private static double sinPhy;
-    
+
     /**
      * StereographicProjection public constructor initializing some values
      *
@@ -40,7 +40,7 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      * @return radius (CartesianCoordinates) : return the value of the radius of the circle
      */
     public double circleRadiusForParallel(HorizontalCoordinates parallel){
-        radius = cosPhy/(Math.sin(parallel.alt())+sinPhy);
+        radius = Math.cos(parallel.alt())/(Math.sin(parallel.alt())+sinPhy);
         return radius;
     }
 
@@ -80,7 +80,7 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      * StereographicPosition public method returning the horizontal coordinates linked to the cartesian coordinates in parameter
      * @param xy  (CartesianCoordinates) : gives the cartesian coordinates we search to convert
      *
-     * @return horizontalCoords (HorizontalCoordinates) : return the horizontal coordinates of the point xy 
+     * @return horizontalCoords (HorizontalCoordinates) : return the horizontal coordinates of the point xy
      */
     public HorizontalCoordinates inverseApply(CartesianCoordinates xy){
 
@@ -107,10 +107,8 @@ public final class StereographicProjection implements Function<HorizontalCoordin
         throw new UnsupportedOperationException();
     }
 
-
-    // à compléter
     @Override
     public final String toString(){
-        return String.format(Locale.ROOT,"(%f,%f)",centerLambda);
+        return String.format(Locale.ROOT,"The stereographic projection is centered on %f",centerLambda);
     }
 }
