@@ -18,6 +18,13 @@ public final class Sun extends CelestialObject{
     private EclipticCoordinates eclipticPos;
     private float meanAnomaly;
 
+    /**
+     * Sun package-private constructor returning a celestial object and more precisely the sun except if the parameters are not working
+     * @param eclipticPos     (EclipticCoordinates) : gives the ecliptic coordinates of the sun
+     * @param equatorialPos   (EquatorialCoordinates) : gives the equatorial coordinates of the planet
+     * @param angularSize     (float) : gives the angular size of the planet
+     * @param meanAnomaly      (float) : gives the anomaly
+     */
     public Sun(EclipticCoordinates eclipticPos, EquatorialCoordinates equatorialPos, float angularSize, float meanAnomaly){
         super(sunName, equatorialPos, angularSize, magnitude);
         this.meanAnomaly = meanAnomaly;
@@ -28,10 +35,18 @@ public final class Sun extends CelestialObject{
         }
     }
 
+    /**
+     * Sun method returning the ecliptic position of the sun
+     * @return eclipticPos  (EclipticCoordinates) : returning the ecliptic position of the sun
+     */
     public EclipticCoordinates eclipticPos(){
         return eclipticPos;
     }
 
+    /**
+     * Sun method returning its anomaly
+     * @return meanAnomaly  (double) : returning the anomaly of the sun
+     */
     public double meanAnomaly(){
         return meanAnomaly;
     }
