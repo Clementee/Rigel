@@ -1,4 +1,4 @@
-package ch.epfl.coordinates;
+package ch.epfl.rigel.coordinates;
 
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 import ch.epfl.rigel.coordinates.EquatorialToHorizontalConversion;
@@ -19,7 +19,6 @@ public class EquatorialToHorizontalConversionTest {
             EquatorialToHorizontalConversion(ZonedDateTime.of(2009,7,6,0,0,0,0, ZoneOffset.UTC),
             GeographicCoordinates.ofDeg(-135.352088857, 52));
     //-135.352088857
-
 
     @Test
     void applyLatWorks() {

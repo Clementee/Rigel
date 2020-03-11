@@ -31,7 +31,6 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
      * @return      call the constructor with the entered parameters or throw exception
      */
     public static HorizontalCoordinates of(double az, double alt) {
-        System.out.print("az = "+ az + " alt = " +alt);
         if(AZINTERVAL.contains(az)&&ALTINTERVAL.contains(alt)) {
             return new HorizontalCoordinates(az,alt);
         }
@@ -114,7 +113,7 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
             break;
         default :
             break;     
-        };
+        }
         return string;
     }
     

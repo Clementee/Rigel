@@ -15,7 +15,7 @@ import java.util.function.Function;
  */
 public final class EquatorialToHorizontalConversion implements Function<EquatorialCoordinates, HorizontalCoordinates> {
 
-    private final double siderealTime;
+    public final double siderealTime;
     private final double cosPhy;
     private final double sinPhy;
 
@@ -38,7 +38,6 @@ public final class EquatorialToHorizontalConversion implements Function<Equatori
      */
     @Override
     public HorizontalCoordinates apply(EquatorialCoordinates equ) {
-
         double sinDelta = Math.sin(equ.dec());
         double cosDelta = Math.cos(equ.dec());
         double hourAngle = siderealTime-equ.ra();

@@ -48,9 +48,9 @@ public final class SiderealTime {
             Sg=Sg % 24+24;
         }
         else{
-            Sg=Sg%24;
+           Sg=Sg%24;
         }
-        return ofHr(Sg);
+        return Angle.normalizePositive(ofHr(Sg));
     }
 
     /**
