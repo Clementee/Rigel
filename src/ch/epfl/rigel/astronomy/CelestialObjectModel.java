@@ -2,6 +2,12 @@ package ch.epfl.rigel.astronomy;
 
 import ch.epfl.rigel.coordinates.EclipticToEquatorialConversion;
 
+/**
+ * Model of celestial object
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public interface CelestialObjectModel <O> {
     /**
      * Abstract method calculating the position of the object using a model
