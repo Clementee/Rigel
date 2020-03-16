@@ -12,9 +12,9 @@ import java.util.Objects;
  * @author Clement Sanh (311427)
  */
 public final class Sun extends CelestialObject{
-    private final static String sunName = "Soleil";
+    private final static String SUNNAME = "Soleil";
     private static float sunPhase;
-    private final static float magnitude = -26.7f;
+    private final static float MAGNITUDE = -26.7f;
     private EclipticCoordinates eclipticPos;
     private float meanAnomaly;
 
@@ -26,7 +26,7 @@ public final class Sun extends CelestialObject{
      * @param meanAnomaly      (float) : gives the anomaly
      */
     public Sun(EclipticCoordinates eclipticPos, EquatorialCoordinates equatorialPos, float angularSize, float meanAnomaly){
-        super(sunName, equatorialPos, angularSize, magnitude);
+        super(SUNNAME, equatorialPos, angularSize, MAGNITUDE);
         this.meanAnomaly = meanAnomaly;
         this.eclipticPos=Objects.requireNonNull(eclipticPos);
 
