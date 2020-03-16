@@ -17,6 +17,7 @@ import static java.lang.Math.*;
  * @author Clement Sanh (311427)
  */
 public enum PlanetModel implements CelestialObjectModel<Planet> {
+
     MERCURY("Mercure", 0.24085, 75.5671, 77.612, 0.205627,
             0.387098, 7.0051, 48.449, 6.74, -0.42),
     VENUS("Vénus", 0.615207, 272.30044, 131.54, 0.006812,
@@ -89,7 +90,7 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         else{
             lambda = lPrim+Math.atan2(k, rPrim-rEarth*cos(lPrim-lEarth));
         }
-        double beta = Math.atan2(rPrim * tan(phi)*sin(lambda-lPrim), k);
+        double beta = Math.atan((rPrim * tan(phi)*sin(lambda-lPrim))/k);
         double rho = sqrt(rEarth*rEarth+r*r-2*rEarth*r*cos(l-lEarth)*cos(phi));
         double theta = theta0/rho;
 
