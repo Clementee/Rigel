@@ -4,11 +4,12 @@ import ch.epfl.rigel.coordinates.EclipticCoordinates;
 import ch.epfl.rigel.coordinates.EclipticToEquatorialConversion;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 import static ch.epfl.rigel.astronomy.SunModel.SUN;
+import static ch.epfl.rigel.math.Angle.normalizePositive;
 import static ch.epfl.rigel.math.Angle.ofDeg;
 import static java.lang.Math.*;
 
 public enum MoonModel implements CelestialObjectModel<Moon> {
-    
+
     MOON;
 
     private final static double l0 = ofDeg(91.929336);
@@ -50,6 +51,7 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
     }
 
     private double MoonLongitudinalOrbit(double daysSinceJ2010){
+
         double l = lCste*daysSinceJ2010+l0;
         double Mm = l-MmCste*daysSinceJ2010-P0;
         double Ev = EvCste*sin(2*(l-SUN_LAMBDA) -Mm);
@@ -66,9 +68,9 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
     private EclipticCoordinates MoonEclipticCoordinates(double daysSinceJ2010){
         double N = N0-NCste*daysSinceJ2010;
         double NPrim = N - NPrimCste*sin(SUN_M);
-        double LAMBDAm = atan((sin(lPrimPrim-NPrim)*cos(i))/(cos(lPrimPrim-NPrim)))+NPrim;
+        double LAMBDAm = atan2((sin(lPrimPrim-NPrim)*cos(i)),(cos(lPrimPrim-NPrim)))+NPrim;
         double BETAm = asin(sin(lPrimPrim-NPrim)*sin(i));
-        return EclipticCoordinates.of(LAMBDAm,BETAm);
+        return EclipticCoordinates.of(normalizePositive(LAMBDAm),normalizePositive(BETAm));
     }
 
     private double MoonPhase(){
