@@ -9,7 +9,7 @@ import static ch.epfl.rigel.math.Angle.ofDeg;
 import static java.lang.Math.*;
 
 /**
- * Model of sun.
+ * Model of sun
  *
  * @author Baptiste Lecoeur (316223)
  * @author Clement Sanh (311427)
