@@ -15,10 +15,11 @@ public final class Asterism {
 
     /**
      * Asterism package-private constructor initializing the asterism with the stars composing it
+     *
      * @param stars   (List<Star>) : gives a list of stars present in the asterism
      */
     Asterism(List<Star> stars){
-        
+
         if(!stars.isEmpty()){
             asterismList = stars;
         }
@@ -29,10 +30,11 @@ public final class Asterism {
 
     /**
      * Asterism method returning the list of stars composing the asterism
-     * 
+     *
      * @return asterismList (List<Star>) : return the list of stars composing the astersim
      */
     public List<Star> stars(){
-        return asterismList;
+        return List.copyOf(asterismList);
     }
 }
+
