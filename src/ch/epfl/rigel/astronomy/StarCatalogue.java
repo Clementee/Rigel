@@ -51,8 +51,9 @@ public final class StarCatalogue {
         private List<Asterism> asterismBuild;
         private Builder catalogueBuilder;
 
-        public void Build(){
-            buildList = new StarCatalogue(starBuild,asterismBuild);
+        public Builder(){
+            starBuild = new ArrayList<>();
+            asterismBuild = new ArrayList<>();
         }
 
         public Builder addStar(Star star){
@@ -85,8 +86,11 @@ public final class StarCatalogue {
 
     public interface Loader {
 
-        public static void load(InputStream inputStream, Builder builder) throws IOException {
-            // à check !!!! builder.addStar(inputStream.read());
+        static void load(InputStream inputStream, Builder builder) throws IOException {
+            Map<Integer,Star> hipparcosToStarMap = new HashMap<>();
+            for(Star star : builder.stars()) {
+                hipparcosToStarMap.put(star.hipparcosId(),star);
+            }
             throw new IOException();
         }
     }
