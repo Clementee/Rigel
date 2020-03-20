@@ -3,14 +3,12 @@ package ch.epfl.rigel.astronomy;
 import ch.epfl.rigel.coordinates.EclipticCoordinates;
 import ch.epfl.rigel.coordinates.EclipticToEquatorialConversion;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
-import ch.epfl.rigel.coordinates.GeographicCoordinates;
-import ch.epfl.rigel.math.Angle;
-
 import static ch.epfl.rigel.astronomy.SunModel.SUN;
 import static ch.epfl.rigel.math.Angle.ofDeg;
 import static java.lang.Math.*;
 
 public enum MoonModel implements CelestialObjectModel<Moon> {
+    
     MOON;
 
     private final static double l0 = ofDeg(91.929336);
@@ -18,7 +16,7 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
     private final static double N0 = ofDeg(291.682547);
     private final static double i = ofDeg(5.145396);
     private final static double e = 0.0549;
-    private final static double TETA0 = ofDeg(0.5181);
+    private final static double THETA0 = ofDeg(0.5181);
 
     private static double SUN_M;
     private static double SUN_LAMBDA;
@@ -79,6 +77,6 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
 
     private double MoonAngularSize(){
         double rho = (1-e*e)/(1+e*cos(MmPrim+Ec));
-        return TETA0/rho;
+        return THETA0/rho;
     }
 }
