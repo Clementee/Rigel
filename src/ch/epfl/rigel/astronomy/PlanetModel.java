@@ -3,15 +3,15 @@ package ch.epfl.rigel.astronomy;
 import ch.epfl.rigel.coordinates.EclipticCoordinates;
 import ch.epfl.rigel.coordinates.EclipticToEquatorialConversion;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
-import org.w3c.dom.html.HTMLAreaElement;
+import ch.epfl.rigel.math.Angle;
 
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.*;
 
 import static ch.epfl.rigel.math.Angle.*;
 import static java.lang.Math.*;
 
 public enum PlanetModel implements CelestialObjectModel<Planet> {
+
     MERCURY("Mercure", 0.24085, 75.5671, 77.612, 0.205627,
             0.387098, 7.0051, 48.449, 6.74, -0.42),
     VENUS("Vénus", 0.615207, 272.30044, 131.54, 0.006812,
@@ -43,51 +43,56 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         this.a=a;
         this.i=ofDeg(i);
         this.omega=ofDeg(omega);
-        this.theta0=theta0*(PI/(180*3600));
+        this.theta0=Angle.ofArcsec(theta0);
         this.v0=v0;
     }
+
     @Override
     public Planet at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
-        double M = TAU/DAYS_PER_YEAR*daysSinceJ2010/Tp+epsilon-varpi;
+
+        list.add(this);
+        double M = (TAU/DAYS_PER_YEAR)*(daysSinceJ2010/Tp)+epsilon-varpi;
         double v = M + 2* eccentricity*sin(M);
-        double r = (a*(1-eccentricity*eccentricity))/(1+eccentricity*cos(v));
+        double r = (a*(1-Math.pow(eccentricity,2)))/(1+eccentricity*cos(v));
         double l = v + varpi;
         double phi = asin(sin(l-omega)*sin(i));
         double rPrim = r*cos(phi);
-        double lPrim = atan((sin(l-omega)*cos(i))/cos(l-omega))+omega;
+        double lPrim = atan2((sin(l-omega)*cos(i)),cos(l-omega))+omega;
 
-        double MEarth = TAU/DAYS_PER_YEAR * daysSinceJ2010/EARTH.Tp+EARTH.epsilon-EARTH.varpi;
+        double MEarth = (TAU/DAYS_PER_YEAR) * (daysSinceJ2010/EARTH.Tp) +EARTH.epsilon - EARTH.varpi;
         double vEARTH = MEarth + 2 * EARTH.eccentricity * sin(MEarth);
-        double R = (EARTH.a*(1-EARTH.eccentricity*EARTH.eccentricity)/(1+EARTH.eccentricity*cos(vEARTH)));
+        double R = (EARTH.a*(1-Math.pow(EARTH.eccentricity,2))/(1+EARTH.eccentricity*cos(vEARTH)));
         double L = vEARTH + EARTH.varpi;
+        double lambda;
+        double k = R * sin(lPrim - L);
 
-        double lambda=0;
-        double k= R * sin(lPrim - L);
-        System.out.println(frenchName);
-        System.out.println(list.contains(this));
-        if(list.contains(this)){
-            lambda = (TAU / 2) + atan(((rPrim * sin(L - lPrim)) / (R - (rPrim * cos(L - lPrim)))));
-        }else{
+        if(createInnerPlanet().contains(list.get(0))){
+            lambda = PI + L + atan(((rPrim * sin(L - lPrim)) / (R - (rPrim * cos(L - lPrim)))));
+        }
+
+        else{
             lambda  = lPrim + atan(k / (rPrim - (R * cos(lPrim - L))));
         }
+
         double beta = atan(((rPrim * tan(phi) * sin(lambda - lPrim)) / k));
 
-        double rho = sqrt((R * R) + (r * r) + (2 * R * r * cos(l - L) * cos(phi)));
+        double rho = Math.sqrt(Math.pow(R,2)+Math.pow(r,2)-2*R*r*Math.cos(l-L)*Math.cos(phi));
         double theta = theta0/rho;
         double F = (1 + cos(lambda - l)) / 2;
-        double m = v0 + 5 * (log(r*rho/sqrt(F)))/log(10);
+        double m = v0 + 5 * Math.log10(r*rho/Math.sqrt(F));
 
         EclipticCoordinates planetEclipticCoordinates= EclipticCoordinates.of(lambda, beta);
         EquatorialCoordinates equatorialCoordinates = eclipticToEquatorialConversion.apply(planetEclipticCoordinates);
-    return new Planet(frenchName, equatorialCoordinates, (float)theta, (float)m);
+        return new Planet(frenchName, equatorialCoordinates, (float)theta, (float)m);
     }
 
     private List<PlanetModel> createInnerPlanet(){
         List<PlanetModel> list = new ArrayList<>();
-        list.add(MERCURY);
-        list.add(VENUS);
+        list.add(0,MERCURY);
+        list.add(1,VENUS);
         return list;
     }
+
 
     public List<PlanetModel> ALL(){
         return List.copyOf(Arrays.asList(PlanetModel.values()));
