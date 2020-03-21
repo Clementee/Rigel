@@ -26,14 +26,6 @@ class PlanetModelTest {
                                 LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC)))
                 .equatorialPos().raHr(), 10e-7);
 
-        //assertEquals(35.11141185362771, Angle.toDeg(PlanetModel.JUPITER.at(-2231.0,
-        //        new EclipticToEquatorialConversion(
-        //                ZonedDateTime.of(LocalDate.of(2003, Month.NOVEMBER, 22),
-        //                      LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC))).angularSize()) * 3600, EPSILON);
-
-        //assertEquals(-1.9885659217834473, PlanetModel.JUPITER.at(-2231.0,
-        //        new EclipticToEquatorialConversion(ZonedDateTime.of(LocalDate.of(2003, Month.NOVEMBER, 22),
-        //                LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC))).magnitude(), EPSILON);
 
         assertEquals(16.820074565897148, PlanetModel.MERCURY.at(-2231.0,
                 new EclipticToEquatorialConversion(

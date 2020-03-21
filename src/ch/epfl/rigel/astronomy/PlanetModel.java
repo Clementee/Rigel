@@ -6,8 +6,7 @@ import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 import org.w3c.dom.html.HTMLAreaElement;
 
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static ch.epfl.rigel.math.Angle.*;
 import static java.lang.Math.*;
@@ -33,7 +32,7 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
     private String frenchName;
     private final double DAYS_PER_YEAR = 365.242191;
     private double Tp, epsilon, varpi, eccentricity, a, i, omega, theta0, v0;
-    private Set<PlanetModel> innerPlanetSet = createInnerPlanet();
+    private List<PlanetModel> list = createInnerPlanet();
 
     private PlanetModel(String frenchName, double Tp, double epsilon, double varpi, double eccentricity, double a, double i, double omega, double theta0, double v0){
         this.frenchName=frenchName;
@@ -64,32 +63,33 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
 
         double lambda=0;
         double k= R * sin(lPrim - L);
-
-        if(innerPlanetSet.contains(this)){
+        System.out.println(frenchName);
+        System.out.println(list.contains(this));
+        if(list.contains(this)){
             lambda = (TAU / 2) + atan(((rPrim * sin(L - lPrim)) / (R - (rPrim * cos(L - lPrim)))));
         }else{
             lambda  = lPrim + atan(k / (rPrim - (R * cos(lPrim - L))));
         }
-        System.out.println(lambda);
         double beta = atan(((rPrim * tan(phi) * sin(lambda - lPrim)) / k));
 
         double rho = sqrt((R * R) + (r * r) + (2 * R * r * cos(l - L) * cos(phi)));
         double theta = theta0/rho;
-        System.out.println("theta0 = " + theta0);
         double F = (1 + cos(lambda - l)) / 2;
-        System.out.println(v0);
         double m = v0 + 5 * (log(r*rho/sqrt(F)))/log(10);
 
         EclipticCoordinates planetEclipticCoordinates= EclipticCoordinates.of(lambda, beta);
         EquatorialCoordinates equatorialCoordinates = eclipticToEquatorialConversion.apply(planetEclipticCoordinates);
-        System.out.println(m);
     return new Planet(frenchName, equatorialCoordinates, (float)theta, (float)m);
     }
 
-    private Set<PlanetModel> createInnerPlanet(){
-        Set<PlanetModel> set = new HashSet<>();
-        set.add(MERCURY);
-        set.add(VENUS);
-        return set;
+    private List<PlanetModel> createInnerPlanet(){
+        List<PlanetModel> list = new ArrayList<>();
+        list.add(MERCURY);
+        list.add(VENUS);
+        return list;
+    }
+
+    public List<PlanetModel> ALL(){
+        return Arrays.asList(PlanetModel.values());
     }
 }
