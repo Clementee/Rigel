@@ -90,6 +90,6 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
     }
 
     public List<PlanetModel> ALL(){
-        return Arrays.asList(PlanetModel.values());
+        return List.copyOf(Arrays.asList(PlanetModel.values()));
     }
 }
