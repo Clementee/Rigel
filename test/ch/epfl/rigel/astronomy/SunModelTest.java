@@ -1,4 +1,4 @@
-package ch.epfl.astronomy;
+package ch.epfl.rigel.astronomy;
 
 import ch.epfl.rigel.astronomy.SunModel;
 import ch.epfl.rigel.coordinates.EclipticToEquatorialConversion;

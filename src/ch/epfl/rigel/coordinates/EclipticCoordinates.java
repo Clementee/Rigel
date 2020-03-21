@@ -32,7 +32,6 @@
          * @return      call the constructor with the entered parameters or throw exception
          */
         public static EclipticCoordinates of(double lon, double lat) {
-
             if(LONINTERVAL.contains(lon) && LATINTERVAL.contains(lat)) {
                 return new EclipticCoordinates(lon, lat);
             } else {

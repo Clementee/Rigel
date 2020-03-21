@@ -1,3 +1,7 @@
+package ch.epfl.rigel.astronomy;
+
+import ch.epfl.rigel.astronomy.CelestialObjectModel;
+import ch.epfl.rigel.astronomy.Sun;
 import ch.epfl.rigel.coordinates.EclipticCoordinates;
 import ch.epfl.rigel.coordinates.EclipticToEquatorialConversion;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
