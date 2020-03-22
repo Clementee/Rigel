@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlanetModelTest {
 
-    private final static double EPSILON = 10e-7;
+    private final static double EPSILON = 10e-9;
 
     @Test
     void at() {
@@ -24,7 +24,7 @@ class PlanetModelTest {
                 new EclipticToEquatorialConversion(
                         ZonedDateTime.of(LocalDate.of(2003, Month.NOVEMBER, 22),
                                 LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC)))
-                .equatorialPos().raHr(), 10e-7);
+                .equatorialPos().raHr(), EPSILON);
 
         assertEquals(35.11141185362771, Angle.toDeg(PlanetModel.JUPITER.at(-2231.0,
                 new EclipticToEquatorialConversion(
@@ -41,7 +41,7 @@ class PlanetModelTest {
                                 LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC)))
                 .equatorialPos().raHr(), EPSILON);
 
-        assertEquals(24.500872462861274, PlanetModel.MERCURY.at(-2231.0,
+        assertEquals(-24.500872462861274, PlanetModel.MERCURY.at(-2231.0,
                 new EclipticToEquatorialConversion(
                         ZonedDateTime.of(LocalDate.of(2003, Month.NOVEMBER, 22),
                                 LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC)))

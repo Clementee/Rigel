@@ -66,7 +66,7 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         double k = R * sin(lPrim - L);
 
         if(createInnerPlanet().contains(this)){
-            lambda = PI + L + atan(((rPrim * sin(L - lPrim)) / (R - (rPrim * cos(L - lPrim)))));
+            lambda = PI + L + atan(((rPrim * sin(L - lPrim)))/ (R - (rPrim * cos(L - lPrim))));
         }
 
         else{
@@ -80,8 +80,9 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         double F = (1 + cos(lambda - l)) / 2;
         double m = v0 + 5 * Math.log10(r*rho/Math.sqrt(F));
 
-        EclipticCoordinates planetEclipticCoordinates= EclipticCoordinates.of(lambda, beta);
+        EclipticCoordinates planetEclipticCoordinates = EclipticCoordinates.of(normalizePositive(lambda), beta);
         EquatorialCoordinates equatorialCoordinates = eclipticToEquatorialConversion.apply(planetEclipticCoordinates);
+        System.out.println(equatorialCoordinates.decDeg());
         return new Planet(frenchName, equatorialCoordinates, (float)theta, (float)m);
     }
 
