@@ -85,6 +85,6 @@ public final class StarCatalogue {
     }
 
     public interface Loader {
-        void load(InputStream inputStream, Builder builder) throws IOException;
+        abstract void load(InputStream inputStream, Builder builder) throws IOException;
     }
 }
