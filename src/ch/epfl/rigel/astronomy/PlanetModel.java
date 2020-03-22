@@ -32,7 +32,6 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
     private String frenchName;
     private final double DAYS_PER_YEAR = 365.242191;
     private double Tp, epsilon, varpi, eccentricity, a, i, omega, theta0, v0;
-    private List<PlanetModel> list = createInnerPlanet();
     public final static List<PlanetModel> ALL = Arrays.asList(PlanetModel.values());
 
     private PlanetModel(String frenchName, double Tp, double epsilon, double varpi, double eccentricity, double a, double i, double omega, double theta0, double v0){
@@ -66,7 +65,7 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         double lambda;
         double k = R * sin(lPrim - L);
 
-        if(list.contains(this)){
+        if(createInnerPlanet().contains(this)){
             lambda = PI + L + atan(((rPrim * sin(L - lPrim)) / (R - (rPrim * cos(L - lPrim)))));
         }
 
