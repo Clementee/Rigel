@@ -10,6 +10,12 @@ import java.util.*;
 import static ch.epfl.rigel.math.Angle.*;
 import static java.lang.Math.*;
 
+/**
+ * A model of Planet
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public enum PlanetModel implements CelestialObjectModel<Planet> {
 
     MERCURY("Mercure", 0.24085, 75.5671, 77.612, 0.205627,
@@ -34,6 +40,20 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
     private double Tp, epsilon, varpi, eccentricity, a, i, omega, theta0, v0;
     public final static List<PlanetModel> ALL = Arrays.asList(PlanetModel.values());
 
+    /**
+     * PlanetModel private constructor initializing the model of planet with its characteristics
+     *
+     * @param frenchName (String) : returns the French name of the planet
+     * @param Tp         (double) : returns the tropical year of the planet
+     * @param epsilon    (double) : returns the longitude at J2010 in radians
+     * @param varpi      (double) : returns the longitude at the perigee in radians
+     * @param eccentricity (double) : returns the eccentricity of the orbit of the planet
+     * @param a          (double) : returns the half big axis of the orbit
+     * @param i          (double) : returns the inclination of the orbit at the ecliptic
+     * @param omega      (double) : returns the longitude of the ascending node
+     * @param theta0     (double) : returns the angular size of the planet
+     * @param v0         (double) : returns the magnitude of the planet
+     */
     private PlanetModel(String frenchName, double Tp, double epsilon, double varpi, double eccentricity, double a, double i, double omega, double theta0, double v0){
         this.frenchName=frenchName;
         this.Tp=Tp;
@@ -46,7 +66,14 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         this.theta0=Angle.ofArcsec(theta0);
         this.v0=v0;
     }
-
+    
+    /**
+     * PlanetModel method at, creating a planet and returning it
+     *
+     * @param daysSinceJ2010 (double) : gives the number of days after J2010
+     * @param eclipticToEquatorialConversion   (EclipticToEquatorialConversion) : gives the equatorial coordinates given by the conversion from ecliptic
+     * @return planetAt    (Planet) : returns the planet
+     */
     @Override
     public Planet at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
 
@@ -82,10 +109,14 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
 
         EclipticCoordinates planetEclipticCoordinates = EclipticCoordinates.of(normalizePositive(lambda), beta);
         EquatorialCoordinates equatorialCoordinates = eclipticToEquatorialConversion.apply(planetEclipticCoordinates);
-        System.out.println(equatorialCoordinates.decDeg());
         return new Planet(frenchName, equatorialCoordinates, (float)theta, (float)m);
     }
 
+    /**
+     * PlanetModel method createInnerPlanet, creating a list of the inner planets and returning it
+     *
+     * @return list   (List<PlanetModel>) : returns the list of inner planets initialized with Mercury and Venus
+     */
     private List<PlanetModel> createInnerPlanet(){
         List<PlanetModel> list = new ArrayList<>();
         list.add(0,MERCURY);
@@ -93,8 +124,13 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         return list;
     }
 
-
+    /**
+     * PlanetModel method ALL, returning a copy of the list of the planets
+     *
+     * @return ALL   (List<PlanetModel>) : returns a copy of the list of the planets
+     */
     public List<PlanetModel> ALL(){
         return List.copyOf(ALL);
     }
+    
 }
