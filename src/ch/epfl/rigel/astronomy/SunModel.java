@@ -1,7 +1,5 @@
 package ch.epfl.rigel.astronomy;
 
-import ch.epfl.rigel.astronomy.CelestialObjectModel;
-import ch.epfl.rigel.astronomy.Sun;
 import ch.epfl.rigel.coordinates.EclipticCoordinates;
 import ch.epfl.rigel.coordinates.EclipticToEquatorialConversion;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
@@ -17,6 +15,7 @@ import static java.lang.Math.*;
  * @author Clement Sanh (311427)
  */
 public enum SunModel implements CelestialObjectModel<Sun> {
+    
     SUN;
 
     private final static double LONSUN2010 = Angle.ofDeg(279.557208);
@@ -24,6 +23,13 @@ public enum SunModel implements CelestialObjectModel<Sun> {
     private final static double J2010SunEarthExcentricity = 0.016705;
     private final static double THETA0 = ofDeg(0.533128);
 
+    /**
+     * SunModel method at, creating a sun and returning it
+     *
+     * @param daysSinceJ2010 (double) : gives the number of days after J2010
+     * @param eclipticToEquatorialConversion   (EclipticToEquatorialConversion) : gives the equatorial coordinates given by the conversion from ecliptic
+     * @return sunAt    (Sun) : returns the sun
+     */
     @Override
     public Sun at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
         double M0 = TAU/365.242191 * daysSinceJ2010 +LONSUN2010 - LONSUNPERIGEE;
