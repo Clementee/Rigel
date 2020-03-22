@@ -85,13 +85,6 @@ public final class StarCatalogue {
     }
 
     public interface Loader {
-
-        static void load(InputStream inputStream, Builder builder) throws IOException {
-            Map<Integer,Star> hipparcosToStarMap = new HashMap<>();
-            for(Star star : builder.stars()) {
-                hipparcosToStarMap.put(star.hipparcosId(),star);
-            }
-            throw new IOException();
-        }
+        void load(InputStream inputStream, Builder builder) throws IOException;
     }
 }
