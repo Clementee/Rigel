@@ -51,7 +51,6 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
     @Override
     public Planet at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
 
-        list.add(this);
         double M = (TAU/DAYS_PER_YEAR)*(daysSinceJ2010/Tp)+epsilon-varpi;
         double v = M + 2* eccentricity*sin(M);
         double r = (a*(1-Math.pow(eccentricity,2)))/(1+eccentricity*cos(v));
@@ -67,7 +66,7 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         double lambda;
         double k = R * sin(lPrim - L);
 
-        if(createInnerPlanet().contains(list.get(0))){
+        if(list.contains(this)){
             lambda = PI + L + atan(((rPrim * sin(L - lPrim)) / (R - (rPrim * cos(L - lPrim)))));
         }
 
