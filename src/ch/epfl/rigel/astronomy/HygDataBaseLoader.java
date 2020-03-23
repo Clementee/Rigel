@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import static ch.epfl.rigel.astronomy.HygDataBaseLoader.index;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 public enum HygDataBaseLoader implements StarCatalogue.Loader{

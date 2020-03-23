@@ -34,11 +34,11 @@ public final class CartesianCoordinates {
         return new CartesianCoordinates(x,y);
     }
 
-    public static double x(){
+    public double x(){
         return x;
     }
 
-    public static double y(){
+    public double y(){
         return y;
     }
 

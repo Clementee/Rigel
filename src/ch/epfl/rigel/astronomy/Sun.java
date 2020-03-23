@@ -12,11 +12,8 @@ import java.util.Objects;
  * @author Clement Sanh (311427)
  */
 public final class Sun extends CelestialObject{
-    private final static String sunName = "Soleil";
-    private static float sunPhase;
-    private final static float magnitude = -26.7f;
-    private EclipticCoordinates eclipticPos;
-    private float meanAnomaly;
+    private static double meanAn;
+    private static EclipticCoordinates eclipticPosition;
 
     /**
      * Sun package-private constructor returning a celestial object and more precisely the sun except if the parameters are not working
@@ -26,28 +23,19 @@ public final class Sun extends CelestialObject{
      * @param meanAnomaly      (float) : gives the anomaly
      */
     public Sun(EclipticCoordinates eclipticPos, EquatorialCoordinates equatorialPos, float angularSize, float meanAnomaly){
-        super(sunName, equatorialPos, angularSize, magnitude);
-        this.meanAnomaly = meanAnomaly;
-        this.eclipticPos=Objects.requireNonNull(eclipticPos);
-
-        if(eclipticPos.lon()==0 & eclipticPos.lat() ==0){
-            throw new NullPointerException();
-        }
+        super("Soleil", equatorialPos, angularSize, -26.7f);
+        Objects.requireNonNull(eclipticPos);
+        eclipticPosition = eclipticPos;
+        meanAn = meanAnomaly;
     }
 
-    /**
-     * Sun method returning the ecliptic position of the sun
-     * @return eclipticPos  (EclipticCoordinates) : returning the ecliptic position of the sun
-     */
     public EclipticCoordinates eclipticPos(){
-        return eclipticPos;
+        return eclipticPosition;
     }
 
-    /**
-     * Sun method returning its anomaly
-     * @return meanAnomaly  (double) : returning the anomaly of the sun
-     */
     public double meanAnomaly(){
-        return meanAnomaly;
+        return meanAn;
     }
+
+
 }

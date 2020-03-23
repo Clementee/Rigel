@@ -75,7 +75,7 @@ public final class StarCatalogue {
         }
 
         public Builder loadFrom(InputStream inputStream, Loader loader) throws IOException {
-            Loader.load(inputStream,catalogueBuilder);
+            //Loader.load(inputStream,catalogueBuilder);
             throw new IOException();
         }
 
