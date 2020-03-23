@@ -18,7 +18,7 @@ public final class Asterism {
      *
      * @param stars   (List<Star>) : gives a list of stars present in the asterism
      */
-    public Asterism(List<Star> stars){
+    Asterism(List<Star> stars){
 
         if(!stars.isEmpty()){
             asterismList = stars;
@@ -33,7 +33,7 @@ public final class Asterism {
      *
      * @return asterismList (List<Star>) : return the list of stars composing the astersim
      */
-    public List<Star> stars(){
+    List<Star> stars(){
         return List.copyOf(asterismList);
     }
 }
