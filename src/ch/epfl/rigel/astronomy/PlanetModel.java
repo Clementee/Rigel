@@ -36,9 +36,9 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
             30.1985, 1.7673, 131.879, 62.20, -6.87);
 
     private String frenchName;
-    private final double DAYS_PER_YEAR = 365.242191;
+    private final static double DAYS_PER_YEAR = 365.242191;
     private double Tp, epsilon, varpi, eccentricity, a, i, omega, theta0, v0;
-    public final static List<PlanetModel> ALL = Arrays.asList(PlanetModel.values());
+    public static List<PlanetModel> ALL = List.copyOf(Arrays.asList(PlanetModel.values()));
 
     /**
      * PlanetModel private constructor initializing the model of planet with its characteristics
@@ -66,7 +66,7 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         this.theta0=Angle.ofArcsec(theta0);
         this.v0=v0;
     }
-    
+
     /**
      * PlanetModel method at, creating a planet and returning it
      *
@@ -123,14 +123,4 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         list.add(1,VENUS);
         return list;
     }
-
-    /**
-     * PlanetModel method ALL, returning a copy of the list of the planets
-     *
-     * @return ALL   (List<PlanetModel>) : returns a copy of the list of the planets
-     */
-    public List<PlanetModel> ALL(){
-        return List.copyOf(ALL);
-    }
-    
 }
