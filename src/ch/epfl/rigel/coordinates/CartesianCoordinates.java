@@ -10,8 +10,8 @@ import java.util.Locale;
  */
 public final class CartesianCoordinates {
 
-    private static double x;
-    private static double y;
+    private double x;
+    private double y;
 
     /**
      * CartesianCoordinates private constructor initializing some values
@@ -27,7 +27,7 @@ public final class CartesianCoordinates {
      * CartesianCoordinates method returning the cartesian coordinates
      * @param x     (double) : gives the abscissa of the coordinates
      * @param y     (double) : gives the ordonnée of the coordinates
-     *              
+     *
      * @return CartesianCoordinates (CartesianCoordinates) : return the cartesian coordinates linked to the x and y given
      */
     public static CartesianCoordinates of(double x, double y){
