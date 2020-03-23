@@ -3,6 +3,8 @@ package ch.epfl.rigel.coordinates;
 import java.util.Locale;
 import java.util.function.Function;
 
+import static java.lang.Math.*;
+
 public final class StereographicProjection implements Function<HorizontalCoordinates, CartesianCoordinates> {
 
     private static double centerLambda;
@@ -83,18 +85,17 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      * @return horizontalCoords (HorizontalCoordinates) : return the horizontal coordinates of the point xy
      */
     public HorizontalCoordinates inverseApply(CartesianCoordinates xy){
-
         double x = xy.x();
         double y = xy.y();
 
-        final double rho = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
-        final double sinC = 2*rho/(Math.pow(rho,2)+1);
-        final double cosC = (1-Math.pow(rho,2))/(Math.pow(rho,2)+1);
+        double rho = sqrt(x*x+y*y);
+        double sinC = (2*rho)/(rho*rho+1);
+        double cosC = (1-rho*rho)/(rho*rho+1);
 
-        double lambda = Math.atan2(x*sinC,rho*cosPhy*cosC-y*sinPhy*sinC)+centerLambda;
-        double phy = Math.asin(cosC*sinPhy+((y*sinC*cosPhy)/rho));
+        double lambda = atan2(x*sinC, rho*cosPhy*cosC-y*sinPhy*sinC)+centerLambda;
+        double phi = asin(cosC*sinPhy+(y*sinC*cosPhy)/rho);
 
-        return HorizontalCoordinates.of(lambda,phy);
+        return HorizontalCoordinates.of(lambda, phi);
     }
 
     @Override
