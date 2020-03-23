@@ -41,7 +41,7 @@ public abstract class CelestialObject {
      * Method name returning the name of the celestial object
      * @return celestialName (String) : return the name of the celestial object
      */
-    public static String name(){
+    public String name(){
         return celestialName;
     }
 
