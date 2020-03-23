@@ -68,11 +68,7 @@ public class ClosedInterval extends Interval {
      */
     @Override
     public boolean contains(double v) {
-        if (lowerBound <= v && v <= upperBound) {
-            return true;
-        } else {
-            return false;
-        }
+        return lowerBound <= v && v <= upperBound;
     }
 
     /**
@@ -85,11 +81,7 @@ public class ClosedInterval extends Interval {
 
         if (v < lowerBound) {
             return lowerBound;
-        } else if (v > upperBound) {
-            return upperBound;
-        } else {
-            return v;
-        }
+        } else return Math.min(v, upperBound);
     }
 
     /**
@@ -101,6 +93,4 @@ public class ClosedInterval extends Interval {
     public String toString() {
         return String.format(Locale.ROOT, "The closed interval chosen can be represented as [%s,%s]", lowerBound, upperBound);
     }
-
-
 }
