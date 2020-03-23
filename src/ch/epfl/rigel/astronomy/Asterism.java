@@ -14,11 +14,11 @@ public final class Asterism {
     private List<Star> asterismList;
 
     /**
-     * Asterism package-private constructor initializing the asterism with the stars composing it
+     * Asterism public constructor initializing the asterism with the stars composing it
      *
      * @param stars   (List<Star>) : gives a list of stars present in the asterism
      */
-    Asterism(List<Star> stars){
+    public Asterism(List<Star> stars){
 
         if(!stars.isEmpty()){
             asterismList = stars;
@@ -33,7 +33,7 @@ public final class Asterism {
      *
      * @return asterismList (List<Star>) : return the list of stars composing the astersim
      */
-    List<Star> stars(){
+    public List<Star> stars(){
         return List.copyOf(asterismList);
     }
 }
