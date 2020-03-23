@@ -11,7 +11,8 @@ public final class StereographicProjection implements Function<HorizontalCoordin
     private static double radius;
     private static double cosPhy;
     private static double sinPhy;
-
+    //
+    
     /**
      * StereographicProjection public constructor initializing some values
      *
