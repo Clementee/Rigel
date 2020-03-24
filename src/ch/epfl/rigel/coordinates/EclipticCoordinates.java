@@ -6,6 +6,8 @@
     import ch.epfl.rigel.math.ClosedInterval;
     import ch.epfl.rigel.math.RightOpenInterval;
 
+    import static ch.epfl.rigel.Preconditions.checkInInterval;
+
     /**
      * An ecliptic coordinate
      *
