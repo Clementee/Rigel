@@ -22,10 +22,8 @@ public final class RightOpenInterval extends Interval {
         super(low, high);
         lowerBound = low;
         upperBound = high;
-
     }
 
-    
     /**
      * RightOpenInterval method returning the right open interval centered in 0 and of radius size if possible and else throw an exception
      *
@@ -69,11 +67,7 @@ public final class RightOpenInterval extends Interval {
      */
     @Override
     public boolean contains(double v) {
-        if (lowerBound <= v && v < upperBound) {
-            return true;
-        } else {
-            return false;
-        }
+        return lowerBound <= v && v < upperBound;
     }
 
     /**
@@ -99,6 +93,5 @@ public final class RightOpenInterval extends Interval {
         return String.format(Locale.ROOT,
                 "The right open interval chosen can be represented as [%s,%s[",
                 lowerBound, upperBound);
-
     }
 }
