@@ -20,7 +20,7 @@ public enum AsterismLoader implements StarCatalogue.Loader {
             try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                 List<Star> starList = builder.stars();
                 while(bufferedReader.ready()){
-                    String[] tabString = bufferedReader.readLine().split(", ");
+                    String[] tabString = bufferedReader.readLine().split(",");
                     List<Star> asterismList = new LinkedList<>();
                     for(int i = 0 ; i<tabString.length ;i++){
                         for(Star s : starList){

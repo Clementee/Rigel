@@ -13,7 +13,6 @@ public final class StarCatalogue {
 
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms){
 
-
         for(Asterism ast : asterisms){
 
             List<Integer> index = new LinkedList<>();
@@ -46,10 +45,8 @@ public final class StarCatalogue {
 
     public static final class Builder {
 
-        private StarCatalogue buildList;
         private List<Star> starBuild;
         private List<Asterism> asterismBuild;
-        private Builder catalogueBuilder;
 
         public Builder(){
             starBuild = new ArrayList<>();
@@ -58,7 +55,7 @@ public final class StarCatalogue {
 
         public Builder addStar(Star star){
             starBuild.add(star);
-            return catalogueBuilder;
+            return this;
         }
 
         public List<Star> stars(){
@@ -67,7 +64,7 @@ public final class StarCatalogue {
 
         public Builder addAsterism(Asterism asterism){
             asterismBuild.add(asterism);
-            return catalogueBuilder;
+            return this;
         }
 
         public List<Asterism> asterisms(){
@@ -75,12 +72,12 @@ public final class StarCatalogue {
         }
 
         public Builder loadFrom(InputStream inputStream, Loader loader) throws IOException {
-            loader.load(inputStream, catalogueBuilder);
+            loader.load(inputStream, this);
             return this;
         }
 
         public StarCatalogue build(){
-            return buildList;
+            return new StarCatalogue(starBuild, asterismBuild);
         }
     }
 

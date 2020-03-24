@@ -14,7 +14,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
 
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
-        LinkedList<String[]> input = new LinkedList<>();
+        ArrayList<String[]> input = new ArrayList<>();
         try(InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII)){
             try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)){
                 String inputLine = bufferedReader.readLine();
@@ -38,16 +38,11 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
                 }
                 valInt = tabInter[index.PROPER.ordinal()];
                 if(valInt.equals("")){
-                    if(tabInter[index.BAYER.ordinal()].equals("")){
-                        starName = "?"+tabInter[index.CON.ordinal()];
-                    }else{
-                        starName = valInt;
-                    }
-                }
+                        starName = tabInter[index.BAYER.ordinal()]+"? "+tabInter[index.CON.ordinal()];
+                    }else{ starName = valInt;}
                 starRaRad = Double.parseDouble(tabInter[index.RARAD.ordinal()]);
                 starDecRad=  Double.parseDouble(tabInter[index.DECRAD.ordinal()]);
                 EquatorialCoordinates starEqCoordinates = EquatorialCoordinates.of(starRaRad, starDecRad);
-
                 valInt = tabInter[index.MAG.ordinal()];
                 if(valInt.equals("")){
                     starMagnitude = 0;
@@ -61,7 +56,8 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
                     starColorInd = Double.parseDouble(valInt);
                 }
                 Star test = new Star(starHip,starName,starEqCoordinates,(float)starMagnitude,(float)starColorInd);
-                builder = builder.addStar(test);
+                System.out.println(test);
+                builder.addStar(test);
             }
 
         }
