@@ -17,7 +17,6 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
 
     private static double cosObliquity;
     private static double sinObliquity;
-    private final static double COEFFOBLI = Angle.ofDMS(23, 26, 21.45);
     private final static Polynomial epsilonPoly = Polynomial.of(Angle.ofArcsec(0.00181), Angle.ofArcsec(-0.0006), Angle.ofArcsec(-46.815), Angle.ofDMS(23,26,21.45));
 
     /**
