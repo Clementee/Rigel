@@ -5,8 +5,6 @@ import ch.epfl.rigel.math.Angle;
 import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.rigel.math.RightOpenInterval;
 
-import static ch.epfl.rigel.Preconditions.checkInInterval;
-
 /**
  * A geographic coordinate
  *
@@ -33,7 +31,12 @@ public final class GeographicCoordinates extends SphericalCoordinates {
       * @return      call the constructor with the entered parameters or throw exception
       */
     public static GeographicCoordinates ofDeg(double lonDeg, double latDeg) {
-        return new GeographicCoordinates(checkInInterval(LONINTERVAL,Angle.ofDeg(lonDeg)), checkInInterval(LATINTERVAL,Angle.ofDeg(latDeg)));
+                if(isValidLonDeg(lonDeg)&&isValidLatDeg(latDeg)) {
+            return new GeographicCoordinates(Angle.ofDeg(lonDeg),Angle.ofDeg(latDeg));
+            }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
     
     /**
