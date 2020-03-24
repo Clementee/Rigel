@@ -32,12 +32,7 @@
          * @return      call the constructor with the entered parameters or throw exception
          */
         public static EquatorialCoordinates of(double ra, double dec) {
-            if(DECINTERVAL.contains(dec) && RAINTERVAL.contains(ra)){
-                return new EquatorialCoordinates(ra,dec);
-            }
-            else {
-                throw new IllegalArgumentException();
-            }
+            return new EquatorialCoordinates(checkInInterval(RAINTERVAL,ra),checkInInterval(DECINTERVAL,dec));
         }
 
         public double ra() { return super.lon();}
