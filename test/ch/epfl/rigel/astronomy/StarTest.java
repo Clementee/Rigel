@@ -13,6 +13,11 @@ class StarTest {
     }
 
     @Test
+    void name(){
+        assertEquals("Rigel",new Star(24436, "Rigel", EquatorialCoordinates.of(0, 0), 0, -0.03f).name() );
+    }
+
+    @Test
     void colorTemperature() {
         assertEquals(10515 ,new Star(24436, "Rigel", EquatorialCoordinates.of(0, 0), 0, -0.03f)
                 .colorTemperature());

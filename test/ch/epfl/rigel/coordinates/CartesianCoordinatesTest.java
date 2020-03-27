@@ -1,6 +1,5 @@
-package testProf.ch.epfl.rigel.coordinates;
+package ch.epfl.rigel.coordinates;
 
-import ch.epfl.rigel.coordinates.CartesianCoordinates;
 import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
 

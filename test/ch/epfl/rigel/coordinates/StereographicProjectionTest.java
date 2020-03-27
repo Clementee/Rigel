@@ -1,14 +1,11 @@
-package testProf.ch.epfl.rigel.coordinates;
+package ch.epfl.rigel.coordinates;
 
-import ch.epfl.rigel.coordinates.CartesianCoordinates;
-import ch.epfl.rigel.coordinates.HorizontalCoordinates;
-import ch.epfl.rigel.coordinates.StereographicProjection;
 import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class   StereographicProjectionTest {
+class StereographicProjectionTest {
 
     @Test
     void circleForEquatorIsALineWhenCenterIsOnEquatorToo() {

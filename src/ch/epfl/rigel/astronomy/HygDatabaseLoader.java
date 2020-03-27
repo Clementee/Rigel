@@ -4,6 +4,7 @@ import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -14,54 +15,61 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
 
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
-        ArrayList<String[]> input = new ArrayList<>();
-        try(InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII)){
-            try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)){
+        ArrayList<String[]> inputTab = new ArrayList<>();
+        try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII)) {
+            try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                 String inputLine = bufferedReader.readLine();
-                while(bufferedReader.ready()){
+                while (bufferedReader.ready()) {
                     inputLine = bufferedReader.readLine();
-                    input.add(inputLine.split(","));
+                    inputTab.add(inputLine.split(","));
                 }
-            }
-            int starHip;
-            String starName ="";
-            String valInt = "";
-            double starRaRad, starDecRad, starMagnitude, starColorInd;
-            Iterator<String[]> i = input.iterator();
-            while(i.hasNext()){
-                String[]tabInter = i.next();
-                valInt = tabInter[index.HIP.ordinal()];
-                if(valInt.equals("")){
-                    starHip = 0;
-                }else{
-                    starHip = Integer.parseInt(valInt);
-                }
-                valInt = tabInter[index.PROPER.ordinal()];
-                if(valInt.equals("")){
-                        starName = tabInter[index.BAYER.ordinal()]+"? "+tabInter[index.CON.ordinal()];
-                    }else{ starName = valInt;}
-                starRaRad = Double.parseDouble(tabInter[index.RARAD.ordinal()]);
-                starDecRad=  Double.parseDouble(tabInter[index.DECRAD.ordinal()]);
-                EquatorialCoordinates starEqCoordinates = EquatorialCoordinates.of(starRaRad, starDecRad);
-                valInt = tabInter[index.MAG.ordinal()];
-                if(valInt.equals("")){
-                    starMagnitude = 0;
-                }else{
-                    starMagnitude = Double.parseDouble(valInt);
-                }
-                valInt = tabInter[index.CI.ordinal()];
-                if(valInt.equals("")){
-                    starColorInd = 0;
-                }else{
-                    starColorInd = Double.parseDouble(valInt);
-                }
-                Star test = new Star(starHip,starName,starEqCoordinates,(float)starMagnitude,(float)starColorInd);
-                System.out.println(test);
-                builder.addStar(test);
-            }
+                Iterator<String[]> i = inputTab.iterator();
 
+                while (i.hasNext()){
+                    int hipparcosID;
+                    String name;
+                    double rarad,decrad;
+                    float magnitude, colorID;
+                    String[] tab = i.next();
+                    String valInt = tab[index.HIP.ordinal()];
+                    if(!valInt.equals("")){
+                        hipparcosID = Integer.parseInt(valInt);
+                    }else{
+                        hipparcosID = 0;
+                    }
+                    valInt = tab[index.PROPER.ordinal()];
+                    if(!valInt.equals("")){
+                        name = valInt;
+                    }else{
+                        valInt = tab[index.BAYER.ordinal()];
+                        if(!valInt.equals("")){
+                            name=valInt+tab[index.CON.ordinal()];
+                        }else{
+                            name ="?"+tab[index.CON.ordinal()];
+                        }
+                    }
+                    rarad = Double.parseDouble(tab[index.RARAD.ordinal()]);
+                    decrad = Double.parseDouble(tab[index.DECRAD.ordinal()]);
+                    valInt = tab[index.MAG.ordinal()];
+                    EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad,decrad);
+                    if(!valInt.equals("")){
+                        magnitude = Float.parseFloat(valInt);
+                    }else{
+                        magnitude=0;
+                    }
+                    valInt = tab[index.CI.ordinal()];
+                    if(!valInt.equals("")){
+                        colorID = Float.parseFloat(valInt);
+                    }else{
+                        colorID = 0;
+                    }
+                    builder.addStar(new Star(hipparcosID,name, equatorialCoordinates, magnitude,colorID));
+                    }
+                }
+            }
         }
-    }
+
+
     private enum index{
         ID, HIP, HD, HR, GL, BF, PROPER, RA, DEC, DIST, PMRA, PMDEC,
         RV, MAG, ABSMAG, SPECT, CI, X, Y, Z, VX, VY, VZ,

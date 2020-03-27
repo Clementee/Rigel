@@ -11,10 +11,10 @@ import java.util.Objects;
  */
 public abstract class CelestialObject {
 
-    private static String celestialName;
-    private static EquatorialCoordinates celestialEquatorialPosition;
-    private static float celestialAngularSize;
-    private static float celestialMagnitude;
+    private  String celestialName;
+    private  EquatorialCoordinates celestialEquatorialPosition;
+    private  float celestialAngularSize;
+    private  float celestialMagnitude;
 
     /**
      * CelestialObject package-private constructor returning a celestial object and initializing some values

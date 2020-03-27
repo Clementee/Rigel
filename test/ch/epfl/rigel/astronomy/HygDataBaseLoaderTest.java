@@ -28,15 +28,12 @@ class HygDatabaseLoaderTest {
             StarCatalogue catalogue = new StarCatalogue.Builder()
                     .loadFrom(hygStream, HygDatabaseLoader.INSTANCE)
                     .build();
-
             Star rigel = null;
             for (Star s : catalogue.stars()) {
-                System.out.println(s.name());
                 if (s.name().equalsIgnoreCase("rigel"))
                     rigel = s;
             }
 
-            System.out.println(catalogue.stars());
                 assertNotNull(rigel);
         }
     }

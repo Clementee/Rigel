@@ -7,14 +7,13 @@ import java.util.*;
 
 public final class StarCatalogue {
 
-    private static List<Star> starList;
+    private List<Star> starList;
     private Map<Asterism,List<Integer>> asterismMap = new HashMap<>();
 
 
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms){
 
         for(Asterism ast : asterisms){
-
             List<Integer> index = new LinkedList<>();
 
             if(!stars.containsAll(ast.stars())){
@@ -27,6 +26,7 @@ public final class StarCatalogue {
                 asterismMap.put(ast,index);
             }
         }
+        System.out.println(stars.get(1));
         starList = stars;
     }
 
@@ -54,6 +54,7 @@ public final class StarCatalogue {
         }
 
         public Builder addStar(Star star){
+            //if(star.hipparcosId()==107){System.out.println("addStar : "+star);}
             starBuild.add(star);
             return this;
         }
@@ -77,6 +78,7 @@ public final class StarCatalogue {
         }
 
         public StarCatalogue build(){
+            System.out.println("build : " + starBuild.get(1));
             return new StarCatalogue(starBuild, asterismBuild);
         }
     }
