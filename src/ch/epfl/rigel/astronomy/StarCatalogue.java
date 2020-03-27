@@ -26,7 +26,6 @@ public final class StarCatalogue {
                 asterismMap.put(ast,index);
             }
         }
-        System.out.println(stars.get(1));
         starList = stars;
     }
 
@@ -54,7 +53,6 @@ public final class StarCatalogue {
         }
 
         public Builder addStar(Star star){
-            //if(star.hipparcosId()==107){System.out.println("addStar : "+star);}
             starBuild.add(star);
             return this;
         }
@@ -78,7 +76,6 @@ public final class StarCatalogue {
         }
 
         public StarCatalogue build(){
-            System.out.println("build : " + starBuild.get(1));
             return new StarCatalogue(starBuild, asterismBuild);
         }
     }
