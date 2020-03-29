@@ -1,8 +1,8 @@
 package ch.epfl.rigel.astronomy;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+
+import static ch.epfl.rigel.Preconditions.checkArgument;
 
 
 /**
@@ -16,18 +16,13 @@ public final class Asterism {
     private List<Star> asterismList;
 
     /**
-     * Asterism public constructor initializing the asterism with the stars composing it
+     * Asterism package-private constructor initializing the asterism with the stars composing it
      *
      * @param stars   (List<Star>) : gives a list of stars present in the asterism
      */
     public Asterism(List<Star> stars){
-
-        if(!stars.isEmpty()){
-            asterismList = Collections.unmodifiableList(List.copyOf(stars));
-        }
-        else {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(!stars.isEmpty());
+        asterismList = stars;
     }
 
     /**
