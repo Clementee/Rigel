@@ -3,6 +3,8 @@ package ch.epfl.rigel.astronomy;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 import java.util.Objects;
 
+import static ch.epfl.rigel.Preconditions.checkArgument;
+
 /**
  * A celestial object
  *
@@ -11,10 +13,10 @@ import java.util.Objects;
  */
 public abstract class CelestialObject {
 
-    private  String celestialName;
-    private  EquatorialCoordinates celestialEquatorialPosition;
-    private  float celestialAngularSize;
-    private  float celestialMagnitude;
+    private String celestialName;
+    private EquatorialCoordinates celestialEquatorialPosition;
+    private float celestialAngularSize;
+    private float celestialMagnitude;
 
     /**
      * CelestialObject package-private constructor returning a celestial object and initializing some values
@@ -23,17 +25,12 @@ public abstract class CelestialObject {
      * @param angularSize     (float) : gives the angular size of the planet
      * @param magnitude       (float) : gives the magnitude of the planet
      */
-    CelestialObject(String name, EquatorialCoordinates equatorialPos, float angularSize, float magnitude){
+    public CelestialObject(String name, EquatorialCoordinates equatorialPos, float angularSize, float magnitude){
 
         celestialName = Objects.requireNonNull(name);
         celestialEquatorialPosition = Objects.requireNonNull(equatorialPos);
-
-        if (!(angularSize < 0)) {
-            celestialAngularSize = angularSize;
-        } else {
-            throw new IllegalArgumentException();
-        }
-
+        checkArgument(angularSize>=0);
+        celestialAngularSize = angularSize;
         celestialMagnitude = magnitude;
     }
 
