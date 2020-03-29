@@ -12,7 +12,7 @@ public final class StarCatalogue {
 
 
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms){
-
+        starList = stars;
         for(Asterism ast : asterisms){
             List<Integer> index = new LinkedList<>();
 
@@ -26,7 +26,7 @@ public final class StarCatalogue {
                 asterismMap.put(ast,index);
             }
         }
-        starList = stars;
+
     }
 
     public List<Star> stars(){
@@ -76,7 +76,7 @@ public final class StarCatalogue {
         }
 
         public StarCatalogue build(){
-            return new StarCatalogue(starBuild, asterismBuild);
+            return new  StarCatalogue(starBuild, asterismBuild);
         }
     }
 

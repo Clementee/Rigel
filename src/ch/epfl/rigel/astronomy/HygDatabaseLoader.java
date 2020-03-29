@@ -23,48 +23,47 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
                     inputLine = bufferedReader.readLine();
                     inputTab.add(inputLine.split(","));
                 }
-                Iterator<String[]> i = inputTab.iterator();
 
-                while (i.hasNext()){
+                for (String[] strings : inputTab) {
                     int hipparcosID;
                     String name;
-                    double rarad,decrad;
+                    double rarad, decrad;
                     float magnitude, colorID;
-                    String[] tab = i.next();
+                    String[] tab = strings;
                     String valInt = tab[index.HIP.ordinal()];
-                    if(!valInt.equals("")){
+                    if (!valInt.equals("")) {
                         hipparcosID = Integer.parseInt(valInt);
-                    }else{
+                    } else {
                         hipparcosID = 0;
                     }
                     valInt = tab[index.PROPER.ordinal()];
-                    if(!valInt.equals("")){
+                    if (!valInt.equals("")) {
                         name = valInt;
-                    }else{
+                    } else {
                         valInt = tab[index.BAYER.ordinal()];
-                        if(!valInt.equals("")){
-                            name=valInt+tab[index.CON.ordinal()];
-                        }else{
-                            name ="?"+tab[index.CON.ordinal()];
+                        if (!valInt.equals("")) {
+                            name = valInt + tab[index.CON.ordinal()];
+                        } else {
+                            name = "?" + tab[index.CON.ordinal()];
                         }
                     }
                     rarad = Double.parseDouble(tab[index.RARAD.ordinal()]);
                     decrad = Double.parseDouble(tab[index.DECRAD.ordinal()]);
                     valInt = tab[index.MAG.ordinal()];
-                    EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad,decrad);
-                    if(!valInt.equals("")){
+                    EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad, decrad);
+                    if (!valInt.equals("")) {
                         magnitude = Float.parseFloat(valInt);
-                    }else{
-                        magnitude=0;
+                    } else {
+                        magnitude = 0;
                     }
                     valInt = tab[index.CI.ordinal()];
-                    if(!valInt.equals("")){
+                    if (!valInt.equals("")) {
                         colorID = Float.parseFloat(valInt);
-                    }else{
+                    } else {
                         colorID = 0;
                     }
-                    builder.addStar(new Star(hipparcosID,name, equatorialCoordinates, magnitude,colorID));
-                    }
+                    builder.addStar(new Star(hipparcosID, name, equatorialCoordinates, magnitude, colorID));
+                }
                 }
             }
         }

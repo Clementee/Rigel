@@ -1,5 +1,7 @@
 package ch.epfl.rigel.astronomy;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -21,7 +23,7 @@ public final class Asterism {
     public Asterism(List<Star> stars){
 
         if(!stars.isEmpty()){
-            asterismList = stars;
+            asterismList = Collections.unmodifiableList(List.copyOf(stars));
         }
         else {
             throw new IllegalArgumentException();
