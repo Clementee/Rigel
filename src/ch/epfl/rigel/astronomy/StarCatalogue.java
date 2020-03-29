@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import static ch.epfl.rigel.Preconditions.checkArgument;
+
 /**
  * A catalogue of stars
  *
@@ -23,20 +25,16 @@ public final class StarCatalogue {
      * @param asterisms (List<Asterism>) : gives the list of asterisms
      */
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms){
-        
+
         starList = stars;
         for(Asterism ast : asterisms){
             List<Integer> index = new LinkedList<>();
 
-            if(!stars.containsAll(ast.stars())){
-                throw new IllegalArgumentException();
-            }
-            else {
+            checkArgument(stars.containsAll(ast.stars()));
                 for(Star star : ast.stars()){
                     index.add(starList.indexOf(star));
                 }
                 asterismMap.put(ast,index);
-            }
         }
     }
 
@@ -56,7 +54,7 @@ public final class StarCatalogue {
         return asterismMap.keySet();
     }
 
-     /**
+    /**
      * StarCatalogue method stars returning the list of stars
      * @return starList (List<Stars>) : returning the list of stars
      */
@@ -96,7 +94,7 @@ public final class StarCatalogue {
             return Collections.unmodifiableList(starBuild);
         }
 
-        
+
         /**
          * StarCatalogue.Builder public method adding a star to the builder
          * @param asterism (Asterism) : gives the asterism we want to add to the builder
@@ -114,7 +112,7 @@ public final class StarCatalogue {
         public List<Asterism> asterisms(){
             return Collections.unmodifiableList(asterismBuild);
         }
-        
+
         /**
          * StarCatalogue.Builder public method loading the input into the loader and throws an IOException
          * @param inputStream (inputStream) : gives the input we want to load into the builder
@@ -137,7 +135,7 @@ public final class StarCatalogue {
 
     // A loader for the star catalogue
     public interface Loader {
-        
+
         /**
          * StarCatalogue.Loader abstract method throwing an IOException
          * @param inputStream (inputStream) : gives the input we want to load into the builder
