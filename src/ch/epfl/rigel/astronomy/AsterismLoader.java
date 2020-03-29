@@ -8,9 +8,23 @@ import java.util.*;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
+/**
+ * A loader of asterism from a database
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public enum AsterismLoader implements StarCatalogue.Loader {
+
     INSTANCE;
 
+    /**
+     * AsterismLoader method loading the asterism from an inputStream into a builder
+     *
+     * @param inputStream   (InputStream) : gives the inputStream from where we take the asterism
+     * @param builder       (StarCatalogue.builder) : gives the builder of the star catalogue we are initializing
+     * @throws IOException   :
+     */
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII)){
@@ -37,4 +51,3 @@ public enum AsterismLoader implements StarCatalogue.Loader {
             }
         }
     }
-
