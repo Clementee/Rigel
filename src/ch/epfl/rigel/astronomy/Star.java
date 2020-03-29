@@ -3,6 +3,9 @@ package ch.epfl.rigel.astronomy;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 import ch.epfl.rigel.math.RightOpenInterval;
 
+import static ch.epfl.rigel.Preconditions.checkArgument;
+import static ch.epfl.rigel.Preconditions.checkInInterval;
+
 /**
  * A star
  *
@@ -26,14 +29,10 @@ public final class Star extends CelestialObject {
     public Star(int hipparcosId, String name, EquatorialCoordinates equatorialPos, float magnitude, float colorIndex) {
 
         super(name,equatorialPos,0,magnitude);
-
-        if(RightOpenInterval.of(-0.5,5.5).contains(colorIndex)&&hipparcosId>=0){
-            starNumber = hipparcosId;
-            starColorInd = colorIndex;
-        }
-        else{
-            throw new IllegalArgumentException();
-        }
+        checkInInterval(RightOpenInterval.of(-0.5,5.5),colorIndex);
+        checkArgument(hipparcosId>=0);
+        starNumber = hipparcosId;
+        starColorInd = colorIndex;
     }
 
     /**
