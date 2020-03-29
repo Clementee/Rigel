@@ -1,5 +1,6 @@
 package ch.epfl.rigel.astronomy;
 
+import java.util.Collections;
 import java.util.List;
 
 import static ch.epfl.rigel.Preconditions.checkArgument;
@@ -22,7 +23,7 @@ public final class Asterism {
      */
     public Asterism(List<Star> stars){
         checkArgument(!stars.isEmpty());
-        asterismList = stars;
+        asterismList = List.copyOf(stars);
     }
 
     /**
@@ -31,6 +32,6 @@ public final class Asterism {
      * @return asterismList (List<Star>) : return the list of stars composing the astersim
      */
     public List<Star> stars(){
-        return List.copyOf(asterismList);
+        return Collections.unmodifiableList(asterismList);
     }
 }
