@@ -5,6 +5,8 @@ import ch.epfl.rigel.math.ClosedInterval;
 
 import java.util.Locale;
 
+import static ch.epfl.rigel.Preconditions.checkInInterval;
+
 /**
  * The moon
  *
@@ -27,13 +29,8 @@ public final class Moon extends CelestialObject {
 
         super(MOONNAME, equatorialPos, angularSize, magnitude);
 
-        if (!(ClosedInterval.of(0, 1).contains(phase))) {
-            throw new IllegalArgumentException();
-        }
-
-        else {
-            moonPhase = phase*100;
-        }
+        checkInInterval(ClosedInterval.of(0,1),phase);
+        moonPhase = phase*100;
     }
 
     @Override
