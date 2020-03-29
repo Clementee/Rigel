@@ -95,7 +95,6 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         if(createInnerPlanet().contains(this)){
             lambda = PI + L + atan(((rPrim * sin(L - lPrim)))/ (R - (rPrim * cos(L - lPrim))));
         }
-
         else{
             lambda  = lPrim + atan(k / (rPrim - (R * cos(lPrim - L))));
         }
