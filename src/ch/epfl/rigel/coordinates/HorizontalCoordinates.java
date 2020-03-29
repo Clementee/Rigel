@@ -5,6 +5,8 @@ import ch.epfl.rigel.math.Angle;
 import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.rigel.math.RightOpenInterval;
 
+import static ch.epfl.rigel.Preconditions.checkInInterval;
+
 /**
  * An horizontal coordinate
  *
@@ -31,12 +33,9 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
      * @return      call the constructor with the entered parameters or throw exception
      */
     public static HorizontalCoordinates of(double az, double alt) {
-        if(AZINTERVAL.contains(az)&&ALTINTERVAL.contains(alt)) {
-            return new HorizontalCoordinates(az,alt);
-        }
-        else {
-            throw new IllegalArgumentException();
-        }
+        checkInInterval(AZINTERVAL,az);
+        checkInInterval(ALTINTERVAL,alt);
+        return new HorizontalCoordinates(az,alt);
     }
 
     /**
@@ -47,12 +46,9 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
      * @return      call the constructor with the entered parameters or throw exception
      */
     public static HorizontalCoordinates ofDeg(double azDeg,double altDeg) {
-        if(AZINTERVAL.contains(Angle.ofDeg(azDeg))&&ALTINTERVAL.contains(Angle.ofDeg(altDeg))) {
-            return new HorizontalCoordinates(Angle.ofDeg(azDeg),Angle.ofDeg(altDeg));
-        }
-        else {
-            throw new IllegalArgumentException();
-        }
+        checkInInterval(AZINTERVAL,Angle.ofDeg(azDeg));
+        checkInInterval(ALTINTERVAL,Angle.ofDeg(altDeg));
+        return new HorizontalCoordinates(azDeg,altDeg);
     }
 
     /**
@@ -113,7 +109,7 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
                 break;
             default :
                 break;
-        };
+        }
         return string;
     }
 
