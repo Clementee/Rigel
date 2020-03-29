@@ -31,7 +31,7 @@ public final class RightOpenInterval extends Interval {
      *
      * @param size (double) : gives the value for half the size of the interval
      * @return RightOpenInterval (RightOpenInterval) : return the right open interval
-     * @throws IllegalArgumentException :
+     * @throws IllegalArgumentException : if size is inferior or equal to 0
      */
     public static RightOpenInterval symmetric(double size) {
 
@@ -46,7 +46,7 @@ public final class RightOpenInterval extends Interval {
      * @param low  (double) : gives the lower bound of the right open interval
      * @param high (double) : gives the upper bound of the right open interval
      * @return RightOpenInterval (RightOpenInterval) : return the right open interval
-     * @throws IllegalArgumentException :
+     * @throws IllegalArgumentException : if bounds are illegal, higher bound bigger than lower bound
      */
     public static RightOpenInterval of(double low, double high) {
 
