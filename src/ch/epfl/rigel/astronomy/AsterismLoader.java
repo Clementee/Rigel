@@ -8,13 +8,12 @@ import java.util.*;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
-/**
- * A loader of asterism from a database
- *
- * @author Baptiste Lecoeur (316223)
- * @author Clement Sanh (311427)
- */
-public enum AsterismLoader implements StarCatalogue.Loader {
+    /**
+     * A loader of asterism from a database
+     * @author Baptiste Lecoeur (316223)
+     * @author Clement Sanh (311427)
+     */
+    public enum AsterismLoader implements StarCatalogue.Loader {
 
     INSTANCE;
 
@@ -41,13 +40,15 @@ public enum AsterismLoader implements StarCatalogue.Loader {
                     asterismListed.put(starInter.hipparcosId(),starInter);
                 }
                 for (String[] hipparsList : inputList) {
+
                     List<Star> asterismList = new LinkedList<>();
+
                     for (String string : hipparsList) {
                         asterismList.add(asterismListed.get(Integer.parseInt(string)));
                     }
                     builder.addAsterism(new Asterism(asterismList));
                 }
-                }
             }
         }
     }
+}
