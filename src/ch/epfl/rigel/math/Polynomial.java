@@ -50,30 +50,30 @@ public final class Polynomial {
      */
     @Override
     public String toString() {
-        String text = "";
+        StringBuilder text = new StringBuilder();
         for (int i = 0; i < tab.length; i++) {
             if (i == 0) {
                 if (tab.length == 1) {
-                    text += tab[i];
+                    text.append(tab[i]);
                 } else {
                     if (tab.length == 2) {
                         if (tab[i] != 1 && tab[i] != -1) {
-                            text += tab[i] + "x";
+                            text.append(tab[i]).append("x");
                         } else {
                             if (tab[i] == 1) {
-                                text += "x";
+                                text.append("x");
                             } else {
-                                text += "-x";
+                                text.append("-x");
                             }
                         }
                     } else {
                         if (tab[i] != 1 && tab[i] != -1) {
-                            text += tab[i] + "x^" + (tab.length - 1);
+                            text.append(tab[i]).append("x^").append(tab.length - 1);
                         } else {
                             if (tab[i] == 1) {
-                                text += "x^" + (tab.length - 1);
+                                text.append("x^").append(tab.length - 1);
                             } else {
-                                text += "-x^" + (tab.length - 1);
+                                text.append("-x^").append(tab.length - 1);
                             }
                         }
 
@@ -82,31 +82,31 @@ public final class Polynomial {
             } else {
                 if (i == tab.length - 1) {
                     if (tab[i] > 0) {
-                        text += "+" + tab[i];
+                        text.append("+").append(tab[i]);
                     }
                     if (tab[i] < 0) {
-                        text += tab[i];
+                        text.append(tab[i]);
                     }
                 } else {
                     if (i == tab.length - 2) {
                         if (tab[i] > 0) {
-                            text += "+" + tab[i] + "x";
+                            text.append("+").append(tab[i]).append("x");
                         }
                         if (tab[i] < 0) {
-                            text += tab[i] + "x";
+                            text.append(tab[i]).append("x");
                         }
                     } else {
                         if (tab[i] > 0 && tab[i] != 1) {
-                            text += "+" + tab[i] + "x^" + (tab.length - i - 1);
+                            text.append("+").append(tab[i]).append("x^").append(tab.length - i - 1);
                         }
                         if (tab[i] < 0 && tab[i] != -1) {
-                            text += tab[i] + "x^" + (tab.length - i - 1);
+                            text.append(tab[i]).append("x^").append(tab.length - i - 1);
                         }
                         if (tab[i] == 1) {
-                            text += "+x^" + (tab.length - i - 1);
+                            text.append("+x^").append(tab.length - i - 1);
                         }
                         if (tab[i] == -1) {
-                            text += "-x^" + (tab.length - i - 1);
+                            text.append("-x^").append(tab.length - i - 1);
                         }
                     }
                 }
@@ -114,14 +114,14 @@ public final class Polynomial {
 
             }
         }
-        return text;
+        return text.toString();
     }
 
     /**
      * Method throwing an UnsupportedOperationException (UOE)
      *
      * @return (int) : nothing because an error has already been thrown
-     * @throw UnsupportedOperationException
+     * @throws UnsupportedOperationException :
      */
     @Override
     public int hashCode() {
@@ -133,11 +133,10 @@ public final class Polynomial {
      *
      * @param obj (Object) : any object
      * @return (boolean) : nothing because an error has already been thrown
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException :
      */
     @Override
     public boolean equals(Object obj) {
         throw new UnsupportedOperationException();
     }
-
 }
