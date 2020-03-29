@@ -53,7 +53,7 @@ public abstract class Interval {
      * Method throwing an UnsupportedOperationException (UOE)
      *
      * @return (int) : nothing because an error has already been thrown
-     * @throw UnsupportedOperationException
+     * @throws UnsupportedOperationException :
      */
     @Override
     public final int hashCode() {
@@ -65,7 +65,7 @@ public abstract class Interval {
      *
      * @param obj (Object) : any object
      * @return (boolean) : nothing because an error has already been thrown
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException :
      */
     @Override
     public final boolean equals(Object obj) {
