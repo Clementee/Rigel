@@ -58,7 +58,7 @@ class HorizontalCoordinatesTest {
             HorizontalCoordinates.ofDeg(-0.0001, 0);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            HorizontalCoordinates.ofDeg(360, 0);
+                HorizontalCoordinates.ofDeg(360, 0);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             HorizontalCoordinates.ofDeg(0, -90.0001);
