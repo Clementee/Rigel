@@ -2,6 +2,8 @@ package ch.epfl.rigel.math;
 
 import java.util.Locale;
 
+import static ch.epfl.rigel.Preconditions.checkArgument;
+
 /**
  * A Right Open Interval
  *
@@ -29,16 +31,13 @@ public final class RightOpenInterval extends Interval {
      *
      * @param size (double) : gives the value for half the size of the interval
      * @return RightOpenInterval (RightOpenInterval) : return the right open interval
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException :
      */
     public static RightOpenInterval symmetric(double size) {
 
-        if (size <= 0) {
-            throw new IllegalArgumentException();
-        } else {
+        checkArgument(size>0);
             rightOpenInterval = new RightOpenInterval(-size / 2, size / 2);
             return rightOpenInterval;
-        }
     }
 
     /**
@@ -47,16 +46,13 @@ public final class RightOpenInterval extends Interval {
      * @param low  (double) : gives the lower bound of the right open interval
      * @param high (double) : gives the upper bound of the right open interval
      * @return RightOpenInterval (RightOpenInterval) : return the right open interval
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException :
      */
     public static RightOpenInterval of(double low, double high) {
 
-        if (low < high) {
+        checkArgument(low<high);
             rightOpenInterval = new RightOpenInterval(low, high);
             return rightOpenInterval;
-        } else {
-            throw new IllegalArgumentException();
-        }
     }
 
     /**
