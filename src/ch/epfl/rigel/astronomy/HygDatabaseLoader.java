@@ -27,39 +27,39 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
      */
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
-        
+
         ArrayList<String[]> inputTab = new ArrayList<>();
-        
+
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII)) {
             try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                
+
                 String inputLine = bufferedReader.readLine();
-                
+
                 while (bufferedReader.ready()) {
                     inputLine = bufferedReader.readLine();
                     inputTab.add(inputLine.split(","));
                 }
 
                 for (String[] strings : inputTab) {
-                    
+
                     int hipparcosID;
                     String name;
                     double rarad, decrad;
                     float magnitude, colorID;
                     String valInt = strings[index.HIP.ordinal()];
-                    
+
                     if (!valInt.equals("")) {
                         hipparcosID = Integer.parseInt(valInt);
-                    } 
+                    }
                     else {
                         hipparcosID = 0;
                     }
-                    
+
                     valInt = strings[index.PROPER.ordinal()];
-                    
+
                     if (!valInt.equals("")) {
                         name = valInt;
-                    } 
+                    }
                     else {
                         valInt = strings[index.BAYER.ordinal()];
                         if (!valInt.equals("")) {
@@ -69,12 +69,12 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
                             name = "?" + strings[index.CON.ordinal()];
                         }
                     }
-                    
+
                     rarad = Double.parseDouble(strings[index.RARAD.ordinal()]);
                     decrad = Double.parseDouble(strings[index.DECRAD.ordinal()]);
                     valInt = strings[index.MAG.ordinal()];
                     EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad, decrad);
-                    
+
                     if (!valInt.equals("")) {
                         magnitude = Float.parseFloat(valInt);
                     } else {
@@ -86,7 +86,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
                     } else {
                         colorID = 0;
                     }
-                    
+
                     builder.addStar(new Star(hipparcosID, name, equatorialCoordinates, magnitude, colorID));
                 }
             }
