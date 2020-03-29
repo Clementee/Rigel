@@ -2,6 +2,8 @@ package ch.epfl.rigel.math;
 
 import java.util.Locale;
 
+import static ch.epfl.rigel.Preconditions.checkArgument;
+
 /**
  * A Closed Interval
  *
@@ -32,16 +34,13 @@ public class ClosedInterval extends Interval {
      * @param low  (double) : gives the lower bound of the closed interval
      * @param high (double) : gives the upper bound of the closed interval
      * @return closedInterval (ClosedInterval) : return the closed interval
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException : if bounds are illegal
      */
     public static ClosedInterval of(double low, double high) {
 
-        if (low < high) {
+        checkArgument(low < high);
             closedInterval = new ClosedInterval(low, high);
             return closedInterval;
-        } else {
-            throw new IllegalArgumentException();
-        }
     }
 
     /**
@@ -49,16 +48,13 @@ public class ClosedInterval extends Interval {
      *
      * @param size (double) : gives the value for half the size of the interval
      * @return closedInterval (ClosedInterval) : return the closed interval
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException : if size illegal
      */
     public static ClosedInterval symmetric(double size) {
 
-        if (size <= 0) {
-            throw new IllegalArgumentException();
-        } else {
+        checkArgument(size>0);
             closedInterval = new ClosedInterval(-size / 2, size / 2);
             return closedInterval;
-        }
     }
 
     /**
@@ -81,7 +77,8 @@ public class ClosedInterval extends Interval {
 
         if (v < lowerBound) {
             return lowerBound;
-        } else return Math.min(v, upperBound);
+        }
+        else return Math.min(v, upperBound);
     }
 
     /**
