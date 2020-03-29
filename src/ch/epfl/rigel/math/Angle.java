@@ -1,4 +1,7 @@
 package ch.epfl.rigel.math;
+
+import static ch.epfl.rigel.Preconditions.checkArgument;
+
 /**
  * An angle
  *
@@ -35,21 +38,18 @@ public final class Angle {
     /**
      * Method converting an angle in degrees, minutes and seconds to an angle in
      * radians (and normalize it). If the measures are not conform, an
-     * IllergalArgumentException is thrown
+     * IllegalArgumentException is thrown
      *
      * @param deg (int) : the number of degrees
      * @param min (int) : the number of minutes in the interval [0,60[
      * @param sec (double) : the number of seconds in the interval [0,60[
      * @return (double) : the normalized angle in radians
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException : if illegal values entered
      */
     public static double ofDMS(int deg, int min, double sec) {
-        if (min < 0 || min >= 60 || sec < 0 || sec >= 60) {
-            throw new IllegalArgumentException();
-        } else {
+        checkArgument(!(min < 0 || min >= 60 || sec < 0 || sec >= 60));
             double angle = deg + (min * MIN_TO_SEC + sec) / SEC_PER_DEG;
             return Math.toRadians(angle);
-        }
     }
 
     /**
