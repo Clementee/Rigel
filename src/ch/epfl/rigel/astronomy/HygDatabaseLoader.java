@@ -14,20 +14,19 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
  * @author Baptiste Lecoeur (316223)
  * @author Clement Sanh (311427)
  */
-public enum HygDatabaseLoader implements StarCatalogue.Loader{
+public enum HygDatabaseLoader implements StarCatalogue.Loader {
 
     INSTANCE;
 
     /**
      * HygDatabaseLoader method loading the stars from an inputStream into a builder
      *
-     * @param inputStream   (InputStream) : gives the inputStream from where we take the stars
-     * @param builder       (StarCatalogue.builder) : gives the builder of the star catalogue we are initializing
-     * @throws IOException   :
+     * @param inputStream (InputStream) : gives the inputStream from where we take the stars
+     * @param builder     (StarCatalogue.builder) : gives the builder of the star catalogue we are initializing
+     * @throws IOException :
      */
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
-
         ArrayList<String[]> inputTab = new ArrayList<>();
 
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII)) {
@@ -39,7 +38,6 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
                     inputLine = bufferedReader.readLine();
                     inputTab.add(inputLine.split(","));
                 }
-
                 for (String[] strings : inputTab) {
 
                     int hipparcosID;
@@ -50,8 +48,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
 
                     if (!valInt.equals("")) {
                         hipparcosID = Integer.parseInt(valInt);
-                    }
-                    else {
+                    } else {
                         hipparcosID = 0;
                     }
 
@@ -59,13 +56,11 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
 
                     if (!valInt.equals("")) {
                         name = valInt;
-                    }
-                    else {
+                    } else {
                         valInt = strings[index.BAYER.ordinal()];
                         if (!valInt.equals("")) {
                             name = valInt + strings[index.CON.ordinal()];
-                        }
-                        else {
+                        } else {
                             name = "?" + strings[index.CON.ordinal()];
                         }
                     }
@@ -95,14 +90,14 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader{
 
     /**
      * private enum of indexes for the loader
-     *
      */
-    private enum index{
+    private enum index {
         ID, HIP, HD, HR, GL, BF, PROPER, RA, DEC, DIST, PMRA, PMDEC,
         RV, MAG, ABSMAG, SPECT, CI, X, Y, Z, VX, VY, VZ,
         RARAD, DECRAD, PMRARAD, PMDECRAD, BAYER, FLAM, CON,
         COMP, COMP_PRIMARY, BASE, LUM, VAR, VAR_MIN, VAR_MAX;
 
-        index(){}
+        index() {
+        }
     }
 }

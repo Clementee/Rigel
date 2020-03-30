@@ -29,12 +29,12 @@ class HygDatabaseLoaderTest {
                     .loadFrom(hygStream, HygDatabaseLoader.INSTANCE)
                     .build();
             Star rigel = null;
-
+            int counter =0;
             for (Star s : catalogue.stars()) {
                 if (s.name().equalsIgnoreCase("rigel"))
                     rigel = s;
             }
-
+            System.out.println(counter);
                 assertNotNull(rigel);
         }
     }
