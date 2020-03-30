@@ -6,42 +6,44 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class AsterismTest {
-    @Test
-    void starsNormal() {
-        List<Star> list = new ArrayList<>();
-        list.add(new Star(1342, "Coronavirus", EquatorialCoordinates.of(0,0),0,0));
-        assertEquals(List.copyOf(list), (new Asterism(List.copyOf(list))).stars());
+public class AsterismTest {
+    private static List<Star> newModifiableStarList(String... starNames) {
+        var eqPos = EquatorialCoordinates.of(0, 0);
+        var stars = new ArrayList<Star>();
+        for (var starName : starNames) {
+            stars.add(new Star(stars.size() + 1, starName, eqPos, 0, 0));
+        }
+        return stars;
     }
 
     @Test
-    void constructorThrowsIllegalArgumentException(){
-        List<Star> list = new ArrayList<>();
-        assertThrows(IllegalArgumentException.class, ()->{
-           new Asterism(list);
+    void constructorFailsWhenStarListIsEmpty() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Asterism(List.of());
         });
     }
 
     @Test
-    void starsIsImmutable() {
-        List<Star> starList = new ArrayList<>();
-        starList.add(new Star(0456, "star0", EquatorialCoordinates.of(0, 0), -0.5f, -0.5f));
-        starList.add(new Star(0443, "stir", EquatorialCoordinates.of(0, 0), -0.5f, 3.5f));
-        starList.add(new Star(45789070, "staaar", EquatorialCoordinates.of(0, 0), -0.5f, 0.5f));
+    void constructorCopiesStarList() {
+        var l = newModifiableStarList("Rigel");
+        var s = l.get(0);
+        var a = new Asterism(l);
+        l.clear();
+        assertEquals(1, a.stars().size());
+        assertEquals(s, a.stars().get(0));
+    }
 
-        assertThrows(UnsupportedOperationException.class, () -> { new Asterism(starList).stars().add(new Star(5676545, "starLight", EquatorialCoordinates.of(0,0), 0.2f, 1)); });
-        assertThrows(UnsupportedOperationException.class, () -> { new Asterism(starList).stars().remove(1); });
-
-        Asterism astres = new Asterism(starList);
-        starList.remove(2);
-        astres.stars().get(2);
-
-        starList.add(new Star(45789070, "staaar", EquatorialCoordinates.of(0, 0), -0.5f, 0.5f));
-        starList.add(new Star(45770, "staaoar", EquatorialCoordinates.of(0, 0), -0.5f, 0.2f));
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {astres.stars().get(3);});
-
-
+    @Test
+    void accessorDoesNotAllowEncapsulationViolation() {
+        var a = new Asterism(newModifiableStarList("Rigel", "Aldebaran", "Sirius"));
+        try {
+            a.stars().clear();
+        } catch (UnsupportedOperationException e) {
+            // If UOE is thrown, the list is unmodifiable, which is correct.
+        }
+        assertEquals(3, a.stars().size());
     }
 }

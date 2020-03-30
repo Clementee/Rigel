@@ -36,7 +36,7 @@ public enum SunModel implements CelestialObjectModel<Sun> {
         double v0 = M0 + 2 * J2010SunEarthExcentricity *sin(M0);
         double lambda0 = v0 + LONSUNPERIGEE;
         double phi0 = 0;
-        double sunAngularSize = THETA0 * ((1 + J2010SunEarthExcentricity * cos(v0)) / (1 - J2010SunEarthExcentricity));
+        double sunAngularSize = THETA0 * ((1 + J2010SunEarthExcentricity * cos(v0)) / (1 - J2010SunEarthExcentricity*J2010SunEarthExcentricity));
         EclipticCoordinates sunEclipticCoordinates = EclipticCoordinates.of(Angle.normalizePositive(lambda0), Angle.normalizePositive(phi0));
         EquatorialCoordinates sunEquatorialCoordinates = eclipticToEquatorialConversion.apply(sunEclipticCoordinates);
         return new Sun(sunEclipticCoordinates, sunEquatorialCoordinates, (float) sunAngularSize, (float) M0);
