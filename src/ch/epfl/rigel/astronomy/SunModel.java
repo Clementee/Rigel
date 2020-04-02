@@ -32,17 +32,10 @@ public enum SunModel implements CelestialObjectModel<Sun> {
      */
     @Override
     public Sun at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
-        System.out.println("D = " +daysSinceJ2010);
-        System.out.println("N =" + toDeg(normalizePositive((2*PI/365.242191) * daysSinceJ2010)));
-        System.out.println("Eg = " + toDeg(LONSUN2010));
-        System.out.println("VarpiG = " + toDeg(LONSUNPERIGEE));
 
         double M0 = TAU/365.242191 * daysSinceJ2010 +LONSUN2010 - LONSUNPERIGEE;
-        System.out.println("Mo = "+toDeg(normalizePositive(M0)));
         double v0 = M0 + 2 * J2010SunEarthExcentricity *sin(M0);
-        System.out.println(toDeg(v0));
         double lambda0 = v0 + LONSUNPERIGEE;
-        System.out.println(toDeg(lambda0));
         double phi0 = 0;
         double sunAngularSize = THETA0 * ((1 + J2010SunEarthExcentricity * cos(v0)) / (1 - J2010SunEarthExcentricity*J2010SunEarthExcentricity));
         EclipticCoordinates sunEclipticCoordinates = EclipticCoordinates.of(Angle.normalizePositive(lambda0), Angle.normalizePositive(phi0));

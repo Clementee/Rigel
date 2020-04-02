@@ -12,16 +12,16 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 public class BlackBodyColor {
 
     private static final String COLOR_CATALOGUE_NAME = "/bbr_color.txt";
-    private Map<Integer, Color> colorList = load();
+    private final static Map<Integer, Color> colorList = load();
 
 
-    public Color colorForTemperature(double temperatureKelv) {
+    public static Color colorForTemperature(double temperatureKelv) {
         checkInInterval(ClosedInterval.of(1000, 40000), temperatureKelv);
         int actTemperatureKelv = (int) Math.round(temperatureKelv/100)*100;
         return colorList.get(actTemperatureKelv);
     }
 
-    private Map<Integer,Color> load(){
+    private static Map<Integer,Color> load(){
         try (FileReader inputStreamReader = new FileReader(COLOR_CATALOGUE_NAME, US_ASCII)){
             try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                 while(bufferedReader.ready()){
