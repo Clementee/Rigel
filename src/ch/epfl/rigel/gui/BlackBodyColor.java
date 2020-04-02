@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 
 import static ch.epfl.rigel.Preconditions.checkInInterval;
+import static java.nio.charset.StandardCharsets.US_ASCII;
 
 public class BlackBodyColor {
 
@@ -21,7 +22,7 @@ public class BlackBodyColor {
     }
 
     private Map<Integer,Color> load(){
-        try (FileReader inputStreamReader = new FileReader(COLOR_CATALOGUE_NAME)){
+        try (FileReader inputStreamReader = new FileReader(COLOR_CATALOGUE_NAME, US_ASCII)){
             try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                 while(bufferedReader.ready()){
                     if(!(bufferedReader.readLine().startsWith("#")|| bufferedReader.readLine().substring(10, 15).equals(" 2deg"))){
