@@ -44,7 +44,9 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
                     List<Star> asterismList = new LinkedList<>();
 
                     for (String string : hipparsList) {
-                        asterismList.add(asterismListed.get(Integer.parseInt(string)));
+                        if(Integer.parseInt(string)!=0){
+                            asterismList.add(asterismListed.get(Integer.parseInt(string)));
+                        }
                     }
                     builder.addAsterism(new Asterism(asterismList));
                 }
