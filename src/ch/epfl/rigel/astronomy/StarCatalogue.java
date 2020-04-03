@@ -43,7 +43,7 @@ public final class StarCatalogue {
      * @return starList (List<Stars>) : returning the list of stars
      */
     public List<Star> stars(){
-        return starList;
+        return List.copyOf(starList);
     }
 
     /**
@@ -51,14 +51,15 @@ public final class StarCatalogue {
      * @return asterismMap (Set<Asterism>) : returning the key set of the map of asterism
      */
     public Set<Asterism> asterisms(){
-        return asterismMap.keySet();
+        return Set.copyOf(asterismMap.keySet());
     }
 
     /**
      * StarCatalogue method stars returning the list of stars
      * @return starList (List<Stars>) : returning the list of stars
      */
-    public List<Integer> asterismIndices(Asterism asterism){
+    public List<Integer> asterismIndices(Asterism asterism) {
+        checkArgument(asterismMap.containsKey(asterism));
         return List.copyOf(asterismMap.get(asterism));
     }
 
