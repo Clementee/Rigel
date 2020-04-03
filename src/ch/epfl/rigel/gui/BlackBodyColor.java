@@ -31,12 +31,18 @@ public class BlackBodyColor {
         try (final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
                 BlackBodyColor.class.getResourceAsStream(COLOR_CATALOGUE_NAME), StandardCharsets.US_ASCII))) {
             while (bufferedReader.ready()) {
-                String readedLine = bufferedReader.readLine();
-                if (!readedLine.startsWith("#")&&!(readedLine.substring(10,15).equals(" 2deg"))){
-                    System.out.println(readedLine);
-                    String colorLine = readedLine.substring(80, 87);
+                String line = bufferedReader.readLine();
+                if (!line.startsWith("#")&&!(line.substring(10,15).equals(" 2deg"))){
+                    System.out.println(line);
+                    String colorLine = line.substring(80, 87);
                     System.out.println("   " + colorLine);
-                    Integer temperatureLine = Integer.parseInt(readedLine.substring(2, 6));
+                    System.out.println(line.substring(1,6));
+                    Integer temperatureLine;
+                    if(line.substring(1,6).startsWith(" ")){
+                        temperatureLine = Integer.valueOf(line.substring(2, 6));
+                    }else{
+                        temperatureLine = Integer.valueOf(line.substring(1, 6));
+                    }
                     System.out.println("   " + temperatureLine);
                     colorMap.put(temperatureLine, Color.web(colorLine));
                 }
