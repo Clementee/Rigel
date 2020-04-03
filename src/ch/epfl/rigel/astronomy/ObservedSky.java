@@ -2,9 +2,8 @@ package ch.epfl.rigel.astronomy;
 
 import ch.epfl.rigel.coordinates.*;
 
-import java.time.Month;
+import javax.swing.text.html.Option;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static ch.epfl.rigel.astronomy.Epoch.J2010;
@@ -23,9 +22,15 @@ public class ObservedSky {
     private CartesianCoordinates sunCoords, moonCords;
     private List<CartesianCoordinates> planetCoords, starCoords;
 
-    private Map<CartesianCoordinates, CelestialObject>  celestialObjectMap;
+    private Map<CelestialObject, CartesianCoordinates>  celestialObjectMap;
 
     public ObservedSky(ZonedDateTime when, GeographicCoordinates where, StereographicProjection stereographicProjection, StarCatalogue catalogue) {
+        planetList = new ArrayList<>();
+        starList = new ArrayList<>();
+        planetCoords = new ArrayList<>();
+        starCoords = new ArrayList<>();
+
+
         double daysSinceJ210 = J2010.daysUntil(when);
         celestialObjectMap = new HashMap<>();
         this.catalogue = catalogue;
@@ -35,11 +40,11 @@ public class ObservedSky {
 
         sun = SUN.at(daysSinceJ210, eclipticToEquatorialConversion);
         sunCoords = stereographicProjection.apply(equatorialToHorizontalConversion.apply(sun.equatorialPos()));
-        celestialObjectMap.put(sunCoords, sun);
+        celestialObjectMap.put(sun, sunCoords);
 
         moon = MoonModel.MOON.at(daysSinceJ210, eclipticToEquatorialConversion);
         moonCords = stereographicProjection.apply(equatorialToHorizontalConversion.apply(moon.equatorialPos()));
-        celestialObjectMap.put(moonCords, moon);
+        celestialObjectMap.put(moon, moonCords);
 
         List<PlanetModel> planets = PlanetModel.ALL;
         for (PlanetModel planet : planets) {
@@ -48,7 +53,7 @@ public class ObservedSky {
                 planetList.add(pl);
                 CartesianCoordinates coord = stereographicProjection.apply(equatorialToHorizontalConversion.apply(pl.equatorialPos()));
                 planetCoords.add(coord);
-                celestialObjectMap.put(coord, pl);
+                celestialObjectMap.put(pl, coord);
             }
         }
 
@@ -56,8 +61,10 @@ public class ObservedSky {
         for (Star star : starList) {
             CartesianCoordinates starCoord = stereographicProjection.apply(equatorialToHorizontalConversion.apply(star.equatorialPos()));
             starCoords.add(starCoord);
-            celestialObjectMap.put(starCoord, star);
+            celestialObjectMap.put(star, starCoord);
         }
+
+        System.out.println(System.nanoTime()/10e6);
     }
 
 
@@ -71,11 +78,28 @@ public class ObservedSky {
 
     public List<Planet> planets(){return planetList;}
 
-    public ArrayList<Double> planetPosition(){
-        ArrayList<Double> tab = new ArrayList<>();
+    public List<Star> stars(){return starList;};
+
+    public double[] starsPosition(){
+        double[] tab = new double[10134];
+        int i =0;
+        for (CartesianCoordinates coordinates : starCoords) {
+            tab[i]=coordinates.x();
+            i++;
+            tab[i]=coordinates.y();
+            i++;
+        }
+        return tab;
+       }
+
+    public double[] planetsPosition(){
+        double[] tab = new double[14];
+        int i =0;
         for (CartesianCoordinates planetCoord : planetCoords) {
-            tab.add(planetCoord.x());
-            tab.add(planetCoord.y());
+            tab[i]=planetCoord.x();
+            i++;
+            tab[i]=planetCoord.y();
+            i++;
         }
         return tab;
     }
@@ -84,21 +108,36 @@ public class ObservedSky {
 
     public List<Integer> asterismIndexList(Asterism asterism){return catalogue.asterismIndices(asterism);}
 
-    public Optional<CelestialObject> objectClosestTo(CartesianCoordinates coordinates, double distance){
-        double minDistance = distance;
-        CartesianCoordinates chosenCoords = coordinates;
-        for (CartesianCoordinates cartesianCoordinates : celestialObjectMap.keySet()) {
-            if(distance(coordinates, cartesianCoordinates)<=minDistance){
-                minDistance = distance(coordinates, cartesianCoordinates);
-                chosenCoords = cartesianCoordinates;
-            }
-        }if(celestialObjectMap.containsKey(chosenCoords)){
-            return Optional.of(celestialObjectMap.get(chosenCoords));
+    public Optional<CelestialObject> objectClosestTo(CartesianCoordinates coordinates, double distance) {
+        MapCompatarator comp = new MapCompatarator(celestialObjectMap, coordinates);
+        CelestialObject selectedObject = Collections.min(celestialObjectMap.keySet(), comp);
+        if(celestialObjectMap.containsKey(selectedObject)&&(distance(celestialObjectMap.get(selectedObject), coordinates))<=distance){
+            return Optional.of(selectedObject);
         }else{
             return Optional.empty();
         }
+
     }
-    private double distance(CartesianCoordinates coord1, CartesianCoordinates coord2){
-        return Math.hypot(coord1.x()-coord2.x(), coord1.y()-coord2.y());
+
+    private static class MapCompatarator implements Comparator{
+        private CartesianCoordinates pointer;
+        private Map<CelestialObject, CartesianCoordinates> map;
+
+        private MapCompatarator(Map<CelestialObject, CartesianCoordinates> map, CartesianCoordinates pointer){
+            this.map=map;
+            this.pointer=pointer;
+        }
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            if(distance(map.get(o1), pointer)>= distance(map.get(o2), pointer )){
+                return 1;
+            }
+            return -1;
+        }
+    }
+
+    private static double distance(CartesianCoordinates o1, CartesianCoordinates o2){
+        return Math.hypot(o1.x()-o2.x(), o1.y()- o2.y());
     }
 }

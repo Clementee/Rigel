@@ -59,7 +59,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                     } else {
                         valInt = strings[index.BAYER.ordinal()];
                         if (!valInt.equals("")) {
-                            name = valInt + strings[index.CON.ordinal()];
+                            name = valInt +" " +  strings[index.CON.ordinal()];
                         } else {
                             name = "?" + strings[index.CON.ordinal()];
                         }
