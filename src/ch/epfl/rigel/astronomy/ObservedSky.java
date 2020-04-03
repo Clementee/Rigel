@@ -24,12 +24,19 @@ public class ObservedSky {
 
     private Map<CelestialObject, CartesianCoordinates>  celestialObjectMap;
 
+    /**
+     * The public constructor for Observed Sky
+     *
+     * @param when (ZoneDateTime) : the date / time zone couple
+     * @param where (GeographicCoordinates) : the place where we observe the sky
+     * @param stereographicProjection (StereographicProjection) : the projection allowing to have all of our Celestial Object in our 2D plan
+     * @param catalogue (StarCatalogue) : the data base of all the stars and the asterisms
+     */
     public ObservedSky(ZonedDateTime when, GeographicCoordinates where, StereographicProjection stereographicProjection, StarCatalogue catalogue) {
         planetList = new ArrayList<>();
         starList = new ArrayList<>();
         planetCoords = new ArrayList<>();
         starCoords = new ArrayList<>();
-
 
         double daysSinceJ210 = J2010.daysUntil(when);
         celestialObjectMap = new HashMap<>();
@@ -67,7 +74,6 @@ public class ObservedSky {
         System.out.println(System.nanoTime()/10e6);
     }
 
-
     public Sun sun() {return sun;}
 
     public CartesianCoordinates sunPosition(){return sunCoords;}
@@ -80,6 +86,12 @@ public class ObservedSky {
 
     public List<Star> stars(){return starList;};
 
+    /**
+     * Method giving all the stars positions
+     * @return (double[]) :  an array containing all the cartesian coordinates, for example,
+     *                       if our array contains only the coordinates(x,y) of the Celestial Object,
+     *                       the array will be [x ; y]
+     */
     public double[] starsPosition(){
         double[] tab = new double[10134];
         int i =0;
@@ -91,7 +103,12 @@ public class ObservedSky {
         }
         return tab;
        }
-
+    /**
+     * Method giving all the planet positions
+     * @return (double[]) :  an array containing all the cartesian coordinates, for example,
+     *                       if our array contains only the coordinates(x,y) of the Celestial Object,
+     *                       the array will be [x ; y]
+     */
     public double[] planetsPosition(){
         double[] tab = new double[14];
         int i =0;
@@ -108,6 +125,13 @@ public class ObservedSky {
 
     public List<Integer> asterismIndexList(Asterism asterism){return catalogue.asterismIndices(asterism);}
 
+    /**
+     * Method finding the closest Celestial object to a point, here the cursor, or returning nothing if there is no object closest than the minimal distance
+     *
+     * @param coordinates (CartesianCoordinates) : the position of our cursor
+     * @param distance (double) : the minimal distance
+     * @return (Optional (CelestialObject)) : an Optional containing our closest Celestial object or nothing if the object does not exist
+     */
     public Optional<CelestialObject> objectClosestTo(CartesianCoordinates coordinates, double distance) {
         MapCompatarator comp = new MapCompatarator(celestialObjectMap, coordinates);
         CelestialObject selectedObject = Collections.min(celestialObjectMap.keySet(), comp);
