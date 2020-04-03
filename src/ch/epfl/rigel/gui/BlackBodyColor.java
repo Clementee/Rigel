@@ -3,6 +3,7 @@ package ch.epfl.rigel.gui;
 import ch.epfl.rigel.math.ClosedInterval;
 import javafx.scene.paint.Color;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -30,9 +31,13 @@ public class BlackBodyColor {
         try (final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
                 BlackBodyColor.class.getResourceAsStream(COLOR_CATALOGUE_NAME), StandardCharsets.US_ASCII))) {
             while (bufferedReader.ready()) {
-                if (!(bufferedReader.readLine().startsWith("#") || bufferedReader.readLine().substring(10, 15).equals(" 2deg"))) {
-                    String colorLine = bufferedReader.readLine().substring(80, 87);
-                    Integer temperatureLine = Integer.valueOf(bufferedReader.readLine().substring(1, 6));
+                String readedLine = bufferedReader.readLine();
+                if (!readedLine.startsWith("#")&&!(readedLine.substring(10,15).equals(" 2deg"))){
+                    System.out.println(readedLine);
+                    String colorLine = readedLine.substring(80, 87);
+                    System.out.println("   " + colorLine);
+                    Integer temperatureLine = Integer.parseInt(readedLine.substring(2, 6));
+                    System.out.println("   " + temperatureLine);
                     colorMap.put(temperatureLine, Color.web(colorLine));
                 }
             }
