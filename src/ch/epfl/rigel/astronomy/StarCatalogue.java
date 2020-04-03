@@ -26,7 +26,7 @@ public final class StarCatalogue {
      */
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms){
 
-        starList = stars;
+        starList = List.copyOf(stars);
         for(Asterism ast : asterisms){
             List<Integer> index = new LinkedList<>();
 
@@ -34,6 +34,7 @@ public final class StarCatalogue {
                 for(Star star : ast.stars()){
                     index.add(starList.indexOf(star));
                 }
+
                 asterismMap.put(ast,index);
         }
     }
@@ -53,6 +54,7 @@ public final class StarCatalogue {
     public Set<Asterism> asterisms(){
         return Set.copyOf(asterismMap.keySet());
     }
+
 
     /**
      * StarCatalogue method stars returning the list of stars
