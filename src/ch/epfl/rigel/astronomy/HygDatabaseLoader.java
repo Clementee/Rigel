@@ -89,7 +89,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
     }
 
     /**
-     * private enum of indexes for the loader
+     * Private enum of indexes for the loader
      */
     private enum index {
         ID, HIP, HD, HR, GL, BF, PROPER, RA, DEC, DIST, PMRA, PMDEC,
