@@ -2,7 +2,6 @@ package ch.epfl.rigel.astronomy;
 
 import ch.epfl.rigel.coordinates.*;
 
-import javax.swing.text.html.Option;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -13,13 +12,13 @@ public class ObservedSky {
 
     private StarCatalogue catalogue;
 
-    private Sun sun;
-    private Moon moon;
+    private static Sun sun;
+    private static Moon moon;
 
     List<Planet> planetList;
     List<Star> starList;
 
-    private CartesianCoordinates sunCoords, moonCords;
+    private static CartesianCoordinates sunCoords, moonCords;
     private List<CartesianCoordinates> planetCoords, starCoords;
 
     private Map<CelestialObject, CartesianCoordinates>  celestialObjectMap;
@@ -82,9 +81,9 @@ public class ObservedSky {
 
     public CartesianCoordinates moonPosition(){return moonCords;}
 
-    public List<Planet> planets(){return planetList;}
+    public List<Planet> planets(){return List.copyOf(planetList);}
 
-    public List<Star> stars(){return starList;};
+    public List<Star> stars(){return List.copyOf(starList);};
 
     /**
      * Method giving all the stars positions
@@ -102,7 +101,7 @@ public class ObservedSky {
             i++;
         }
         return tab;
-       }
+    }
     /**
      * Method giving all the planet positions
      * @return (double[]) :  an array containing all the cartesian coordinates, for example,
@@ -133,7 +132,7 @@ public class ObservedSky {
      * @return (Optional (CelestialObject)) : an Optional containing our closest Celestial object or nothing if the object does not exist
      */
     public Optional<CelestialObject> objectClosestTo(CartesianCoordinates coordinates, double distance) {
-        MapCompatarator comp = new MapCompatarator(celestialObjectMap, coordinates);
+        MapComparator comp = new MapComparator(celestialObjectMap, coordinates);
         CelestialObject selectedObject = Collections.min(celestialObjectMap.keySet(), comp);
         if(celestialObjectMap.containsKey(selectedObject)&&(distance(celestialObjectMap.get(selectedObject), coordinates))<=distance){
             return Optional.of(selectedObject);
@@ -143,17 +142,18 @@ public class ObservedSky {
 
     }
 
-    private static class MapCompatarator implements Comparator{
+    private static class MapComparator implements Comparator {
         private CartesianCoordinates pointer;
         private Map<CelestialObject, CartesianCoordinates> map;
 
-        private MapCompatarator(Map<CelestialObject, CartesianCoordinates> map, CartesianCoordinates pointer){
+        private MapComparator(Map<CelestialObject, CartesianCoordinates> map, CartesianCoordinates pointer){
             this.map=map;
             this.pointer=pointer;
         }
 
         @Override
         public int compare(Object o1, Object o2) {
+
             if(distance(map.get(o1), pointer)>= distance(map.get(o2), pointer )){
                 return 1;
             }
