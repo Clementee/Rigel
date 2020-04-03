@@ -38,6 +38,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                     inputLine = bufferedReader.readLine();
                     inputTab.add(inputLine.split(","));
                 }
+                
                 for (String[] strings : inputTab) {
 
                     int hipparcosID;
@@ -48,7 +49,8 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
 
                     if (!valInt.equals("")) {
                         hipparcosID = Integer.parseInt(valInt);
-                    } else {
+                    } 
+                    else {
                         hipparcosID = 0;
                     }
 
@@ -56,11 +58,14 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
 
                     if (!valInt.equals("")) {
                         name = valInt;
-                    } else {
+                    } 
+                    else {
                         valInt = strings[index.BAYER.ordinal()];
+                        
                         if (!valInt.equals("")) {
                             name = valInt +" " +  strings[index.CON.ordinal()];
-                        } else {
+                        } 
+                        else {
                             name = "?" + strings[index.CON.ordinal()];
                         }
                     }
@@ -72,16 +77,19 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
 
                     if (!valInt.equals("")) {
                         magnitude = Float.parseFloat(valInt);
-                    } else {
+                    } 
+                    else {
                         magnitude = 0;
                     }
                     valInt = strings[index.CI.ordinal()];
+                    
                     if (!valInt.equals("")) {
                         colorID = Float.parseFloat(valInt);
-                    } else {
+                    } 
+                    else {
                         colorID = 0;
                     }
-
+                    
                     builder.addStar(new Star(hipparcosID, name, equatorialCoordinates, magnitude, colorID));
                 }
             }
