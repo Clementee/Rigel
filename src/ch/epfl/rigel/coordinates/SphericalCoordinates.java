@@ -8,7 +8,7 @@ import ch.epfl.rigel.math.Angle;
  * @author Baptiste Lecoeur (316223)
  * @author Clement Sanh (311427)
  */
-abstract class SphericalCoordinates {
+ abstract class SphericalCoordinates {
     
     private double longitudeCoords;
     private double latitudeCoords;
@@ -29,7 +29,7 @@ abstract class SphericalCoordinates {
      * 
      * @return (double) : return value of longitude in radians
      */
-    double lon() { 
+    public double lon() {
         return longitudeCoords;
     }
     

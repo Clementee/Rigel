@@ -36,13 +36,11 @@ public enum AsterismLoader implements StarCatalogue.Loader {
                 
                 Map<Integer,Star> asterismListed = new HashMap<>();
 
-                while(bufferedReader.ready()){
-                    
-                    String[] inputLineTab = bufferedReader
-                            .readLine()
-                            .split(",");
-                    
+                String line = bufferedReader.readLine();
+                while(line!=null){
+                    String[] inputLineTab = line.split(",");
                     inputList.add(inputLineTab);
+                    line = bufferedReader.readLine();
                 }
 
                 for(Star starInter : starList){
