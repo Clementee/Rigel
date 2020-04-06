@@ -47,20 +47,32 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
 
     /**
      * MoonModel method at, creating a moon and returning it
+     * 
      * @param daysSinceJ2010 (double) : gives the number of days after J2010
      * @param eclipticToEquatorialConversion   (EclipticToEquatorialConversion) : gives the equatorial coordinates given by the conversion from ecliptic
-     * @return moonAt    (Sun) : returns the moon
+     * @return (Moon) : returns the moon
      */
     @Override
     public Moon at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
-        SUN_LAMBDA = SUN.at(daysSinceJ2010,eclipticToEquatorialConversion).eclipticPos().lon();
-        SUN_M = SUN.at(daysSinceJ2010,eclipticToEquatorialConversion).meanAnomaly();
+        
+        SUN_LAMBDA = SUN
+                .at(daysSinceJ2010, eclipticToEquatorialConversion)
+                .eclipticPos()
+                .lon();
+        
+        SUN_M = SUN
+                .at( daysSinceJ2010, eclipticToEquatorialConversion)
+                .meanAnomaly();
+        
         lPrimPrim = MoonLongitudinalOrbit(daysSinceJ2010);
+        
         EclipticCoordinates moonEclipticCoords = MoonEclipticCoordinates(daysSinceJ2010);
+        EquatorialCoordinates moonEquatorialPos = eclipticToEquatorialConversion.apply(moonEclipticCoords);
+        
         float F = (float) MoonPhase();
         float angularSize = (float) MoonAngularSize();
-        EquatorialCoordinates moonEquatorialPos = eclipticToEquatorialConversion.apply(moonEclipticCoords);
-        return new Moon(moonEquatorialPos, angularSize, 0 ,F);
+        
+        return new Moon(moonEquatorialPos, angularSize, 0 , F);
     }
 
     /**
@@ -89,12 +101,14 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
      * @return moonEcliptic    (EclipticCoordinates) : returns the ecliptic coordinates
      */
     private EclipticCoordinates MoonEclipticCoordinates(double daysSinceJ2010){
-        double N = N0-NCste*daysSinceJ2010;
-        double NPrim = N - NPrimCste*sin(SUN_M);
-        double LAMBDAm = atan2((sin(lPrimPrim-NPrim)*cos(i)),(cos(lPrimPrim-NPrim)))+NPrim;
-        double BETAm = asin(sin(lPrimPrim-NPrim)*sin(i));
-
-        return EclipticCoordinates.of(normalizePositive(LAMBDAm),BETAm);
+        
+        double N = N0 - NCste * daysSinceJ2010;
+        double NPrim = N - NPrimCste * sin( SUN_M );
+        double LAMBDAm = atan2 ((sin(lPrimPrim - NPrim) * cos(i)) , (cos( lPrimPrim - NPrim ))) + NPrim;
+        double BETAm = asin( sin(lPrimPrim - NPrim) * sin(i));
+        
+        return EclipticCoordinates
+                .of(normalizePositive(LAMBDAm) , normalizePositive(BETAm));
     }
 
     /**
@@ -103,15 +117,19 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
      * @return moonPhase    (double) : returns the phase
      */
     private double MoonPhase(){
-        return (1-cos(lPrimPrim-SUN_LAMBDA))/2;
+        
+        return (1 - cos(lPrimPrim - SUN_LAMBDA)) /2;
     }
 
     /**
      * MoonModel method MoonAngularSize, returning the angular size
+     * 
      * @return moonAngularSize (double) : returns the angular size
      */
     private double MoonAngularSize(){
-        double rho = (1-e*e)/(1+e*cos(MmPrim+Ec));
+        
+        double rho = (1 - e * e) / (1 + e * cos(MmPrim + Ec));
+        
         return THETA0/rho;
     }
 }
