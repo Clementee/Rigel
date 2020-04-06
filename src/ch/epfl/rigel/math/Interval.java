@@ -7,11 +7,13 @@ package ch.epfl.rigel.math;
  * @author Clement Sanh (311427)
  */
 public abstract class Interval {
-    private final double LOWERBOUND, UPPERBOUND;
+
+    private final double LOWER_BOUND, UPPER_BOUND;
 
     protected Interval(double lowerBound, double upperBound) {
-        LOWERBOUND = lowerBound;
-        UPPERBOUND = upperBound;
+
+        LOWER_BOUND = lowerBound;
+        UPPER_BOUND = upperBound;
     }
 
     /**
@@ -20,7 +22,7 @@ public abstract class Interval {
      * @return (double) : the lower bound of the interval
      */
     public double low() {
-        return LOWERBOUND;
+        return LOWER_BOUND;
     }
 
     /**
@@ -29,7 +31,7 @@ public abstract class Interval {
      * @return (double) : the upper bound of the interval
      */
     public double high() {
-        return UPPERBOUND;
+        return UPPER_BOUND;
     }
 
     /**
@@ -38,7 +40,7 @@ public abstract class Interval {
      * @return (double) :  the size of the interval
      */
     public double size() {
-        return UPPERBOUND - LOWERBOUND;
+        return UPPER_BOUND - LOWER_BOUND;
     }
 
     /**
