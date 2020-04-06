@@ -14,7 +14,9 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
 public abstract class CelestialObject {
 
     private String celestialName;
+    
     private EquatorialCoordinates celestialEquatorialPosition;
+    
     private float celestialAngularSize;
     private float celestialMagnitude;
 
@@ -26,9 +28,12 @@ public abstract class CelestialObject {
      * @param magnitude       (float) : gives the magnitude of the planet
      */
     public CelestialObject(String name, EquatorialCoordinates equatorialPos, float angularSize, float magnitude){
+        
         celestialName = Objects.requireNonNull(name);
         celestialEquatorialPosition = Objects.requireNonNull(equatorialPos);
+        
         checkArgument(angularSize>=0);
+        
         celestialAngularSize = angularSize;
         celestialMagnitude = magnitude;
     }
@@ -37,36 +42,54 @@ public abstract class CelestialObject {
      * Method name returning the name of the celestial object
      * @return celestialName (String) : return the name of the celestial object
      */
-    public String name(){ return celestialName; }
+    public String name(){
+        
+        return celestialName;
+    }
 
     /**
      * Method angularSize returning the angular size of the celestial object
      * @return celestialAngularSize (double) : return the angular size of the celestial object
      */
-    public double angularSize(){ return celestialAngularSize; }
+    public double angularSize(){
+        
+        return celestialAngularSize;
+    }
 
     /**
      * Method magnitude returning the magnitude of the celestial object
      * @return celestialMagnitude (double) : return the magnitude of the celestial object
      */
-    public double magnitude(){ return celestialMagnitude; }
+    public double magnitude(){
+        
+        return celestialMagnitude;
+    }
 
     /**
      * Method equatorialPos returning the equatorial coordinates of the celestial object
      * @return celestialEquatorialPosition (EquatorialCoordinates) : return the equatorial position of the celestial object
      */
-    public EquatorialCoordinates equatorialPos(){ return celestialEquatorialPosition; }
+    public EquatorialCoordinates equatorialPos() {
+        
+        return celestialEquatorialPosition;
+    }
 
     /**
-     * Public method info returning the name of the celestial object
+     * Method info returning the name of the celestial object
      * @return name (String) : return the name of the celestial object
      */
-    public String info(){ return name(); }
+    public String info(){
+        
+        return name();
+    }
 
     /**
-     * Public method toString returning the name of the celestial object by calling method info()
+     * Overrode method toString returning the name of the celestial object calling the method info()
      * @return info() (String) : return the name of the celestial object
      */
     @Override
-    public String toString(){ return info(); }
+    public String toString(){
+        
+        return info();
+    }
 }
