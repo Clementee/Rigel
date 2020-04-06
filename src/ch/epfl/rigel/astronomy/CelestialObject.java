@@ -45,7 +45,6 @@ public abstract class CelestialObject {
      * @return celestialName (String) : return the name of the celestial object
      */
     public String name(){
-        
         return celestialName;
     }
 
@@ -55,7 +54,6 @@ public abstract class CelestialObject {
      * @return celestialAngularSize (double) : return the angular size of the celestial object
      */
     public double angularSize(){
-        
         return celestialAngularSize;
     }
 
@@ -64,7 +62,6 @@ public abstract class CelestialObject {
      * @return celestialMagnitude (double) : return the magnitude of the celestial object
      */
     public double magnitude(){
-        
         return celestialMagnitude;
     }
 
@@ -74,7 +71,6 @@ public abstract class CelestialObject {
      * @return celestialEquatorialPosition (EquatorialCoordinates) : return the equatorial position of the celestial object
      */
     public EquatorialCoordinates equatorialPos() {
-        
         return celestialEquatorialPosition;
     }
 
@@ -84,7 +80,6 @@ public abstract class CelestialObject {
      * @return (String) : return the name of the celestial object
      */
     public String info(){
-        
         return name();
     }
 
@@ -95,7 +90,6 @@ public abstract class CelestialObject {
      */
     @Override
     public String toString(){
-        
         return info();
     }
 }
