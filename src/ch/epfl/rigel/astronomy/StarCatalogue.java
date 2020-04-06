@@ -44,7 +44,7 @@ public final class StarCatalogue {
      * @return starList (List<Stars>) : returning the list of stars
      */
     public List<Star> stars(){
-        return List.copyOf(starList);
+        return Collections.unmodifiableList(starList);
     }
 
     /**

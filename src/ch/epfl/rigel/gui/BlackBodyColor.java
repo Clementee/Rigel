@@ -1,5 +1,6 @@
 package ch.epfl.rigel.gui;
 
+
 import ch.epfl.rigel.math.ClosedInterval;
 import javafx.scene.paint.Color;
 

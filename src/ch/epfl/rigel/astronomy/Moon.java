@@ -15,7 +15,7 @@ import static ch.epfl.rigel.Preconditions.checkInInterval;
  */
 public final class Moon extends CelestialObject {
 
-    private static float moonPhase;
+    private float moonPhase;
     private final static String MOONNAME = "Lune";
 
         /**
