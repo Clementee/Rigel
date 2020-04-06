@@ -17,15 +17,18 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
 
     private static double cosObliquity;
     private static double sinObliquity;
-    private final static Polynomial epsilonPoly = Polynomial.of(Angle.ofArcsec(0.00181), Angle.ofArcsec(-0.0006), Angle.ofArcsec(-46.815), Angle.ofDMS(23,26,21.45));
+    private final static Polynomial epsilonPoly = Polynomial
+            .of(Angle.ofArcsec(0.00181), Angle.ofArcsec(-0.0006), Angle.ofArcsec(-46.815), Angle.ofDMS(23,26,21.45));
 
     /**
      * EclipticToEquatorialConversion public constructor, initializing few values
      * @param when  (ZonedDateTime) : gives the zoned date time used to settle the conversion
      */
     public EclipticToEquatorialConversion(ZonedDateTime when){
+        
         double nbJulianCycles = J2000.julianCenturiesUntil(when);
         double obliquityEcliptic = epsilonPoly.at(nbJulianCycles);
+        
         cosObliquity = Math.cos(obliquityEcliptic);
         sinObliquity = Math.sin(obliquityEcliptic);
     }
@@ -41,16 +44,28 @@ public final class EclipticToEquatorialConversion implements Function<EclipticCo
 
         double latitudeEcliptic = ecl.lat();
         double longitudeEcliptic = ecl.lon();
-        double equatorialRA = Math.atan2((Math.sin(longitudeEcliptic)*cosObliquity - Math.tan(latitudeEcliptic) * sinObliquity), Math.cos(longitudeEcliptic));
+        
+        double equatorialRA = Math.atan2((Math.sin(longitudeEcliptic) * cosObliquity - Math.tan(latitudeEcliptic) * sinObliquity), Math.cos(longitudeEcliptic));
         double equatorialDec = Math.asin(((Math.sin(latitudeEcliptic)) * cosObliquity) + (Math.cos(latitudeEcliptic) * sinObliquity * Math.sin(longitudeEcliptic)));
+        
         return new EquatorialCoordinates(Angle.normalizePositive(equatorialRA), equatorialDec);
     }
 
+    /**
+     * EclToEquConversion overrode method throwing UOE
+     *
+     * @throws UnsupportedOperationException : throws this exception when the method is called
+     */
     @Override
     public final int hashCode(){
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * EclToEquConversion overrode method throwing UOE
+     *
+     * @throws UnsupportedOperationException : throws this exception when the method is called
+     */
     @Override
     public final boolean equals(Object object){
         throw new UnsupportedOperationException();
