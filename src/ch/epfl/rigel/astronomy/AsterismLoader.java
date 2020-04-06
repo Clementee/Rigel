@@ -10,6 +10,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 
 /**
  * A loader of asterism from a database
+ *
  * @author Baptiste Lecoeur (316223)
  * @author Clement Sanh (311427)
  */
