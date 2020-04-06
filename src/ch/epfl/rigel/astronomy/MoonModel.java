@@ -108,7 +108,7 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
         double BETAm = asin( sin(lPrimPrim - NPrim) * sin(i));
         
         return EclipticCoordinates
-                .of(normalizePositive(LAMBDAm) , normalizePositive(BETAm));
+                .of(normalizePositive(LAMBDAm) , BETAm);
     }
 
     /**
