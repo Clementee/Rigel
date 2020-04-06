@@ -35,7 +35,6 @@ public final class Asterism {
      * @return asterismList (List<Star>) : return the list of stars composing the astersim
      */
     public List<Star> stars(){
-        
         return Collections.unmodifiableList(asterismList);
     }
 }
