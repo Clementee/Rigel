@@ -48,7 +48,6 @@ public final class StarCatalogue {
      * @return starList (List<Stars>) : returning the list of stars
      */
     public List<Star> stars(){
-        
         return Collections.unmodifiableList(starList);
     }
 
@@ -58,7 +57,6 @@ public final class StarCatalogue {
      * @return asterismMap (Set<Asterism>) : returning the key set of the map of asterism
      */
     public Set<Asterism> asterisms() {
-        
         return Set.copyOf(asterismMap.keySet());
     }
 
@@ -109,7 +107,6 @@ public final class StarCatalogue {
          * @return starBuild (List<Star>) : return the list of stars unmodifiable
          */
         public List<Star> stars(){
-            
             return Collections.unmodifiableList(starBuild);
         }
 
@@ -133,7 +130,6 @@ public final class StarCatalogue {
          * @return asterismBuild (List<Asterism>) : return the list of asterism unmodifiable
          */
         public List<Asterism> asterisms(){
-            
             return Collections.unmodifiableList(asterismBuild);
         }
 
@@ -158,7 +154,6 @@ public final class StarCatalogue {
          * @return builder (Builder) : return the catalogue of star
          */
         public StarCatalogue build() {
-            
             return new StarCatalogue(starBuild, asterismBuild);
         }
     }
