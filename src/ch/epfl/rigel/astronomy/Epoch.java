@@ -25,7 +25,6 @@ public enum Epoch {
      * @param zone            (ZoneId) : gives the name of the time zone for the date
      */
     Epoch(LocalDate currentDate, LocalTime currentHour, ZoneId zone) {
-        
         thisZoneTime = ZonedDateTime.of(currentDate, currentHour, zone); 
     }
 
@@ -51,7 +50,6 @@ public enum Epoch {
      * @return (double) : return the number of julian centuries between the two dates
      */
     public double julianCenturiesUntil(ZonedDateTime when){
-        
         return thisZoneTime.until( when, ChronoUnit.MILLIS) / (3600000.0*24*36525);
     }
 }
