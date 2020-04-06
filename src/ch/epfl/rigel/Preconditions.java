@@ -19,7 +19,7 @@ public final class Preconditions {
      * Method checking if the argument selected is valid or not and if not, throwing an exception
      *
      * @param isTrue (Boolean) : gives the argument of the checked value
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException : if the argument is false, throws IAE
      */
     public static void checkArgument(boolean isTrue) {
 
@@ -33,7 +33,7 @@ public final class Preconditions {
      *
      * @param interval (Interval) : gives the studied interval for which we check if the value is in
      * @param value    (double) : gives the value of the studied number
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException : if the value doesn't belong to the interval, throws IAE
      */
     public static double checkInInterval(Interval interval, double value) {
         
@@ -42,9 +42,9 @@ public final class Preconditions {
 
         if (lowerBound <= value && value <= upperBound) {
             return value;
-        } else {
+        }
+        else {
             throw new IllegalArgumentException();
         }
     }
-
 }
