@@ -36,8 +36,10 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
             30.1985, 1.7673, 131.879, 62.20, -6.87);
 
     private String frenchName;
+
     private final static double DAYS_PER_YEAR = 365.242191;
     private double Tp, epsilon, varpi, eccentricity, a, i, omega, theta0, v0;
+
     public static List<PlanetModel> ALL = List.copyOf(Arrays.asList(PlanetModel.values()));
 
     /**
@@ -55,16 +57,17 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
      * @param v0         (double) : returns the magnitude of the planet
      */
     private PlanetModel(String frenchName, double Tp, double epsilon, double varpi, double eccentricity, double a, double i, double omega, double theta0, double v0){
-        this.frenchName=frenchName;
-        this.Tp=Tp;
-        this.epsilon=ofDeg(epsilon);
-        this.varpi=ofDeg(varpi);
-        this.eccentricity=eccentricity;
-        this.a=a;
-        this.i=ofDeg(i);
-        this.omega=ofDeg(omega);
-        this.theta0=Angle.ofArcsec(theta0);
-        this.v0=v0;
+
+        this.frenchName = frenchName;
+        this.Tp = Tp;
+        this.epsilon = ofDeg(epsilon);
+        this.varpi = ofDeg(varpi);
+        this.eccentricity = eccentricity;
+        this.a = a;
+        this.i = ofDeg(i);
+        this.omega = ofDeg(omega);
+        this.theta0 = Angle.ofArcsec(theta0);
+        this.v0 = v0;
     }
 
     /**
@@ -72,43 +75,47 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
      *
      * @param daysSinceJ2010 (double) : gives the number of days after J2010
      * @param eclipticToEquatorialConversion   (EclipticToEquatorialConversion) : gives the equatorial coordinates given by the conversion from ecliptic
-     * @return planetAt    (Planet) : returns the planet
+     * @return (Planet) : returns the planet
      */
     @Override
     public Planet at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
 
-        double M = (TAU/DAYS_PER_YEAR)*(daysSinceJ2010/Tp)+epsilon-varpi;
-        double v = M + 2* eccentricity*sin(M);
-        double r = (a*(1-Math.pow(eccentricity,2)))/(1+eccentricity*cos(v));
+        double M = (TAU / DAYS_PER_YEAR) * (daysSinceJ2010 / Tp) + epsilon - varpi;
+        double v = M + 2 * eccentricity *sin(M);
+        double r = (a *(1 - Math.pow(eccentricity,2))) / (1 + eccentricity * cos(v));
         double l = v + varpi;
-        double phi = asin(sin(l-omega)*sin(i));
-        double rPrim = r*cos(phi);
-        double lPrim = atan2((sin(l-omega)*cos(i)),cos(l-omega))+omega;
+        double phi = asin(sin(l - omega) * sin(i));
+        double rPrim = r *cos(phi);
+        double lPrim = atan2((sin(l - omega) * cos(i)) , cos(l - omega)) + omega;
 
-        double MEarth = (TAU/DAYS_PER_YEAR) * (daysSinceJ2010/EARTH.Tp) +EARTH.epsilon - EARTH.varpi;
+        double MEarth = (TAU / DAYS_PER_YEAR) * (daysSinceJ2010 / EARTH.Tp) + EARTH.epsilon - EARTH.varpi;
         double vEARTH = MEarth + 2 * EARTH.eccentricity * sin(MEarth);
-        double R = (EARTH.a*(1-Math.pow(EARTH.eccentricity,2))/(1+EARTH.eccentricity*cos(vEARTH)));
+        double R = (EARTH.a * (1 - Math.pow(EARTH.eccentricity , 2)) / (1 + EARTH.eccentricity * cos(vEARTH)));
         double L = vEARTH + EARTH.varpi;
         double lambda;
         double k = R * sin(lPrim - L);
 
         if(createInnerPlanet().contains(this)){
+
             lambda = PI + L + atan(((rPrim * sin(L - lPrim)))/ (R - (rPrim * cos(L - lPrim))));
         }
+
         else{
+
             lambda  = lPrim + atan(k / (rPrim - (R * cos(lPrim - L))));
         }
 
         double beta = atan(((rPrim * tan(phi) * sin(lambda - lPrim)) / k));
 
-        double rho = Math.sqrt(Math.pow(R,2)+Math.pow(r,2)-2*R*r*Math.cos(l-L)*Math.cos(phi));
-        double theta = theta0/rho;
+        double rho = Math.sqrt(Math.pow(R,2) + Math.pow(r,2) - 2 * R * r * Math.cos(l - L) * Math.cos(phi));
+        double theta = theta0 / rho;
         double F = (1 + cos(lambda - l)) / 2;
-        double m = v0 + 5 * Math.log10(r*rho/Math.sqrt(F));
+        double m = v0 + 5 * Math.log10(r * rho / Math.sqrt(F));
 
-        EclipticCoordinates planetEclipticCoordinates = EclipticCoordinates.of(normalizePositive(lambda), beta);
+        EclipticCoordinates planetEclipticCoordinates = EclipticCoordinates.of(normalizePositive(lambda) , beta);
         EquatorialCoordinates equatorialCoordinates = eclipticToEquatorialConversion.apply(planetEclipticCoordinates);
-        return new Planet(frenchName, equatorialCoordinates, (float)theta, (float)m);
+
+        return new Planet(frenchName, equatorialCoordinates, (float) theta, (float) m);
     }
 
     /**
@@ -117,9 +124,12 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
      * @return list   (List<PlanetModel>) : returns the list of inner planets initialized with Mercury and Venus
      */
     private List<PlanetModel> createInnerPlanet(){
+
         List<PlanetModel> list = new ArrayList<>();
+
         list.add(0,MERCURY);
         list.add(1,VENUS);
+
         return list;
     }
 }
