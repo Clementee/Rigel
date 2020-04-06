@@ -40,7 +40,6 @@ public final class Sun extends CelestialObject{
      * @return eclipticPositionAn (EclipticCoordinates) : return the ecliptic coordinates of the sun
      */
     public EclipticCoordinates eclipticPos(){
-        
         return eclipticPosition;
     }
     
@@ -50,7 +49,6 @@ public final class Sun extends CelestialObject{
      * @return meanAn (double) : return the anomaly
      */
     public double meanAnomaly(){
-        
         return meanAn;
     }
 }
