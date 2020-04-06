@@ -22,8 +22,11 @@ public final class Asterism {
      * @param stars   (List<Star>) : gives a list of stars present in the asterism
      */
     public Asterism(List<Star> stars){
+        
         checkArgument(!stars.isEmpty());
+        
         asterismList = Collections.unmodifiableList(stars);
+        
     }
 
     /**
@@ -32,6 +35,7 @@ public final class Asterism {
      * @return asterismList (List<Star>) : return the list of stars composing the astersim
      */
     public List<Star> stars(){
+        
         return Collections.unmodifiableList(asterismList);
     }
 }
