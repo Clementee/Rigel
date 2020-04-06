@@ -96,7 +96,6 @@ public class ObservedSky {
      * @return sun  (Sun) : return the sun
      */
     public Sun sun() {
-
         return sun;
     }
 
@@ -106,7 +105,6 @@ public class ObservedSky {
      * @return sunCoords  (CartesianCoordinates) : return the coordinates of the sun
      */
     public CartesianCoordinates sunPosition(){
-
         return sunCoords;
     }
 
@@ -116,7 +114,6 @@ public class ObservedSky {
      * @return moon  (Moon) : return the moon
      */
     public Moon moon(){
-
         return moon;
     }
 
@@ -126,27 +123,24 @@ public class ObservedSky {
      * @return moonCoords  (CartesianCoordinates) : return the coordinates of the moon
      */
     public CartesianCoordinates moonPosition(){
-
         return moonCords;
     }
 
     /**
      * ObservedSky public method returning the list of planets
      *
-     * @return planetList  (List<Planet>) : return the list of planets
+     * @return (List<Planet>) : return the list of planets
      */
     public List<Planet> planets(){
-
         return List.copyOf(planetList);
     }
 
     /**
      * ObservedSky public method returning the list of stars
      *
-     * @return starList  (List<Star>) : return the list of stars
+     * @return (List<Star>) : return the list of stars
      */
     public List<Star> stars(){
-
         return List.copyOf(starList);
     }
 
@@ -204,12 +198,10 @@ public class ObservedSky {
      * @return (Set<Asterism>) : return the set of asterisms
      */
     public Set<Asterism> asterism(){
-
         return Set.copyOf(catalogue.asterisms());
     }
 
     public List<Integer> asterismIndexList(Asterism asterism){
-        
         return catalogue.asterismIndices(asterism); 
     }
 
@@ -278,12 +270,9 @@ public class ObservedSky {
         public int compare(Object o1, Object o2) {
 
             if ( distance(map.get(o1), pointer) >= distance(map.get(o2), pointer)) {
-
                 return 1;
             }
-
             else {
-
                 return -1;
             }
         }
