@@ -52,32 +52,26 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                     String name;
 
                     if (!valInt.equals("")) {
-                        
                         hipparcosID = Integer.parseInt(valInt);
                     }
                     
                     else {
-                        
                         hipparcosID = 0;
                     }
 
                     valInt = strings[index.PROPER.ordinal()];
 
                     if (!valInt.equals("")) {
-                        
                         name = valInt;
                     }
                     else {
-                        
                         valInt = strings[index.BAYER.ordinal()];
 
                         if (!valInt.equals("")) {
-                            
                             name = valInt +" " +  strings[index.CON.ordinal()];
                         }
                         
                         else {
-                            
                             name = "? " + strings[index.CON.ordinal()];
                         }
                     }
@@ -89,22 +83,18 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                     EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad, decrad);
 
                     if (!valInt.equals("")) {
-                        
                         magnitude = Float.parseFloat(valInt);
                     }
                     else {
-                        
                         magnitude = 0;
                     }
                     
                     valInt = strings[index.CI.ordinal()];
 
                     if (!valInt.equals("")) {
-                        
                         colorID = Float.parseFloat(valInt);
                     }
                     else {
-                        
                         colorID = 0;
                     }
 
