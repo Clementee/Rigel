@@ -9,12 +9,13 @@ import ch.epfl.rigel.coordinates.EclipticToEquatorialConversion;
  * @author Clement Sanh (311427)
  */
 public interface CelestialObjectModel <O> {
-    
+
     /**
      * Abstract method calculating the position of the object using a model
-     * @param daysSinceJ2010 (double) : the numbre of days since the first day of 2010
+     * @param daysSinceJ2010 (double) : the number of days since the first day of 2010
      * @param eclipticToEquatorialConversion (EclipticToEquatorialConversion): the coordinates converter
-     * @return (O) : the modelized object
+     * @return (O) : the modelled object
      */
     public abstract O at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion);
+    
 }
