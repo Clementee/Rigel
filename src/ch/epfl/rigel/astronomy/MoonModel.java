@@ -117,7 +117,6 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
      * @return moonPhase    (double) : returns the phase
      */
     private double MoonPhase(){
-        
         return (1 - cos(lPrimPrim - SUN_LAMBDA)) /2;
     }
 
