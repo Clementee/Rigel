@@ -25,7 +25,7 @@ public final class Asterism {
         
         checkArgument(!stars.isEmpty());
         
-        asterismList = Collections.unmodifiableList(stars);
+        asterismList = List.copyOf(stars);
         
     }
 
