@@ -15,6 +15,7 @@ abstract class SphericalCoordinates {
     
     /**
      * SphericalCoordinates package-private constructor
+     *
      * @param longitude  (double) : gives the longitude of the position
      * @param latitude   (double) : gives the latitude of the position
      */
@@ -26,37 +27,58 @@ abstract class SphericalCoordinates {
     /**
      * Public method used to return the value of the longitude in radians
      * 
-     * @return :    return value of longitude in radians
+     * @return (double) : return value of longitude in radians
      */
-    double lon() { return longitudeCoords;}
+    double lon() { 
+        return longitudeCoords;
+    }
     
     /**
      * Public method used to return the value of the longitude in degrees
      * 
-     * @return :    return value of longitude in degrees
+     * @return (double) : return value of longitude in degrees
      */
-    double lonDeg() { return Angle.toDeg(longitudeCoords);}
+    double lonDeg() { 
+        return Angle.toDeg(longitudeCoords);
+    }
     
     /**
      * Public method used to return the value of the latitude in radians
      * 
-     * @return :    return value of latitude in radians
+     * @return (double) : return value of latitude in radians
      */
-    double lat() { return latitudeCoords;}
+    double lat() {
+        return latitudeCoords;
+    }
     
     /**
      * Public method used to return the value of the latitude in degrees
      * 
-     * @return :    return value of latitude in degrees
+     * @ (double) :  return value of latitude in degrees
      */
-    double latDeg() { return Angle.toDeg(latitudeCoords);}
-    
-    //Method overridden in order to throw an exception when called
-    @Override
-    public final int hashCode() { throw new UnsupportedOperationException();}
-    
-    //Method overridden in order to throw an exception when called
-    @Override
-    public final boolean equals(Object obj) { throw new UnsupportedOperationException();}
+    double latDeg() { 
+        return Angle.toDeg(latitudeCoords);
+    }
 
+    /**
+     * SphericalCoordinates overrode method throwing UOE
+     *
+     * @throws UnsupportedOperationException : throws this exception when the method is called
+     */
+    @Override
+    public final int hashCode() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * SphericalCoordinates overrode method throwing UOE
+     * 
+     * @param obj (Object) : gives the object to compare
+     * @throws UnsupportedOperationException : throws this exception when the method is called
+     */
+    @Override
+    public final boolean equals(Object obj) { 
+        throw new UnsupportedOperationException();
+    }
 }
+
