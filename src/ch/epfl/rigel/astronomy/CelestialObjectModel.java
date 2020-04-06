@@ -12,6 +12,7 @@ public interface CelestialObjectModel <O> {
 
     /**
      * Abstract method calculating the position of the object using a model
+     *
      * @param daysSinceJ2010 (double) : the number of days since the first day of 2010
      * @param eclipticToEquatorialConversion (EclipticToEquatorialConversion): the coordinates converter
      * @return (O) : the modelled object
