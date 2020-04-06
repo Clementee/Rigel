@@ -43,7 +43,6 @@ public final class Star extends CelestialObject {
      * @return starNumber (int) : return the hipparcos number linked to the star
      */
     public int hipparcosId(){
-        
         return starNumber;
     }
 
@@ -53,7 +52,6 @@ public final class Star extends CelestialObject {
      * @return colorTemperature (int) : return the temperature of the color of the star in kelvins
      */
     public int colorTemperature(){
-        
         return (int) Math.floor((4600 * ((1 / (0.92 * starColorInd + 1.7)) + (1 / (0.92 * starColorInd + 0.62)))));
     }
 }
