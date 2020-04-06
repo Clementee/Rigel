@@ -161,6 +161,11 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
                 + Math.cos(currentLatitude) * Math.cos(that.lat()) * Math.cos(currentLongitude-that.lon()));
     }
 
+    /**
+     * HorizontalCoordinates overrode method returning a string with the coordinates
+     *
+     * @return (String) : the string of coordinates
+     */
     @Override
     public String toString() {
         return String.format(Locale.ROOT,"(az=%.4f°, alt=%.4f°)",azDeg(),altDeg());
