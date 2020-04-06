@@ -11,7 +11,9 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  * @author Clement Sanh (311427)
  */
 public final class RightOpenInterval extends Interval {
+    
     private double lowerBound, upperBound;
+    
     public static RightOpenInterval rightOpenInterval;
 
     /**
@@ -21,13 +23,16 @@ public final class RightOpenInterval extends Interval {
      * @param high (double) : gives the upper bound of the right open interval
      */
     protected RightOpenInterval(double low, double high) {
+    
         super(low, high);
+    
         lowerBound = low;
         upperBound = high;
     }
 
     /**
-     * RightOpenInterval method returning the right open interval centered in 0 and of radius size if possible and else throw an exception
+     * RightOpenInterval method returning the right open interval centered in 0 and of radius size 
+     * if possible and else throw an exception
      *
      * @param size (double) : gives the value for half the size of the interval
      * @return RightOpenInterval (RightOpenInterval) : return the right open interval
@@ -36,12 +41,15 @@ public final class RightOpenInterval extends Interval {
     public static RightOpenInterval symmetric(double size) {
 
         checkArgument(size>0);
+    
             rightOpenInterval = new RightOpenInterval(-size / 2, size / 2);
+           
             return rightOpenInterval;
     }
 
     /**
-     * RightOpenInterval method returning the right open interval between the two bounds if possible and else throw an exception
+     * RightOpenInterval method returning the right open interval between the two bounds 
+     * if possible and else throw an exception
      *
      * @param low  (double) : gives the lower bound of the right open interval
      * @param high (double) : gives the upper bound of the right open interval
@@ -50,8 +58,10 @@ public final class RightOpenInterval extends Interval {
      */
     public static RightOpenInterval of(double low, double high) {
 
-        checkArgument(low<high);
+        checkArgument(low < high);
+           
             rightOpenInterval = new RightOpenInterval(low, high);
+           
             return rightOpenInterval;
     }
 
@@ -73,9 +83,11 @@ public final class RightOpenInterval extends Interval {
      * @return the numerical application of this function
      */
     public double reduce(double v) {
+        
         double x = v - lowerBound;
         double y = upperBound - lowerBound;
         double floorMod = x - (y * Math.floor(x / y));
+        
         return lowerBound + floorMod;
     }
 
