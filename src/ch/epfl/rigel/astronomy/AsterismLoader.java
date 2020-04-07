@@ -21,40 +21,40 @@ public enum AsterismLoader implements StarCatalogue.Loader {
     /**
      * AsterismLoader method loading the asterism from an inputStream into a builder
      *
-     * @param inputStream   (InputStream) : gives the inputStream from where we take the asterism
-     * @param builder       (StarCatalogue.builder) : gives the builder of the star catalogue we are initializing
+     * @param inputStream (InputStream) : gives the inputStream from where we take the asterism
+     * @param builder     (StarCatalogue.builder) : gives the builder of the star catalogue we are initializing
      * @throws IOException : throws the IOException
      */
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
 
-        try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream , US_ASCII)){
-            try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+        try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII)) {
+            try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
 
                 List<Star> starList = builder.stars();
                 List<String[]> inputList = new ArrayList<>();
-                
-                Map<Integer,Star> asterismListed = new HashMap<>();
+
+                Map<Integer, Star> asterismListed = new HashMap<>();
 
                 String line = bufferedReader.readLine();
-                while(line!=null){
+                while (line != null) {
                     String[] inputLineTab = line.split(",");
                     inputList.add(inputLineTab);
                     line = bufferedReader.readLine();
                 }
 
-                for(Star starInter : starList){
-                
-                    asterismListed.put(starInter.hipparcosId() , starInter);
+                for (Star starInter : starList) {
+
+                    asterismListed.put(starInter.hipparcosId(), starInter);
                 }
-                
+
                 for (String[] hipparsList : inputList) {
 
                     List<Star> asterismList = new LinkedList<>();
 
                     for (String string : hipparsList) {
 
-                        if(Integer.parseInt(string) != 0){
+                        if (Integer.parseInt(string) != 0) {
 
                             asterismList.
                                     add(asterismListed.get(Integer.parseInt(string)));

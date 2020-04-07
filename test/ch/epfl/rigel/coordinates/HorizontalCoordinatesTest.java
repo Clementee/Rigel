@@ -1,6 +1,5 @@
 package ch.epfl.rigel.coordinates;
 
-import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +57,7 @@ class HorizontalCoordinatesTest {
             HorizontalCoordinates.ofDeg(-0.0001, 0);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-                HorizontalCoordinates.ofDeg(360, 0);
+            HorizontalCoordinates.ofDeg(360, 0);
         });
         assertThrows(IllegalArgumentException.class, () -> {
             HorizontalCoordinates.ofDeg(0, -90.0001);

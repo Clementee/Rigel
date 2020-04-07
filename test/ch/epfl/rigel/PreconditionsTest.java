@@ -1,8 +1,7 @@
 // Rigel stage 1
 
-package testProf.ch.epfl.rigel;
+package ch.epfl.rigel;
 
-import ch.epfl.rigel.Preconditions;
 import ch.epfl.rigel.math.ClosedInterval;
 import org.junit.jupiter.api.Test;
 

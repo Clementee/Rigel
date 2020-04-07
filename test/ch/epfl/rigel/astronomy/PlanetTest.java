@@ -1,6 +1,5 @@
-package testProf.ch.epfl.rigel.astronomy;
+package ch.epfl.rigel.astronomy;
 
-import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;

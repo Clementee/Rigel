@@ -1,8 +1,7 @@
 // Rigel stage 1
 
-package testProf.ch.epfl.rigel.math;
+package ch.epfl.rigel.math;
 
-import ch.epfl.rigel.math.Angle;
 import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
 

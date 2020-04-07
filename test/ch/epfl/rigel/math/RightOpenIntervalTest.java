@@ -1,8 +1,7 @@
 // Rigel stage 1
 
-package testProf.ch.epfl.rigel.math;
+package ch.epfl.rigel.math;
 
-import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
 
@@ -10,14 +9,14 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ClosedIntervalTest {
+class RightOpenIntervalTest {
     @Test
     void ofWorksWithValidValues() {
         var rng = TestRandomizer.newRandom();
         for (int i = 0; i < TestRandomizer.RANDOM_ITERATIONS; i++) {
             var low = rng.nextDouble();
             var size = rng.nextDouble(Double.MIN_VALUE,500);
-            var interval = ClosedInterval.of(low, low + size);
+            var interval = RightOpenInterval.of(low, low + size);
             assertEquals(low, interval.low(), 1e-6);
             assertEquals(low + size, interval.high(), 1e-6);
             assertEquals(size, interval.size(), 1e-6);
@@ -30,7 +29,7 @@ public class ClosedIntervalTest {
         for (int i = 0; i < TestRandomizer.RANDOM_ITERATIONS; i++) {
             var lowAndHigh = rng.nextDouble();
             assertThrows(IllegalArgumentException.class, () -> {
-                ClosedInterval.of(lowAndHigh, lowAndHigh);
+                RightOpenInterval.of(lowAndHigh, lowAndHigh);
             });
         }
     }
@@ -42,7 +41,7 @@ public class ClosedIntervalTest {
             var v1 = rng.nextDouble();
             var v2 = rng.nextDouble();
             assertThrows(IllegalArgumentException.class, () -> {
-                ClosedInterval.of(max(v1, v2), min(v1, v2));
+                RightOpenInterval.of(max(v1, v2), min(v1, v2));
             });
         }
     }
@@ -52,7 +51,7 @@ public class ClosedIntervalTest {
         var rng = TestRandomizer.newRandom();
         for (int i = 0; i < TestRandomizer.RANDOM_ITERATIONS; i++) {
             var size = rng.nextDouble(Double.MIN_VALUE,500);
-            var interval = ClosedInterval.symmetric(size);
+            var interval = RightOpenInterval.symmetric(size);
             assertEquals(-size / 2d, interval.low(), 1e-6);
             assertEquals(size / 2d, interval.high(), 1e-6);
             assertEquals(size, interval.size(), 1e-6);
@@ -65,7 +64,7 @@ public class ClosedIntervalTest {
         for (int i = 0; i < TestRandomizer.RANDOM_ITERATIONS; i++) {
             var size = -rng.nextDouble(Double.MIN_VALUE,10);
             assertThrows(IllegalArgumentException.class, () -> {
-                ClosedInterval.symmetric(size);
+                RightOpenInterval.symmetric(size);
             });
         }
     }
@@ -73,15 +72,15 @@ public class ClosedIntervalTest {
     @Test
     void symmetricFailsOnTrivialInterval() {
         assertThrows(IllegalArgumentException.class, () -> {
-            ClosedInterval.symmetric(0);
+            RightOpenInterval.symmetric(0);
         });
     }
 
     @Test
     void containWorksOnNonSymmetricInterval() {
-        var interval = ClosedInterval.of(-5, -2);
+        var interval = RightOpenInterval.of(-5, -2);
         assertTrue(interval.contains(-5));
-        assertTrue(interval.contains(-2));
+        assertTrue(interval.contains(-2.0000000001));
         assertTrue(interval.contains(-3));
 
         assertFalse(interval.contains(-6));
@@ -90,9 +89,9 @@ public class ClosedIntervalTest {
 
     @Test
     void containWorksOnSymmetricInterval() {
-        var interval = ClosedInterval.symmetric(9);
+        var interval = RightOpenInterval.symmetric(9);
         assertTrue(interval.contains(-4.5));
-        assertTrue(interval.contains(4.5));
+        assertTrue(interval.contains(4.49999999999));
         assertTrue(interval.contains(0));
 
         assertFalse(interval.contains(4.6));
@@ -101,29 +100,29 @@ public class ClosedIntervalTest {
     }
 
     @Test
-    void clipWorksOnNonSymmetricInterval() {
-        var interval = ClosedInterval.of(15, 25);
-        assertEquals(15, interval.clip(15));
-        assertEquals(25, interval.clip(25));
-        assertEquals(15, interval.clip(3));
-        assertEquals(25, interval.clip(35));
-        assertEquals(20, interval.clip(20));
+    void reduceWorksOnNonSymmetricInterval() {
+        var range = RightOpenInterval.of(-1, 7);
+        assertEquals(3, range.reduce(-5));
+        assertEquals(0, range.reduce(0));
+        assertEquals(6, range.reduce(-10));
+        assertEquals(4, range.reduce(100));
+        assertEquals(6, range.reduce(6));
     }
 
     @Test
-    void clipWorksOnSymmetricInterval() {
-        var interval = ClosedInterval.symmetric(5);
-        assertEquals(-2.5, interval.clip(-2.5));
-        assertEquals(-2.5, interval.clip(-30));
-        assertEquals(0, interval.clip(0));
-        assertEquals(2.5, interval.clip(2.5));
-        assertEquals(2, interval.clip(2));
+    void reduceWorksOnSymmetricInterval() {
+        var range = RightOpenInterval.symmetric(9);
+        assertEquals(3.5, range.reduce(-5.5));
+        assertEquals(0, range.reduce(0));
+        assertEquals(-1, range.reduce(-10));
+        assertEquals(1, range.reduce(100));
+        assertEquals(-3, range.reduce(6));
     }
 
     @Test
     void equalsThrowsUOE() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            var interval = ClosedInterval.symmetric(1);
+            var interval = RightOpenInterval.symmetric(1);
             interval.equals(interval);
         });
     }
@@ -131,7 +130,7 @@ public class ClosedIntervalTest {
     @Test
     void hashCodeThrowsUOE() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            ClosedInterval.symmetric(1).hashCode();
+            RightOpenInterval.symmetric(1).hashCode();
         });
     }
 }

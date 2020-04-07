@@ -18,26 +18,27 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
 
     //initializing the intervals for the equatorial coordinates
     private final static RightOpenInterval RA_INTERVAL = RightOpenInterval.of(0, Angle.TAU);
-    private final static ClosedInterval DEC_INTERVAL =  ClosedInterval.symmetric(Math.PI);
+    private final static ClosedInterval DEC_INTERVAL = ClosedInterval.symmetric(Math.PI);
 
     /**
-     * EquatorialCoordinates package-private constructor
-     * 
-     * @param rightAscension  (double) : gives the longitude/right ascension of the position
-     * @param declination     (double) : gives the latitude/declination of the position
+     * EquatorialCoordinates private constructor
+     *
+     * @param rightAscension (double) : gives the longitude/right ascension of the position
+     * @param declination    (double) : gives the latitude/declination of the position
      */
-    EquatorialCoordinates(double rightAscension, double declination) { super(rightAscension, declination);}
+    private EquatorialCoordinates(double rightAscension, double declination) {
+        super(rightAscension, declination);
+    }
 
     /**
      * Public method used to return the equatorial coordinates while throwing an exception if not working
-     * 
-     * @param ra    (double) : gives the longitude/right ascension value in rad of the position
-     * @param dec   (double) : gives the latitude/declination value in rad of the position
      *
+     * @param ra  (double) : gives the longitude/right ascension value in rad of the position
+     * @param dec (double) : gives the latitude/declination value in rad of the position
      * @return (EquatorialCoordinates) : call the constructor with the entered parameters or throws exception
      */
     public static EquatorialCoordinates of(double ra, double dec) {
-        return new EquatorialCoordinates(checkInInterval(RA_INTERVAL , ra),checkInInterval(DEC_INTERVAL , dec));
+        return new EquatorialCoordinates(checkInInterval(RA_INTERVAL, ra), checkInInterval(DEC_INTERVAL, dec));
     }
 
     /**
@@ -65,7 +66,7 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
      */
     public double raHr() {
         double ra = super.lon();
-        
+
         return Angle.toHr(ra);
     }
 
@@ -74,7 +75,7 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
      *
      * @return (double) : return the declination in radians
      */
-    public double dec() { 
+    public double dec() {
         return super.lat();
     }
 
@@ -93,7 +94,7 @@ public final class EquatorialCoordinates extends SphericalCoordinates {
      * @return (String) : the string of coordinates
      */
     @Override
-    public String toString() { 
-        return String.format(Locale.ROOT,"(ra=%.4fh, dec=%.4f°)",raHr(),decDeg()); 
+    public String toString() {
+        return String.format(Locale.ROOT, "(ra=%.4fh, dec=%.4f°)", raHr(), decDeg());
     }
 }

@@ -1,6 +1,7 @@
 package ch.epfl.rigel.coordinates;
 
 import java.util.Locale;
+
 import ch.epfl.rigel.math.Angle;
 import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.rigel.math.RightOpenInterval;
@@ -14,52 +15,51 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  * @author Clement Sanh (311427)
  */
 public final class GeographicCoordinates extends SphericalCoordinates {
-    
+
     //initializing the intervals for the geographic coordinates
     private final static RightOpenInterval LON_INTERVAL = RightOpenInterval.symmetric(Angle.TAU);
-    private final static ClosedInterval LAT_INTERVAL = ClosedInterval.symmetric(Angle.TAU/2.0);
-    
+    private final static ClosedInterval LAT_INTERVAL = ClosedInterval.symmetric(Angle.TAU / 2.0);
+
     /**
-     * GeographicCoordinates package-private constructor
-     * 
-     * @param longitude  (double) : gives the longitude of the position
-     * @param latitude   (double) : gives the latitude of the position
+     * GeographicCoordinates private constructor
+     *
+     * @param longitude (double) : gives the longitude of the position
+     * @param latitude  (double) : gives the latitude of the position
      */
-     GeographicCoordinates(double longitude, double latitude) { 
-         super(longitude,latitude);
-     }
-        
-     /**
-      * Public method used to return the geographic coordinates while throwing an exception if not working 
-      * 
-      * @param lonDeg    (double) : gives the longitude value in deg of the position
-      * @param latDeg    (double) : gives the latitude value in deg of the position
-      * 
-      * @return (GeographicCoordinates) : return the geographic coordinates or throw exception if the coords are out of the intervals
-      */
-    public static GeographicCoordinates ofDeg(double lonDeg, double latDeg) {
-        checkArgument(isValidLonDeg(lonDeg)&&isValidLatDeg(latDeg));
-        return new GeographicCoordinates(Angle.ofDeg(lonDeg),Angle.ofDeg(latDeg));
+    private GeographicCoordinates(double longitude, double latitude) {
+        super(longitude, latitude);
     }
-    
+
+    /**
+     * Public method used to return the geographic coordinates while throwing an exception if not working
+     *
+     * @param lonDeg (double) : gives the longitude value in deg of the position
+     * @param latDeg (double) : gives the latitude value in deg of the position
+     * @return (GeographicCoordinates) : return the geographic coordinates or throw exception if the coords are out of the intervals
+     */
+    public static GeographicCoordinates ofDeg(double lonDeg, double latDeg) {
+        checkArgument(isValidLonDeg(lonDeg) && isValidLatDeg(latDeg));
+        return new GeographicCoordinates(Angle.ofDeg(lonDeg), Angle.ofDeg(latDeg));
+    }
+
     /**
      * Method validating if the entered value is valid
-     * 
-     * @param lonDeg  (double) : gives the longitude of the position in degrees
+     *
+     * @param lonDeg (double) : gives the longitude of the position in degrees
      * @return (boolean) : returns whether the interval contains the longitude
      */
     public static boolean isValidLonDeg(double lonDeg) {
         return LON_INTERVAL
                 .contains(Angle.ofDeg(lonDeg));
     }
-        
+
     /**
      * Method validating if the entered value is valid
-     * 
-     * @param latDeg  (double) : gives the latitude of the position in degrees
+     *
+     * @param latDeg (double) : gives the latitude of the position in degrees
      * @return (boolean) : returns whether the interval contains the latitude
      */
-    public static boolean isValidLatDeg(double latDeg) { 
+    public static boolean isValidLatDeg(double latDeg) {
         return LAT_INTERVAL
                 .contains(Angle.ofDeg(latDeg));
     }
@@ -70,7 +70,7 @@ public final class GeographicCoordinates extends SphericalCoordinates {
      * @return (double) : returns the longitude in radians
      */
     @Override
-    public double lon() { 
+    public double lon() {
         return super.lon();
     }
 
@@ -100,7 +100,7 @@ public final class GeographicCoordinates extends SphericalCoordinates {
      * @return (double) : returns the latitude in degrees
      */
     @Override
-    public double latDeg() { 
+    public double latDeg() {
         return super.latDeg();
     }
 
@@ -110,7 +110,7 @@ public final class GeographicCoordinates extends SphericalCoordinates {
      * @return (String) : the string of coordinates
      */
     @Override
-    public String toString() { 
-        return String.format(Locale.ROOT,"(lon=%.4f°, lat=%.4f°)", lonDeg(), latDeg());
+    public String toString() {
+        return String.format(Locale.ROOT, "(lon=%.4f°, lat=%.4f°)", lonDeg(), latDeg());
     }
 }

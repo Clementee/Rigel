@@ -1,6 +1,5 @@
-package testProf.ch.epfl.rigel.astronomy;
+package ch.epfl.rigel.astronomy;
 
-import ch.epfl.rigel.astronomy.Moon;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
@@ -83,8 +82,6 @@ public class MoonTest {
         var m1 = new Moon(equ, 0, 0, 0.1f);
         var m2 = new Moon(equ, 0, 0, 0.9f);
         assertEquals(m1.name(), m2.name());
-        System.out.println(m1.info());
-        System.out.println(m2.info());
         assertNotEquals(m1.info(), m2.info());
     }
 

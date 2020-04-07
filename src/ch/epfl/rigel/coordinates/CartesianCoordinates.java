@@ -10,32 +10,31 @@ import java.util.Locale;
  */
 public final class CartesianCoordinates {
 
-    private double x;
-    private double y;
+    private final double x;
+    private final double y;
 
     /**
      * CartesianCoordinates private constructor initializing some values
-     * 
-     * @param abs     (double) : gives the abscissa of the coordinates
-     * @param ord     (double) : gives the ordonnée of the coordinates
+     *
+     * @param abs (double) : gives the abscissa of the coordinates
+     * @param ord (double) : gives the ordonnée of the coordinates
      */
-    private CartesianCoordinates(double abs, double ord){
-        
+    private CartesianCoordinates(double abs, double ord) {
+
         x = abs;
         y = ord;
     }
 
     /**
      * CartesianCoordinates method returning the cartesian coordinates
-     * 
-     * @param x     (double) : gives the abscissa of the coordinates
-     * @param y     (double) : gives the ordonnée of the coordinates
      *
+     * @param x (double) : gives the abscissa of the coordinates
+     * @param y (double) : gives the ordonnée of the coordinates
      * @return CartesianCoordinates (CartesianCoordinates) : return the cartesian coordinates linked to the x and y given
      */
     public static CartesianCoordinates of(double x, double y) {
-        
-        return new CartesianCoordinates(x,y);
+
+        return new CartesianCoordinates(x, y);
     }
 
     /**
@@ -43,8 +42,8 @@ public final class CartesianCoordinates {
      *
      * @return x  (double) : return the abscissa of the coordinates
      */
-    public double x(){
-        
+    public double x() {
+
         return x;
     }
 
@@ -53,8 +52,8 @@ public final class CartesianCoordinates {
      *
      * @return y  (double) : return the y of the coordinates
      */
-    public double y(){
-        
+    public double y() {
+
         return y;
     }
 
@@ -64,8 +63,8 @@ public final class CartesianCoordinates {
      * @throws UnsupportedOperationException : throws this exception when the method is called
      */
     @Override
-    public final int hashCode(){
-        
+    public final int hashCode() {
+
         throw new UnsupportedOperationException();
     }
 
@@ -76,7 +75,7 @@ public final class CartesianCoordinates {
      */
     @Override
     public final boolean equals(Object obj) {
-        
+
         throw new UnsupportedOperationException();
     }
 
@@ -86,8 +85,8 @@ public final class CartesianCoordinates {
      * @return (String) : the string of coordinates
      */
     @Override
-    public final String toString(){
-        
-        return String.format(Locale.ROOT,"(abscisse =%.4f°, ordonnée =%.4f°)", x() , y());
+    public final String toString() {
+
+        return String.format(Locale.ROOT, "(abscisse =%.4f°, ordonnée =%.4f°)", x(), y());
     }
 }

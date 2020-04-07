@@ -1,8 +1,5 @@
-package testProf.ch.epfl.rigel.astronomy;
+package ch.epfl.rigel.astronomy;
 
-import ch.epfl.rigel.astronomy.HygDatabaseLoader;
-import ch.epfl.rigel.astronomy.Star;
-import ch.epfl.rigel.astronomy.StarCatalogue;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

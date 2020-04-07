@@ -1,6 +1,5 @@
 package ch.epfl.rigel.coordinates;
 
-import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
 

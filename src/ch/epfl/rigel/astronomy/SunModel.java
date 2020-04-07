@@ -26,22 +26,22 @@ public enum SunModel implements CelestialObjectModel<Sun> {
     /**
      * SunModel method at, creating a sun and returning it
      *
-     * @param daysSinceJ2010 (double) : gives the number of days after J2010
-     * @param eclipticToEquatorialConversion   (EclipticToEquatorialConversion) : gives the equatorial coordinates given by the conversion from ecliptic
+     * @param daysSinceJ2010                 (double) : gives the number of days after J2010
+     * @param eclipticToEquatorialConversion (EclipticToEquatorialConversion) : gives the equatorial coordinates given by the conversion from ecliptic
      * @return (Sun) : returns the sun
      */
     @Override
     public Sun at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
 
-        double M0 = TAU/365.242191 * daysSinceJ2010 + LONSUN2010 - LONSUNPERIGEE;
-        double v0 = M0 + 2 * J2010SunEarthExcentricity *sin(M0);
+        double M0 = TAU / 365.242191 * daysSinceJ2010 + LONSUN2010 - LONSUNPERIGEE;
+        double v0 = M0 + 2 * J2010SunEarthExcentricity * sin(M0);
         double lambda0 = v0 + LONSUNPERIGEE;
         double phi0 = 0;
-        double sunAngularSize = THETA0 * ((1 + J2010SunEarthExcentricity * cos(v0)) / (1 - J2010SunEarthExcentricity*J2010SunEarthExcentricity));
-        
+        double sunAngularSize = THETA0 * ((1 + J2010SunEarthExcentricity * cos(v0)) / (1 - J2010SunEarthExcentricity * J2010SunEarthExcentricity));
+
         EclipticCoordinates sunEclipticCoordinates = EclipticCoordinates.of(Angle.normalizePositive(lambda0), Angle.normalizePositive(phi0));
         EquatorialCoordinates sunEquatorialCoordinates = eclipticToEquatorialConversion.apply(sunEclipticCoordinates);
-        
+
         return new Sun(sunEclipticCoordinates, sunEquatorialCoordinates, (float) sunAngularSize, (float) M0);
     }
 }

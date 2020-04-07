@@ -9,7 +9,7 @@ import ch.epfl.rigel.Preconditions;
  * @author Clement Sanh (311427)
  */
 public final class Polynomial {
-    private double[] tab;
+    private final double[] tab;
 
     /**
      * Polynomial private constructor representing a Polynomial object under the form of an array
@@ -18,10 +18,10 @@ public final class Polynomial {
      * @param coefficients (double[] ) : the other coefficients of our polynomial function (can be null)
      */
     private Polynomial(double coefficientN, double[] coefficients) {
-        
+
         tab = new double[coefficients.length + 1];
         tab[0] = coefficientN;
-        
+
         System.arraycopy(coefficients, 0, tab, 1, coefficients.length);
     }
 
@@ -44,13 +44,13 @@ public final class Polynomial {
      * @return (double) : the image
      */
     public double at(double x) {
-        
+
         double value = tab[0];
-        
+
         for (int i = 1; i < tab.length; i++) {
             value = value * x + tab[i];
         }
-        
+
         return value;
     }
 
@@ -61,96 +61,87 @@ public final class Polynomial {
      */
     @Override
     public String toString() {
-        
+
         StringBuilder text = new StringBuilder();
-        
+
         for (int i = 0; i < tab.length; i++) {
-            
+
             if (i == 0) {
-                
+
                 if (tab.length == 1) {
-                    
+
                     text.append(tab[i]);
-                } 
-                else {
+                } else {
                     if (tab.length == 2) {
-                        
+
                         if (tab[i] != 1 && tab[i] != -1) {
-                            
+
                             text.append(tab[i]).append("x");
-                        } 
-                        else {
+                        } else {
                             if (tab[i] == 1) {
-                                
+
                                 text.append("x");
-                            } 
-                            else {
+                            } else {
                                 text.append("-x");
                             }
                         }
-                    } 
-                    else {
+                    } else {
                         if (tab[i] != 1 && tab[i] != -1) {
-                            
+
                             text.append(tab[i]).append("x^").append(tab.length - 1);
-                        } 
-                        else {
+                        } else {
                             if (tab[i] == 1) {
-                                
+
                                 text.append("x^").append(tab.length - 1);
-                            } 
-                            else {
-                                
+                            } else {
+
                                 text.append("-x^").append(tab.length - 1);
                             }
                         }
 
                     }
                 }
-            } 
-            else {
+            } else {
                 if (i == tab.length - 1) {
-                    
+
                     if (tab[i] > 0) {
-                        
+
                         text.append("+").append(tab[i]);
                     }
-                    
+
                     if (tab[i] < 0) {
-                        
+
                         text.append(tab[i]);
                     }
-                } 
-                else {
+                } else {
                     if (i == tab.length - 2) {
-                        
+
                         if (tab[i] > 0) {
-                            
+
                             text.append("+").append(tab[i]).append("x");
                         }
                         if (tab[i] < 0) {
-                            
+
                             text.append(tab[i]).append("x");
                         }
-                    } 
-                    else {
+                    } else {
                         if (tab[i] > 0 && tab[i] != 1) {
-                            
+
                             text.append("+").append(tab[i]).append("x^").append(tab.length - i - 1);
                         }
-                        
+
                         if (tab[i] < 0 && tab[i] != -1) {
-                            
+
                             text.append(tab[i]).append("x^").append(tab.length - i - 1);
                         }
-                        
+
                         if (tab[i] == 1) {
-                            
+
                             text.append("+x^").append(tab.length - i - 1);
                         }
-                        
+
                         if (tab[i] == -1) {
-                            
+
                             text.append("-x^").append(tab.length - i - 1);
                         }
                     }

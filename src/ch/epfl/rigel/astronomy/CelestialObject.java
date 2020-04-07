@@ -1,6 +1,7 @@
 package ch.epfl.rigel.astronomy;
 
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
+
 import java.util.Objects;
 
 import static ch.epfl.rigel.Preconditions.checkArgument;
@@ -13,28 +14,27 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  */
 public abstract class CelestialObject {
 
-    private String celestialName;
-    
-    private EquatorialCoordinates celestialEquatorialPosition;
-    
-    private float celestialAngularSize;
-    private float celestialMagnitude;
+    private final String celestialName;
+
+    private final EquatorialCoordinates celestialEquatorialPosition;
+
+    private final float celestialAngularSize, celestialMagnitude;
 
     /**
      * CelestialObject package-private constructor returning a celestial object and initializing some values
      *
-     * @param name            (String) : gives the name of the celestial object
-     * @param equatorialPos   (EquatorialCoordinates) : gives the equatorial coordinates of the planet
-     * @param angularSize     (float) : gives the angular size of the planet
-     * @param magnitude       (float) : gives the magnitude of the planet
+     * @param name          (String) : gives the name of the celestial object
+     * @param equatorialPos (EquatorialCoordinates) : gives the equatorial coordinates of the planet
+     * @param angularSize   (float) : gives the angular size of the planet
+     * @param magnitude     (float) : gives the magnitude of the planet
      */
-    public CelestialObject(String name, EquatorialCoordinates equatorialPos, float angularSize, float magnitude){
-        
+    CelestialObject(String name, EquatorialCoordinates equatorialPos, float angularSize, float magnitude) {
+
         celestialName = Objects.requireNonNull(name);
         celestialEquatorialPosition = Objects.requireNonNull(equatorialPos);
-        
-        checkArgument(angularSize>=0);
-        
+
+        checkArgument(angularSize >= 0);
+
         celestialAngularSize = angularSize;
         celestialMagnitude = magnitude;
     }
@@ -44,7 +44,7 @@ public abstract class CelestialObject {
      *
      * @return celestialName (String) : return the name of the celestial object
      */
-    public String name(){
+    public String name() {
         return celestialName;
     }
 
@@ -53,15 +53,16 @@ public abstract class CelestialObject {
      *
      * @return celestialAngularSize (double) : return the angular size of the celestial object
      */
-    public double angularSize(){
+    public double angularSize() {
         return celestialAngularSize;
     }
 
     /**
      * Method magnitude returning the magnitude of the celestial object
+     *
      * @return celestialMagnitude (double) : return the magnitude of the celestial object
      */
-    public double magnitude(){
+    public double magnitude() {
         return celestialMagnitude;
     }
 
@@ -79,7 +80,7 @@ public abstract class CelestialObject {
      *
      * @return (String) : return the name of the celestial object
      */
-    public String info(){
+    public String info() {
         return name();
     }
 
@@ -89,7 +90,7 @@ public abstract class CelestialObject {
      * @return (String) : return the name of the celestial object
      */
     @Override
-    public String toString(){
+    public String toString() {
         return info();
     }
 }

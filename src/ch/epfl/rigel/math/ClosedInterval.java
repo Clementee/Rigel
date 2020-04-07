@@ -10,12 +10,11 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  * @author Baptiste Lecoeur (316223)
  * @author Clement Sanh (311427)
  */
-public class ClosedInterval extends Interval {
+public final class ClosedInterval extends Interval {
 
     public static ClosedInterval closedInterval;
-    
-    private double lowerBound;
-    private double upperBound;
+
+    private final double lowerBound, upperBound;
 
     /**
      * ClosedInterval private constructor
@@ -24,9 +23,9 @@ public class ClosedInterval extends Interval {
      * @param high (double) : gives the upper bound of the closed interval
      */
     private ClosedInterval(double low, double high) {
-        
+
         super(low, high);
-        
+
         lowerBound = low;
         upperBound = high;
     }
@@ -36,17 +35,15 @@ public class ClosedInterval extends Interval {
      *
      * @param low  (double) : gives the lower bound of the closed interval
      * @param high (double) : gives the upper bound of the closed interval
-     * 
      * @return closedInterval (ClosedInterval) : return the closed interval
-     *
-     *  @throws IllegalArgumentException : if bounds are illegal
+     * @throws IllegalArgumentException : if bounds are illegal
      */
     public static ClosedInterval of(double low, double high) {
 
         checkArgument(low < high);
-            
+
         closedInterval = new ClosedInterval(low, high);
-        
+
         return closedInterval;
     }
 
@@ -59,10 +56,10 @@ public class ClosedInterval extends Interval {
      */
     public static ClosedInterval symmetric(double size) {
 
-        checkArgument(size>0);
-            
+        checkArgument(size > 0);
+
         closedInterval = new ClosedInterval(-size / 2, size / 2);
-        
+
         return closedInterval;
     }
 
@@ -86,8 +83,7 @@ public class ClosedInterval extends Interval {
 
         if (v < lowerBound) {
             return lowerBound;
-        }
-        else return Math.min(v, upperBound);
+        } else return Math.min(v, upperBound);
     }
 
     /**

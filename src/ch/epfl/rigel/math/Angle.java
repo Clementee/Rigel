@@ -9,13 +9,13 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  * @author Clement Sanh (311427)
  */
 public final class Angle {
-    
+
     public final static double TAU = 2 * Math.PI;
     private final static double RAD_PER_HOUR = TAU / 24;
-    
+
     private final static int SEC_PER_DEG = 3600;
     private final static int MIN_TO_SEC = 60;
-    
+
     /**
      * Method normalizing the angle
      *
@@ -23,9 +23,9 @@ public final class Angle {
      * @return (double) : the angle in radians belonging to the interval [0,2*pi]
      */
     public static double normalizePositive(double rad) {
-        
-        RightOpenInterval ROI = RightOpenInterval.of(0,TAU);
-        
+
+        RightOpenInterval ROI = RightOpenInterval.of(0, TAU);
+
         return ROI.reduce(rad);
     }
 
@@ -51,11 +51,11 @@ public final class Angle {
      * @throws IllegalArgumentException : if illegal values entered
      */
     public static double ofDMS(int deg, int min, double sec) {
-        
+
         checkArgument(!(min < 0 || min >= 60 || sec < 0 || sec >= 60));
-            
+
         double angle = deg + (min * MIN_TO_SEC + sec) / SEC_PER_DEG;
-            
+
         return Math.toRadians(angle);
     }
 

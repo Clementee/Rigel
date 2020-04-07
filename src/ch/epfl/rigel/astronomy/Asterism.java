@@ -14,19 +14,19 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  */
 public final class Asterism {
 
-    private List<Star> asterismList;
+    private final List<Star> asterismList;
 
     /**
-     * Asterism package-private constructor initializing the asterism with the stars composing it
+     * Asterism public constructor initializing the asterism with the stars composing it
      *
-     * @param stars   (List<Star>) : gives a list of stars present in the asterism
+     * @param stars (List<Star>) : gives a list of stars present in the asterism
      */
-    public Asterism(List<Star> stars){
-        
+    public Asterism(List<Star> stars) {
+
         checkArgument(!stars.isEmpty());
 
         asterismList = List.copyOf(stars);
-        
+
     }
 
     /**
@@ -34,7 +34,7 @@ public final class Asterism {
      *
      * @return asterismList (List<Star>) : return the list of stars composing the astersim
      */
-    public List<Star> stars(){
+    public List<Star> stars() {
         return Collections.unmodifiableList(asterismList);
     }
 }
