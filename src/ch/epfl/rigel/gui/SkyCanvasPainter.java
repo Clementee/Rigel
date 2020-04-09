@@ -87,7 +87,7 @@ public class SkyCanvasPainter {
     public void drawMoon(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
 
         final Color MOON_COLOR = Color.WHITE;
-
+        
         final double moonAngSize = observedSky.moon().angularSize();
         final double x = observedSky.moonPosition().x();
         final double y = observedSky.moonPosition().y();
