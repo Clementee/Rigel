@@ -2,18 +2,15 @@ package ch.epfl.rigel.gui;
 
 import ch.epfl.rigel.astronomy.Asterism;
 import ch.epfl.rigel.astronomy.ObservedSky;
+import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.astronomy.Star;
-import ch.epfl.rigel.coordinates.CartesianCoordinates;
-import ch.epfl.rigel.coordinates.EquatorialToHorizontalConversion;
 import ch.epfl.rigel.coordinates.StereographicProjection;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static ch.epfl.rigel.math.Angle.ofDeg;
 import static java.lang.Math.max;
@@ -21,10 +18,8 @@ import static java.lang.Math.max;
 public class SkyCanvasPainter {
 
 
-    private Canvas canvas;
-    private GraphicsContext ctx;
-    private StereographicProjection projection;
-    private EquatorialToHorizontalConversion conversion;
+    private final Canvas canvas;
+    private final GraphicsContext ctx;
 
 
     public SkyCanvasPainter(Canvas canvas){
@@ -38,30 +33,29 @@ public class SkyCanvasPainter {
 
     public void drawStars(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
 
-        projection = stereographicProjection;
-        Map<Star,CartesianCoordinates> starPosition = new HashMap<>();
         final Color ASTERISM_COLOR = Color.BLUE;
         Color starColor;
-
 
         for(Star star : observedSky.stars()){
 
             starColor = BlackBodyColor
                     .colorForTemperature(star.colorTemperature());
-            
+
             double starDiameter = objectDiameter(star.magnitude());
 
-            CartesianCoordinates coords = projection.apply(conversion.apply(star.equatorialPos()));
-            starPosition.put(star,coords);
+            double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
+            double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
 
             ctx.setFill(starColor);
-            ctx.fillOval(coords.x(), coords.y() , starDiameter , starDiameter);
+            ctx.fillOval(x, y , starDiameter , starDiameter);
         }
 
         for(Asterism asterism : observedSky.asterism()){
 
             List<Star> starFromAsterism = asterism.stars();
+
             ctx.setFill(ASTERISM_COLOR);
+
             for(int i = 0 ; i < starFromAsterism.size(); i++){
 
             }
@@ -71,10 +65,37 @@ public class SkyCanvasPainter {
 
     public void drawPlanets(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
 
-        final Color planetColor = Color.LIGHTGRAY;
+        final Color PLANET_COLOR = Color.LIGHTGRAY;
+
+        for(Planet planet : observedSky.planets()){
 
 
+            double planetDiameter = objectDiameter(planet.magnitude());
+
+            double x = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet))];
+            double y = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet)) + 1];
+
+            ctx.setFill(PLANET_COLOR);
+            ctx.fillOval(x, y , planetDiameter , planetDiameter);
+        }
     }
+
+    public void drawSun(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
+        // à compléter pogchamp
+    }
+
+    public void drawMoon(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
+
+        final Color MOON_COLOR = Color.WHITE;
+
+        final double moonAngSize = observedSky.moon().angularSize();
+        final double x = observedSky.moonPosition().x();
+        final double y = observedSky.moonPosition().y();
+
+        ctx.setFill(MOON_COLOR);
+        ctx.fillOval(x,y,moonAngSize,moonAngSize);
+    }
+
 
     private double cappedMagnitude(double magnitude){
 
@@ -89,8 +110,8 @@ public class SkyCanvasPainter {
     private double sizeFactor(double magnitude){
         return (99 - 17 * cappedMagnitude(magnitude)) / 140;
     }
-    
+
     private double objectDiameter(double magnitude){
         return  sizeFactor(magnitude) * 2 * Math.tan(ofDeg(0.5) / 4);
     }
-    
+}
