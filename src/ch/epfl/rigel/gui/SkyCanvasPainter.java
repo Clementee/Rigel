@@ -42,22 +42,14 @@ public class SkyCanvasPainter {
         Map<Star,CartesianCoordinates> starPosition = new HashMap<>();
         final Color ASTERISM_COLOR = Color.BLUE;
         Color starColor;
-        double starMagnitude;
 
 
         for(Star star : observedSky.stars()){
 
-            starColor = BlackBodyColor.colorForTemperature(star.colorTemperature());
-
-            if (star.magnitude() >= 5){
-                starMagnitude = 5;
-            }
-            else {
-                starMagnitude = max(star.magnitude(), -2);
-            }
-
-            double f = (99 - 17 * starMagnitude) / 140;
-            double starDiameter = f * 2 * Math.tan(ofDeg(0.5)/4);
+            starColor = BlackBodyColor
+                    .colorForTemperature(star.colorTemperature());
+            
+            double starDiameter = objectDiameter(star.magnitude());
 
             CartesianCoordinates coords = projection.apply(conversion.apply(star.equatorialPos()));
             starPosition.put(star,coords);
@@ -76,4 +68,29 @@ public class SkyCanvasPainter {
 
         }
     }
-}
+
+    public void drawPlanets(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
+
+        final Color planetColor = Color.LIGHTGRAY;
+
+
+    }
+
+    private double cappedMagnitude(double magnitude){
+
+        if (magnitude >= 5){
+            return 5;
+        }
+        else {
+            return max(magnitude, -2);
+        }
+    }
+
+    private double sizeFactor(double magnitude){
+        return (99 - 17 * cappedMagnitude(magnitude)) / 140;
+    }
+    
+    private double objectDiameter(double magnitude){
+        return  sizeFactor(magnitude) * 2 * Math.tan(ofDeg(0.5) / 4);
+    }
+    
