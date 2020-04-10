@@ -79,7 +79,7 @@ public class SkyCanvasPainter {
 
                 Transform transform1 = translate.createConcatenation(scale);
 
-                Point2D coordsTranformed = transform1.deltaTransform(x,y);
+                Point2D coordsTranformed = transform.deltaTransform(x,y);
 
                 if (i == 0 && containsCondition) {
                     ctx.beginPath();
@@ -88,6 +88,7 @@ public class SkyCanvasPainter {
                 }
                 if (i == 1 && containsCondition) {
                     ctx.lineTo(coordsTranformed.getX(), coordsTranformed.getY());
+                    ctx.stroke();
                     i--;
                 }
             }
