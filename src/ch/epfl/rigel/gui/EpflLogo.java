@@ -30,11 +30,12 @@ public class EpflLogo extends Application {
         ctx.setTextBaseline(VPos.BASELINE);
         ctx.fillText("EPFL", 400, 250);
 
-        ctx.setFill(Color.BLUEVIOLET);
+        ctx.setFill(Color.BLUE);
         ctx.beginPath();
-        ctx.moveTo(50,50);
+        ctx.moveTo(0,0);
         ctx.lineTo(100,100);
         ctx.stroke();
+
 
         // Trous dans le E et le F
         ctx.setFill(Color.WHITE);

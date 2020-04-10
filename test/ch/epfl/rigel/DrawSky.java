@@ -1,8 +1,6 @@
 package ch.epfl.rigel;
 
-import ch.epfl.rigel.astronomy.HygDatabaseLoader;
-import ch.epfl.rigel.astronomy.ObservedSky;
-import ch.epfl.rigel.astronomy.StarCatalogue;
+import ch.epfl.rigel.astronomy.*;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
@@ -30,11 +28,13 @@ public final class DrawSky extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        try (InputStream hs = resourceStream("/hygdata_v3.csv")){
-            StarCatalogue catalogue = new StarCatalogue.Builder()
-                    .loadFrom(hs, HygDatabaseLoader.INSTANCE)
-                    .build();
-
+        StarCatalogue catalogue;
+        StarCatalogue.Builder builder;
+        try (InputStream hs = resourceStream("/hygdata_v3.csv")) {
+            builder = new StarCatalogue.Builder().loadFrom(hs, HygDatabaseLoader.INSTANCE);
+        }
+        try(InputStream astTream = resourceStream("/asterisms.txt")) {
+            catalogue = builder.loadFrom(astTream, AsterismLoader.INSTANCE).build();
             ZonedDateTime when =
                     ZonedDateTime.parse("2020-02-17T20:15:00+01:00");
             GeographicCoordinates where =
@@ -55,10 +55,10 @@ public final class DrawSky extends Application {
 
             painter.clear();
             painter.drawStars(sky, projection, planeToCanvas);
-            painter.drawHorizon(sky,projection, planeToCanvas);
+            //painter.drawHorizon(sky,projection, planeToCanvas);
 
-            painter.drawSun(sky, projection, planeToCanvas);
-            painter.drawMoon(sky,projection, planeToCanvas);
+            //painter.drawSun(sky, projection, planeToCanvas);
+            //painter.drawMoon(sky,projection, planeToCanvas);
 
             WritableImage fxImage =
                     canvas.snapshot(null, null);

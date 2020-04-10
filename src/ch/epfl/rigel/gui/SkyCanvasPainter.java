@@ -40,10 +40,10 @@ public class SkyCanvasPainter {
     }
 
     public void drawStars(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
-
         final Color ASTERISM_COLOR = Color.BLUE;
         Color starColor;
         Bounds bound = canvas.getBoundsInLocal();
+
 
 
         for (Star star : observedSky.stars()) {
@@ -64,35 +64,38 @@ public class SkyCanvasPainter {
 
             List<Star> starFromAsterism = asterism.stars();
 
-            ctx.setFill(ASTERISM_COLOR);
             int i = 0;
 
             for (Star star : starFromAsterism) {
-
+                ctx.setFill(Color.LIGHTBLUE);
                 double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
                 double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
                 boolean containsCondition = bound.contains(x, y);
 
-
-                Scale scale = Transform.scale(x, y);
-                Translate translate = Transform.translate(x, y);
-
-                Transform transform1 = translate.createConcatenation(scale);
-
-                Point2D coordsTranformed = transform.deltaTransform(x,y);
+                Point2D coordsTranformed = transform.transform(x,y);
 
                 if (i == 0 && containsCondition) {
                     ctx.beginPath();
                     ctx.moveTo(coordsTranformed.getX(), coordsTranformed.getY());
                     i++;
                 }
-                else if (i == 1 && containsCondition) {
+                if (i == 1 && containsCondition) {
                     ctx.lineTo(coordsTranformed.getX(), coordsTranformed.getY());
-                    ctx.stroke();
                     i--;
+                    ctx.stroke();
                 }
             }
         }
+        ctx.setFill(Color.GREEN);
+        ctx.fillOval(100,100, 10, 10);
+        ctx.fillOval(0,0,10,10);
+        
+        ctx.setFill(Color.WHITE);
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.lineTo(100,100);
+        ctx.stroke();
+
     }
 
     public void drawPlanets(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
