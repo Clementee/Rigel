@@ -157,7 +157,11 @@ public class SkyCanvasPainter {
     }
 
     public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
-        
+
+        HorizontalCoordinates origin = HorizontalCoordinates.of(0,0);
+        CartesianCoordinates cartesianCoordinates = stereographicProjection.circleCenterForParallel(origin);
+        ctx.setFill(Color.RED);
+        ctx.strokeOval(cartesianCoordinates.x(),cartesianCoordinates.y(),2,2);
     }
 
 
