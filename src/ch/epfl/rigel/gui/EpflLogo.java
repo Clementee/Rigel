@@ -30,7 +30,7 @@ public class EpflLogo extends Application {
         ctx.setTextBaseline(VPos.BASELINE);
         ctx.fillText("EPFL", 400, 250);
 
-        ctx.setFill(Color.BLUE);
+        ctx.setStroke(Color.GREEN);
         ctx.beginPath();
         ctx.moveTo(0,0);
         ctx.lineTo(100,100);

@@ -65,37 +65,28 @@ public class SkyCanvasPainter {
             List<Star> starFromAsterism = asterism.stars();
 
             int i = 0;
+            ctx.setStroke(Color.BLUE);
 
             for (Star star : starFromAsterism) {
-                ctx.setFill(Color.LIGHTBLUE);
                 double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
                 double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
                 boolean containsCondition = bound.contains(x, y);
-
+                boolean done = false;
                 Point2D coordsTranformed = transform.transform(x,y);
-
                 if (i == 0 && containsCondition) {
                     ctx.beginPath();
                     ctx.moveTo(coordsTranformed.getX(), coordsTranformed.getY());
                     i++;
+                    done = true;
                 }
-                if (i == 1 && containsCondition) {
+                if (i == 1 && containsCondition &&!done) {
                     ctx.lineTo(coordsTranformed.getX(), coordsTranformed.getY());
                     i--;
                     ctx.stroke();
                 }
+
             }
         }
-        ctx.setFill(Color.GREEN);
-        ctx.fillOval(100,100, 10, 10);
-        ctx.fillOval(0,0,10,10);
-        
-        ctx.setFill(Color.WHITE);
-        ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.lineTo(100,100);
-        ctx.stroke();
-
     }
 
     public void drawPlanets(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
