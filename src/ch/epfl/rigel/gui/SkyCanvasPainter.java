@@ -48,7 +48,6 @@ public class SkyCanvasPainter {
 
             starColor = BlackBodyColor
                     .colorForTemperature(star.colorTemperature());
-
             double starDiameter = objectDiameter(star.magnitude(), stereographicProjection);
 
             double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
@@ -56,8 +55,11 @@ public class SkyCanvasPainter {
 
             Point2D point = getCoordsOnCanvas(x, y);
 
+            System.out.println(point);
+
+            int k = 1000;
             ctx.setFill(starColor);
-            ctx.fillOval(point.getX(), point.getY(), starDiameter, starDiameter);
+            drawCircle(ctx, point.getX(), point.getY(), k*starDiameter);
         }
 
         for (Asterism asterism : observedSky.asterism()) {
@@ -121,14 +123,14 @@ public class SkyCanvasPainter {
         final Color SUN_YELLOW2 = Color.rgb(255, 255, 0, 0.25);
 
         final double sunAngularSize = observedSky.sun().angularSize();
-        final double x = observedSky.sunPosition().x() + 10;
-        final double y = observedSky.sunPosition().y() + 10;
+        final double x = observedSky.sunPosition().x();
+        final double y = observedSky.sunPosition().y();
 
         Point2D point = getCoordsOnCanvas(x, y);
 
         int k = 1000;
 
-        System.out.println("x = " + x + " y = " + y);
+        System.out.println("Sun : " + point);
 
         ctx.setFill(SUN_YELLOW2);
         drawCircle(ctx, point.getX(), point.getY(), k*2.2*sunAngularSize);
@@ -152,8 +154,10 @@ public class SkyCanvasPainter {
 
         Point2D point = getCoordsOnCanvas(x, y);
 
+        System.out.println("Moon : " + point);
+        int k =1000;
         ctx.setFill(MOON_COLOR);
-        drawCircle(ctx, point.getX(), point.getY(), moonAngSize);
+        drawCircle(ctx, point.getX(), point.getY(), k*moonAngSize);
     }
 
     public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
@@ -174,8 +178,8 @@ public class SkyCanvasPainter {
     }
 
     private Point2D getCoordsOnCanvas(double x, double y) {
-        Scale scale = Transform.scale(x, y);
-        Translate translate = Transform.translate(x, y);
+        Scale scale = Transform.scale(1300, -1300);
+        Translate translate = Transform.translate(400, 300);
 
         Transform transform = translate.createConcatenation(scale);
 

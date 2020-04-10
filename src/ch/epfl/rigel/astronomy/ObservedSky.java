@@ -86,8 +86,6 @@ public class ObservedSky {
             starCoords.add(starCoord);
             celestialObjectMap.put(star, starCoord);
         }
-
-        System.out.println(System.nanoTime() / 10e6);
     }
 
     /**

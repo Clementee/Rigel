@@ -70,9 +70,7 @@ public class BlackBodyColor {
                     else {
                         temperatureLine = Integer.valueOf(line.substring(1, 6));
                     }
-                    
-                    System.out.println("   " + temperatureLine);
-                    
+
                     colorMap.put(temperatureLine, Color.web(colorLine));
                 }
             }
