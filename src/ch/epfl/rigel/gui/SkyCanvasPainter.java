@@ -4,7 +4,6 @@ import ch.epfl.rigel.astronomy.Asterism;
 import ch.epfl.rigel.astronomy.ObservedSky;
 import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.astronomy.Star;
-import ch.epfl.rigel.coordinates.CartesianCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
 import ch.epfl.rigel.math.ClosedInterval;
@@ -13,21 +12,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
 
 import java.util.List;
 
 import static ch.epfl.rigel.math.Angle.ofDeg;
-import static java.lang.Math.max;
-
 
 public class SkyCanvasPainter {
 
     private final Canvas canvas;
     private final GraphicsContext ctx;
-
 
     public SkyCanvasPainter(Canvas canvas) {
         this.canvas = canvas;
@@ -40,52 +34,52 @@ public class SkyCanvasPainter {
     }
 
     public void drawStars(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
+
         final Color ASTERISM_COLOR = Color.BLUE;
         Color starColor;
         Bounds bound = canvas.getBoundsInLocal();
 
 
+        for (Asterism asterism : observedSky.asterism()) {
+
+            List<Star> starFromAsterism = asterism.stars();
+
+            ctx.setStroke(ASTERISM_COLOR);
+            ctx.setLineWidth(1);
+
+
+            for(int i =0 ; i< starFromAsterism.size();i++){
+                Star star = starFromAsterism.get(i);
+                double x1 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
+                double y1 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
+
+                Point2D begTransformed = transform.transform(x1, y1);
+                if(bound.contains(begTransformed)&&i<starFromAsterism.size()-1){
+                    Star star2 = starFromAsterism.get(i+1);
+                    double x2 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star2))];
+                    double y2 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star2)) + 1];
+                    Point2D endTransformed = transform.transform(x2,y2);
+                    if(bound.contains(endTransformed)){
+                        ctx.strokeLine(begTransformed.getX(),begTransformed.getY(),endTransformed.getX(),endTransformed.getY());
+                    }
+                }
+            }
+        }
 
         for (Star star : observedSky.stars()) {
 
             starColor = BlackBodyColor
                     .colorForTemperature(star.colorTemperature());
-            double starDiameter = transform.deltaTransform(0,objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
+
+            double starDiameter = transform.deltaTransform(0, objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
 
             double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
             double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
 
             Point2D point = transform.transform(x,y);
+
             ctx.setFill(starColor);
             drawCircle(ctx, point.getX(), point.getY(), starDiameter);
-        }
-
-        for (Asterism asterism : observedSky.asterism()) {
-
-            List<Star> starFromAsterism = asterism.stars();
-
-            int i = 0;
-            ctx.setStroke(Color.BLUE);
-
-            for (Star star : starFromAsterism) {
-                double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
-                double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
-                boolean containsCondition = bound.contains(x, y);
-                boolean done = false;
-                Point2D coordsTranformed = transform.transform(x,y);
-                if (i == 0 && containsCondition) {
-                    ctx.beginPath();
-                    ctx.moveTo(coordsTranformed.getX(), coordsTranformed.getY());
-                    i++;
-                    done = true;
-                }
-                if (i == 1 && containsCondition &&!done) {
-                    ctx.lineTo(coordsTranformed.getX(), coordsTranformed.getY());
-                    i--;
-                    ctx.stroke();
-                }
-
-            }
         }
     }
 
@@ -113,7 +107,7 @@ public class SkyCanvasPainter {
         final Color SUN_YELLOW = Color.YELLOW;
         final Color SUN_YELLOW2 = Color.rgb(255, 255, 0, 0.25);
 
-        final double sunAngularSize = transform.deltaTransform(0,observedSky.sun().angularSize()).magnitude();
+        final double sunAngularSize = transform.deltaTransform(0,observedSky.sun().angularSize()).magnitude()/2;
         final double x = observedSky.sunPosition().x();
         final double y = observedSky.sunPosition().y();
 
@@ -127,7 +121,6 @@ public class SkyCanvasPainter {
 
         ctx.setFill(SUN_WHITE);
         drawCircle(ctx, point.getX(), point.getY(), sunAngularSize);
-
 
     }
 
@@ -147,10 +140,14 @@ public class SkyCanvasPainter {
 
     public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
-        HorizontalCoordinates origin = HorizontalCoordinates.of(0,0);
-        CartesianCoordinates cartesianCoordinates = stereographicProjection.circleCenterForParallel(origin);
+        StereographicProjection projection = stereographicProjection;
+
+        double r = projection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
+        Point2D rad = transform.deltaTransform(r, r);
+        double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
+
         ctx.setFill(Color.RED);
-        ctx.strokeOval(cartesianCoordinates.x(),cartesianCoordinates.y(),2,2);
+        ctx.strokeOval(rad.getX()- radius / 2, rad.getY() - radius / 2, radius, radius);
     }
 
 
