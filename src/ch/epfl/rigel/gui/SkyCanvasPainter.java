@@ -65,17 +65,28 @@ public class SkyCanvasPainter {
 
             ctx.setFill(ASTERISM_COLOR);
             int i = 0;
+
             for (Star star : starFromAsterism) {
+
                 double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
                 double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
                 boolean containsCondition = bound.contains(x, y);
+
+
+                Scale scale = Transform.scale(x, y);
+                Translate translate = Transform.translate(x, y);
+
+                Transform transform1 = translate.createConcatenation(scale);
+
+                Point2D coordsTranformed = transform1.deltaTransform(x,y);
+
                 if (i == 0 && containsCondition) {
                     ctx.beginPath();
-                    ctx.moveTo(x, y);
+                    ctx.moveTo(coordsTranformed.getX(), coordsTranformed.getY());
                     i++;
                 }
                 if (i == 1 && containsCondition) {
-                    ctx.lineTo(x, y);
+                    ctx.lineTo(coordsTranformed.getX(), coordsTranformed.getY());
                     i--;
                 }
             }
@@ -111,9 +122,10 @@ public class SkyCanvasPainter {
         final double y = observedSky.sunPosition().y() + 10;
 
         Point2D point = getCoordsOnCanvas(x, y);
-        int k = 1000;
-        System.out.println("x = " + x + " y = " + y);
 
+        int k = 1000;
+
+        System.out.println("x = " + x + " y = " + y);
 
         ctx.setFill(SUN_YELLOW2);
         drawCircle(ctx, point.getX(), point.getY(), k*2.2*sunAngularSize);
@@ -139,6 +151,10 @@ public class SkyCanvasPainter {
 
         ctx.setFill(MOON_COLOR);
         ctx.fillOval(point.getX(), point.getY(), moonAngSize, moonAngSize);
+    }
+
+    public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
+        
     }
 
 
