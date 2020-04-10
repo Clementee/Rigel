@@ -4,6 +4,8 @@ import ch.epfl.rigel.astronomy.Asterism;
 import ch.epfl.rigel.astronomy.ObservedSky;
 import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.astronomy.Star;
+import ch.epfl.rigel.coordinates.CartesianCoordinates;
+import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
 import ch.epfl.rigel.math.ClosedInterval;
 import javafx.geometry.Bounds;
@@ -48,18 +50,14 @@ public class SkyCanvasPainter {
 
             starColor = BlackBodyColor
                     .colorForTemperature(star.colorTemperature());
-            double starDiameter = objectDiameter(star.magnitude(), stereographicProjection);
+            double starDiameter = transform.deltaTransform(0,objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
 
             double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
             double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
 
-            Point2D point = getCoordsOnCanvas(x, y);
-
-            System.out.println(point);
-
-            int k = 1000;
+            Point2D point = transform.transform(x,y);
             ctx.setFill(starColor);
-            drawCircle(ctx, point.getX(), point.getY(), k*starDiameter);
+            drawCircle(ctx, point.getX(), point.getY(), starDiameter);
         }
 
         for (Asterism asterism : observedSky.asterism()) {
@@ -107,7 +105,7 @@ public class SkyCanvasPainter {
             double x = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet))];
             double y = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet)) + 1];
 
-            Point2D point = getCoordsOnCanvas(x, y);
+            Point2D point = transform.transform(x, y);
 
             ctx.setFill(PLANET_COLOR);
             ctx.fillOval(point.getX(), point.getY(), planetDiameter, planetDiameter);
@@ -115,31 +113,25 @@ public class SkyCanvasPainter {
     }
 
     public void drawSun(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
-        /*
-        Attention : enlever la partie avec le k
-         */
+
         final Color SUN_WHITE = Color.WHITE;
         final Color SUN_YELLOW = Color.YELLOW;
         final Color SUN_YELLOW2 = Color.rgb(255, 255, 0, 0.25);
 
-        final double sunAngularSize = observedSky.sun().angularSize();
+        final double sunAngularSize = transform.deltaTransform(0,observedSky.sun().angularSize()).magnitude();
         final double x = observedSky.sunPosition().x();
         final double y = observedSky.sunPosition().y();
 
-        Point2D point = getCoordsOnCanvas(x, y);
-
-        int k = 1000;
-
-        System.out.println("Sun : " + point);
+        Point2D point = transform.transform(x, y);
 
         ctx.setFill(SUN_YELLOW2);
-        drawCircle(ctx, point.getX(), point.getY(), k*2.2*sunAngularSize);
+        drawCircle(ctx, point.getX(), point.getY(), 2.2*sunAngularSize);
 
         ctx.setFill(SUN_YELLOW);
-        drawCircle(ctx, point.getX(), point.getY(), (2+k*sunAngularSize));
+        drawCircle(ctx, point.getX(), point.getY(), (2+sunAngularSize));
 
         ctx.setFill(SUN_WHITE);
-        drawCircle(ctx, point.getX(), point.getY(), k*sunAngularSize);
+        drawCircle(ctx, point.getX(), point.getY(), sunAngularSize);
 
 
     }
@@ -148,16 +140,14 @@ public class SkyCanvasPainter {
 
         final Color MOON_COLOR = Color.WHITE;
 
-        final double moonAngSize = observedSky.moon().angularSize();
+        final double moonAngSize = transform.deltaTransform(0,observedSky.moon().angularSize()).magnitude();
         final double x = observedSky.moonPosition().x();
         final double y = observedSky.moonPosition().y();
 
-        Point2D point = getCoordsOnCanvas(x, y);
+        Point2D point = transform.transform(x, y);
 
-        System.out.println("Moon : " + point);
-        int k =1000;
         ctx.setFill(MOON_COLOR);
-        drawCircle(ctx, point.getX(), point.getY(), k*moonAngSize);
+        drawCircle(ctx, point.getX(), point.getY(), moonAngSize);
     }
 
     public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
@@ -181,14 +171,6 @@ public class SkyCanvasPainter {
         return sizeFactor(magnitude) * projection.applyToAngle(ofDeg(0.5));
     }
 
-    private Point2D getCoordsOnCanvas(double x, double y) {
-        Scale scale = Transform.scale(1300, -1300);
-        Translate translate = Transform.translate(400, 300);
-
-        Transform transform = translate.createConcatenation(scale);
-
-        return transform.transform(x, y);
-    }
 
     private static void drawCircle(GraphicsContext ctx, double x, double y, double d){
         ctx.fillOval(x-d/2, y-d/2, d,d);
