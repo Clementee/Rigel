@@ -5,6 +5,7 @@ import ch.epfl.rigel.astronomy.ObservedSky;
 import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.astronomy.Star;
 import ch.epfl.rigel.coordinates.StereographicProjection;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -38,6 +39,8 @@ public class SkyCanvasPainter {
 
         final Color ASTERISM_COLOR = Color.BLUE;
         Color starColor;
+        Bounds bound = canvas.getBoundsInLocal();
+
 
         for(Star star : observedSky.stars()){
 
@@ -60,9 +63,21 @@ public class SkyCanvasPainter {
             List<Star> starFromAsterism = asterism.stars();
 
             ctx.setFill(ASTERISM_COLOR);
-
-            for(int i = 0 ; i < starFromAsterism.size(); i++){
-
+            int i = 0;
+            for (Star star : starFromAsterism)
+            {
+                double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
+                double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
+                boolean containsCondition = bound.contains(x, y);
+                if(i==0 && containsCondition){
+                    ctx.beginPath();
+                    ctx.moveTo(x,y);
+                    i++;
+                }
+                if(i==1 && containsCondition){
+                    ctx.lineTo(x,y);
+                    i--;
+                }
             }
         }
     }
@@ -86,13 +101,33 @@ public class SkyCanvasPainter {
     }
 
     public void drawSun(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
-        // à compléter pogchamp
+
+        final Color SUN_WHITE = Color.WHITE;
+        final Color SUN_YELLOW = Color.YELLOW;
+        final Color SUN_YELLOW2 = Color.rgb(255,255,0, 0.25);
+
+        final double sunAngularSize = observedSky.sun().angularSize();
+        //final double x = observedSky.sunPosition().x();
+        //final double y = observedSky.sunPosition().y();
+        double x = 100;
+        double y = 100;
+
+        System.out.println("x = "+ x +" y = "+y);
+        double k = 100;
+        ctx.setFill(SUN_YELLOW2);
+        ctx.fillOval(x,y,k*2.2*sunAngularSize,k*2.2*sunAngularSize);
+
+        ctx.setFill(SUN_YELLOW);
+        ctx.fillOval(x,y,k*(2+sunAngularSize), k*(2+sunAngularSize));
+
+        ctx.setFill(SUN_WHITE);
+        ctx.fillOval(x,y,k*sunAngularSize,k*sunAngularSize);
     }
 
     public void drawMoon(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
 
         final Color MOON_COLOR = Color.WHITE;
-        
+
         final double moonAngSize = observedSky.moon().angularSize();
         final double x = observedSky.moonPosition().x();
         final double y = observedSky.moonPosition().y();
