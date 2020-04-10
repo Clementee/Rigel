@@ -86,7 +86,7 @@ public class SkyCanvasPainter {
                     ctx.moveTo(coordsTranformed.getX(), coordsTranformed.getY());
                     i++;
                 }
-                if (i == 1 && containsCondition) {
+                else if (i == 1 && containsCondition) {
                     ctx.lineTo(coordsTranformed.getX(), coordsTranformed.getY());
                     ctx.stroke();
                     i--;
