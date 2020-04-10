@@ -5,10 +5,13 @@ import ch.epfl.rigel.astronomy.ObservedSky;
 import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.astronomy.Star;
 import ch.epfl.rigel.coordinates.StereographicProjection;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 
 import java.util.List;
 
@@ -46,8 +49,10 @@ public class SkyCanvasPainter {
             double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
             double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
 
+            Point2D point = getCoordsOnCanvas(x,y);
+
             ctx.setFill(starColor);
-            ctx.fillOval(x, y , starDiameter , starDiameter);
+            ctx.fillOval(point.getX(), point.getY() , starDiameter , starDiameter);
         }
 
         for(Asterism asterism : observedSky.asterism()){
@@ -73,8 +78,10 @@ public class SkyCanvasPainter {
             double x = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet))];
             double y = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet)) + 1];
 
+            Point2D point = getCoordsOnCanvas(x,y);
+
             ctx.setFill(PLANET_COLOR);
-            ctx.fillOval(x, y , planetDiameter , planetDiameter);
+            ctx.fillOval(point.getX(), point.getY() , planetDiameter , planetDiameter);
         }
     }
 
@@ -90,8 +97,10 @@ public class SkyCanvasPainter {
         final double x = observedSky.moonPosition().x();
         final double y = observedSky.moonPosition().y();
 
+        Point2D point = getCoordsOnCanvas(x,y);
+
         ctx.setFill(MOON_COLOR);
-        ctx.fillOval(x,y,moonAngSize,moonAngSize);
+        ctx.fillOval(point.getX(), point.getY(), moonAngSize, moonAngSize);
     }
 
 
@@ -111,5 +120,14 @@ public class SkyCanvasPainter {
 
     private double objectDiameter(double magnitude, StereographicProjection projection){
         return  sizeFactor(magnitude) * projection.applyToAngle(ofDeg(0.5));
+    }
+
+    private Point2D getCoordsOnCanvas(double x , double y){
+        Scale scale = Transform.scale(x,y);
+        Translate translate = Transform.translate(x,y);
+
+        Transform transform = translate.createConcatenation(scale);
+
+        return transform.transform(x, y);
     }
 }
