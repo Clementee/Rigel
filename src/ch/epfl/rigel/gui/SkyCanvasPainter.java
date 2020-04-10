@@ -1,15 +1,15 @@
 package ch.epfl.rigel.gui;
 
-import ch.epfl.rigel.astronomy.Asterism;
-import ch.epfl.rigel.astronomy.ObservedSky;
-import ch.epfl.rigel.astronomy.Planet;
-import ch.epfl.rigel.astronomy.Star;
+import ch.epfl.rigel.astronomy.*;
 import ch.epfl.rigel.coordinates.StereographicProjection;
+import ch.epfl.rigel.math.ClosedInterval;
+import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 
+import javax.swing.*;
 import java.util.List;
 
 import static ch.epfl.rigel.math.Angle.ofDeg;
@@ -36,6 +36,8 @@ public class SkyCanvasPainter {
         final Color ASTERISM_COLOR = Color.BLUE;
         Color starColor;
 
+        Bounds bounds = canvas.getBoundsInLocal();
+
         for(Star star : observedSky.stars()){
 
             starColor = BlackBodyColor
@@ -55,9 +57,21 @@ public class SkyCanvasPainter {
             List<Star> starFromAsterism = asterism.stars();
 
             ctx.setFill(ASTERISM_COLOR);
-
-            for(int i = 0 ; i < starFromAsterism.size(); i++){
-
+            int i = 0;
+            for (Star star : starFromAsterism)
+            {
+                double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
+                double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
+                boolean containsCondition = bounds.contains(x, y);
+                if(i==0 && containsCondition){
+                    ctx.beginPath();
+                    ctx.moveTo(x,y);
+                    i++;
+                }
+                if(i==1 && containsCondition){
+                    ctx.lineTo(x,y);
+                    i--;
+                }
             }
 
         }
@@ -68,7 +82,6 @@ public class SkyCanvasPainter {
         final Color PLANET_COLOR = Color.LIGHTGRAY;
 
         for(Planet planet : observedSky.planets()){
-
 
             double planetDiameter = objectDiameter(planet.magnitude());
 
@@ -81,7 +94,23 @@ public class SkyCanvasPainter {
     }
 
     public void drawSun(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
-        // à compléter pogchamp
+        final Color SUN_WHITE = Color.WHITE;
+        final Color SUN_YELLOW = Color.YELLOW;
+        final Color SUN_YELLOW2 = Color.rgb(255,255,0, 0.25);
+
+        final double sunAngularSize = observedSky.sun().angularSize();
+        final double x = observedSky.sunPosition().x();
+        final double y = observedSky.sunPosition().y();
+
+        ctx.setFill(SUN_YELLOW2);
+        ctx.fillOval(x,y,2.2*sunAngularSize,2.2*sunAngularSize);
+
+        ctx.setFill(SUN_YELLOW);
+        ctx.fillOval(x,y,2+sunAngularSize, 2+sunAngularSize);
+
+        ctx.setFill(SUN_WHITE);
+        ctx.fillOval(x,y,sunAngularSize,sunAngularSize);
+
     }
 
     public void drawMoon(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform){
@@ -98,13 +127,7 @@ public class SkyCanvasPainter {
 
 
     private double cappedMagnitude(double magnitude){
-
-        if (magnitude >= 5){
-            return 5;
-        }
-        else {
-            return max(magnitude, -2);
-        }
+        return (ClosedInterval.of(-2, 5)).clip(magnitude);
     }
 
     private double sizeFactor(double magnitude){

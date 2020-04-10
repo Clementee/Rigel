@@ -70,19 +70,19 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      * @return (CartesianCoordinates) : return the coordinates of the projection of azAlt
      */
     @Override
-    public CartesianCoordinates apply(HorizontalCoordinates azAlt) {
+        public CartesianCoordinates apply(HorizontalCoordinates azAlt) {
 
-        final double horAzimuth = azAlt.az();
-        final double horAltitude = azAlt.alt();
-        final double cosLat = Math.cos(horAltitude);
-        final double sinLat = Math.sin(horAltitude);
-        final double lambdaDelta = horAzimuth - centerLambda;
-        final double cosLambdaDelta = Math.cos(lambdaDelta);
+            final double horAzimuth = azAlt.az();
+            final double horAltitude = azAlt.alt();
+            final double cosLat = Math.cos(horAltitude);
+            final double sinLat = Math.sin(horAltitude);
+            final double lambdaDelta = horAzimuth - centerLambda;
+            final double cosLambdaDelta = Math.cos(lambdaDelta);
 
-        final double d = 1 / (1 + sinPhy * sinLat + cosLat * cosPhy * cosLambdaDelta);
+            final double d = 1 / (1 + sinPhy * sinLat + cosLat * cosPhy * cosLambdaDelta);
 
-        double y = d * (sinLat * cosPhy - cosLat * sinPhy * cosLambdaDelta);
-        double x = d * cosLat * Math.sin(lambdaDelta);
+            double y = d * (sinLat * cosPhy - cosLat * sinPhy * cosLambdaDelta);
+            double x = d * cosLat * Math.sin(lambdaDelta);
 
         return CartesianCoordinates.of(x, y);
     }
