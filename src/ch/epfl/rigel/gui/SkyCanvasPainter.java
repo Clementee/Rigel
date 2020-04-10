@@ -5,6 +5,7 @@ import ch.epfl.rigel.astronomy.ObservedSky;
 import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.astronomy.Star;
 import ch.epfl.rigel.coordinates.StereographicProjection;
+import ch.epfl.rigel.math.ClosedInterval;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -112,7 +113,9 @@ public class SkyCanvasPainter {
     }
 
     public void drawSun(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
-
+        /*
+        Attention : enlever la partie avec le k
+         */
         final Color SUN_WHITE = Color.WHITE;
         final Color SUN_YELLOW = Color.YELLOW;
         final Color SUN_YELLOW2 = Color.rgb(255, 255, 0, 0.25);
@@ -150,7 +153,7 @@ public class SkyCanvasPainter {
         Point2D point = getCoordsOnCanvas(x, y);
 
         ctx.setFill(MOON_COLOR);
-        ctx.fillOval(point.getX(), point.getY(), moonAngSize, moonAngSize);
+        drawCircle(ctx, point.getX(), point.getY(), moonAngSize);
     }
 
     public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
@@ -159,12 +162,7 @@ public class SkyCanvasPainter {
 
 
     private double cappedMagnitude(double magnitude) {
-
-        if (magnitude >= 5) {
-            return 5;
-        } else {
-            return max(magnitude, -2);
-        }
+        return ClosedInterval.of(-2,5).clip(magnitude);
     }
 
     private double sizeFactor(double magnitude) {
