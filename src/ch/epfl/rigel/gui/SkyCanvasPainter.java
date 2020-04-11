@@ -154,7 +154,8 @@ public class SkyCanvasPainter {
         Point2D rad = transform.deltaTransform(r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
 
-        ctx.setFill(Color.RED);
+        ctx.setLineWidth(2);
+        ctx.setStroke(Color.RED);
         ctx.strokeOval(rad.getX()- radius / 2, rad.getY() - radius / 2, radius, radius);
     }
 
