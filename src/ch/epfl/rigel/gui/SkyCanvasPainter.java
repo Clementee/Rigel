@@ -48,17 +48,23 @@ public class SkyCanvasPainter {
             ctx.setLineWidth(1);
 
 
-            for(int i =0 ; i< starFromAsterism.size();i++){
+            for(int i = 0 ; i < starFromAsterism.size();i++){
+
                 Star star = starFromAsterism.get(i);
                 double x1 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
                 double y1 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
 
                 Point2D begTransformed = transform.transform(x1, y1);
+
                 if(bound.contains(begTransformed)&&i<starFromAsterism.size()-1){
+
                     Star star2 = starFromAsterism.get(i+1);
+
                     double x2 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star2))];
                     double y2 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star2)) + 1];
+
                     Point2D endTransformed = transform.transform(x2,y2);
+
                     if(bound.contains(endTransformed)){
                         ctx.strokeLine(begTransformed.getX(),begTransformed.getY(),endTransformed.getX(),endTransformed.getY());
                     }
@@ -72,6 +78,8 @@ public class SkyCanvasPainter {
                     .colorForTemperature(star.colorTemperature());
 
             double starDiameter = transform.deltaTransform(0, objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
+
+            System.out.println(starDiameter);
 
             double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
             double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
@@ -89,7 +97,9 @@ public class SkyCanvasPainter {
 
         for (Planet planet : observedSky.planets()) {
 
-            double planetDiameter = objectDiameter(planet.magnitude(), stereographicProjection);
+            double planetDiameter = transform.deltaTransform(0, objectDiameter(planet.magnitude(), stereographicProjection)).magnitude();
+
+            System.out.println(planetDiameter);
 
             double x = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet))];
             double y = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet)) + 1];
@@ -97,7 +107,7 @@ public class SkyCanvasPainter {
             Point2D point = transform.transform(x, y);
 
             ctx.setFill(PLANET_COLOR);
-            ctx.fillOval(point.getX(), point.getY(), planetDiameter, planetDiameter);
+            drawCircle(ctx,point.getX(),point.getY(),planetDiameter);
         }
     }
 
@@ -140,9 +150,7 @@ public class SkyCanvasPainter {
 
     public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
-        StereographicProjection projection = stereographicProjection;
-
-        double r = projection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
+        double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
         Point2D rad = transform.deltaTransform(r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
 
