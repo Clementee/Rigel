@@ -31,10 +31,8 @@ public class EpflLogo extends Application {
         ctx.fillText("EPFL", 400, 250);
 
         ctx.setStroke(Color.GREEN);
-        ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.lineTo(100,100);
-        ctx.stroke();
+        ctx.setLineWidth(2);
+        ctx.strokeOval(100,100,5,5);
 
 
         // Trous dans le E et le F

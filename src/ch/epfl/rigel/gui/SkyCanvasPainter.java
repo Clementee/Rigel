@@ -4,16 +4,23 @@ import ch.epfl.rigel.astronomy.Asterism;
 import ch.epfl.rigel.astronomy.ObservedSky;
 import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.astronomy.Star;
+import ch.epfl.rigel.coordinates.CartesianCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
 import ch.epfl.rigel.math.ClosedInterval;
 import javafx.geometry.Bounds;
+import javafx.geometry.NodeOrientation;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
+import org.w3c.dom.ls.LSOutput;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static ch.epfl.rigel.math.Angle.ofDeg;
@@ -149,14 +156,44 @@ public class SkyCanvasPainter {
     }
 
     public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
+        ctx.setLineWidth(2);
+        ctx.setStroke(Color.RED);
+        ctx.setFill(Color.RED);
+
+        /*
+        Vérifier si optimisable avec horizontal coordinates
+         */
+
+        HashMap<String, CartesianCoordinates> cardinalPoints = new HashMap<>();
+        cardinalPoints.put("N", stereographicProjection.apply(HorizontalCoordinates.ofDeg(0,-0.5)));
+        cardinalPoints.put("NE", stereographicProjection.apply(HorizontalCoordinates.ofDeg(45,-0.5)));
+        cardinalPoints.put("E", stereographicProjection.apply(HorizontalCoordinates.ofDeg(90, -0.5)));
+        cardinalPoints.put("SE", stereographicProjection.apply(HorizontalCoordinates.ofDeg(135, -0.5)));
+        cardinalPoints.put("S", stereographicProjection.apply(HorizontalCoordinates.ofDeg(180, -0.5)));
+        cardinalPoints.put("SO", stereographicProjection.apply(HorizontalCoordinates.ofDeg(225, -0.5)));
+        cardinalPoints.put("O", stereographicProjection.apply(HorizontalCoordinates.ofDeg(270, -0.5)));
+        cardinalPoints.put("NO", stereographicProjection.apply(HorizontalCoordinates.ofDeg(315, -0.5)));
+
+        for (String s : cardinalPoints.keySet()) {
+            CartesianCoordinates cartesCoor = cardinalPoints.get(s);
+            Point2D point = transform.transform(cartesCoor.x(), cartesCoor.y());
+            ctx.fillText(s, point.getX(), point.getY());
+        }
+
 
         double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
-        Point2D rad = transform.deltaTransform(r, r);
+        CartesianCoordinates centerCoords = stereographicProjection.circleCenterForParallel(HorizontalCoordinates.of(0,0));
+        Point2D transformedCenter = transform.transform(centerCoords.x() + r,centerCoords.y() - r);
+        Point2D rad = transform.deltaTransform(-r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
+
+        System.out.println("r: " +r);
+        System.out.println("coords : " + centerCoords.x()  + " " +centerCoords.y());
+        System.out.println("transformedCenter : " + transformedCenter.getX() + " " + transformedCenter.getY());
 
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);
-        ctx.strokeOval(rad.getX()- radius / 2, rad.getY() - radius / 2, radius, radius);
+        ctx.strokeOval(transformedCenter.getX() - radius,transformedCenter.getY() -radius,radius,radius);
     }
 
 
