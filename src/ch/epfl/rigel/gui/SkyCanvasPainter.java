@@ -63,7 +63,7 @@ public class SkyCanvasPainter {
 
                 Point2D begTransformed = transform.transform(x1, y1);
 
-                if(bound.contains(begTransformed)&&i<starFromAsterism.size()-1){
+                if(i<starFromAsterism.size()-1){
 
                     Star star2 = starFromAsterism.get(i+1);
 
@@ -72,7 +72,7 @@ public class SkyCanvasPainter {
 
                     Point2D endTransformed = transform.transform(x2,y2);
 
-                    if(bound.contains(endTransformed)){
+                    if(bound.contains(endTransformed) || bound.contains(begTransformed)){
                         ctx.strokeLine(begTransformed.getX(),begTransformed.getY(),endTransformed.getX(),endTransformed.getY());
                     }
                 }
