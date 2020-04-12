@@ -124,7 +124,7 @@ public class SkyCanvasPainter {
         final Color SUN_YELLOW = Color.YELLOW;
         final Color SUN_YELLOW2 = Color.rgb(255, 255, 0, 0.25);
 
-        final double sunAngularSize = transform.deltaTransform(0,stereographicProjection.applyToAngle(observedSky.sun().angularSize())).magnitude()/2;
+        final double sunAngularSize = transform.deltaTransform(0,observedSky.sun().angularSize()).magnitude()/2;
         final double x = observedSky.sunPosition().x();
         final double y = observedSky.sunPosition().y();
 
