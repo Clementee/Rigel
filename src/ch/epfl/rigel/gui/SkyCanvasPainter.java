@@ -178,6 +178,7 @@ public class SkyCanvasPainter {
         for (String s : cardinalPoints.keySet()) {
             CartesianCoordinates cartesCoor = cardinalPoints.get(s);
             Point2D point = transform.transform(cartesCoor.x(), cartesCoor.y());
+            ctx.setTextAlign(TextAlignment.CENTER);
             ctx.setTextBaseline(VPos.TOP);
             ctx.fillText(s, point.getX(), point.getY());
         }
