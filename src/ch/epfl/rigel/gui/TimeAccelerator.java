@@ -4,13 +4,13 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 
 //@FunctionalInterface
-public interface TimeAccelerator {
+public interface TimeAccelerator{
     ZonedDateTime adjust(ZonedDateTime T0, long elapsedTime);
 
-    static NamedTimeAccelerator continuous(int alpha){
-        return null;
+    static TimeAccelerator continuous(int alpha){
+        return (alpha)->;
     }
-    static NamedTimeAccelerator discrete(int v, Duration S){
+    static TimeAccelerator discrete(int v, Duration S){
         return null;
     }
 
