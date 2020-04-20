@@ -28,7 +28,7 @@ import java.util.List;
 
 import static ch.epfl.rigel.math.Angle.ofDeg;
 
-public class SkyCanvasPainter {
+public final class SkyCanvasPainter {
 
     private final Canvas canvas;
     private final GraphicsContext ctx;
