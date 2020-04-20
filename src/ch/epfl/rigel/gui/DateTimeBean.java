@@ -9,7 +9,7 @@ public final class DateTimeBean {
     private ObjectProperty<LocalDate> date = null;
     private ObjectProperty<LocalTime> time = null;
     private ObjectProperty<ZoneId> zone = null;
-    private ZonedDateTime zonedDateTime;
+    private LocalDateTime localDateTime;
 
     public ObjectProperty<LocalDate> dateProperty(){
         return date;
@@ -48,5 +48,16 @@ public final class DateTimeBean {
     public void setZone(ZoneId zone){
         this.zone
                 .setValue(zone);
+    }
+
+    public ZonedDateTime getZonedDateTime(){
+        localDateTime = date.getValue().atTime(time.getValue());
+        return localDateTime.atZone(zone.getValue());
+    }
+
+    public void setZonedDateTime(ZonedDateTime zonedDateTime){
+        zone.setValue(zonedDateTime.getOffset().normalized());
+        time.setValue(zonedDateTime.toLocalTime());
+        date.setValue(zonedDateTime.toLocalDate());
     }
 }
