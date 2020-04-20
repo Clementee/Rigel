@@ -9,40 +9,59 @@ import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
 import ch.epfl.rigel.math.ClosedInterval;
 import javafx.geometry.Bounds;
-import javafx.geometry.NodeOrientation;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Ellipse;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Transform;
-import org.w3c.dom.ls.LSOutput;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static ch.epfl.rigel.math.Angle.ofDeg;
 
+/**
+ * A painter of canvas for the sky
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class SkyCanvasPainter {
 
     private final Canvas canvas;
     private final GraphicsContext ctx;
 
+    /**
+     * SkyCanvasPainter public constructor initializing the canvas and the
+     * graphic context we will be using to draw the sky
+     *
+     * @param canvas   (Canvas) : set the canvas we are going to use to draw the sky
+     */
     public SkyCanvasPainter(Canvas canvas) {
         this.canvas = canvas;
         ctx = canvas.getGraphicsContext2D();
     }
 
+    /**
+     * SkyCanvasPainter public method used to clear the canvas by reformatting it as a black canvas
+     *
+     */
     public void clear() {
         ctx.setFill(Color.BLACK);
         ctx.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
+    /**
+     * SkyCanvasPainter public method used to draw the multiple stars onto the canvas in their right position
+     *
+     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
+     *                                stars in the canvas
+     * @param transform (Transform) : gives the transformation we will be using to modify the projection
+     *                  in the good frame
+     */
     public void drawStars(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
         final Color ASTERISM_COLOR = Color.BLUE;
@@ -89,6 +108,7 @@ public final class SkyCanvasPainter {
 
             double starDiameter = transform.deltaTransform(0, objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
 
+
             double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
             double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
 
@@ -99,13 +119,24 @@ public final class SkyCanvasPainter {
         }
     }
 
+    /**
+     * SkyCanvasPainter public method used to draw the planets onto the canvas in their right position
+     *
+     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
+     *                                stars in the canvas
+     * @param transform (Transform) : gives the transformation we will be using to modify the projection
+     *                  in the good frame
+     */
     public void drawPlanets(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
-        final Color PLANET_COLOR = Color.LIGHTBLUE;
+        final Color PLANET_COLOR = Color.LIGHTGRAY;
 
         for (Planet planet : observedSky.planets()) {
 
             double planetDiameter = transform.deltaTransform(0, objectDiameter(planet.magnitude(), stereographicProjection)).magnitude();
+
+            System.out.println(planetDiameter);
 
             double x = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet))];
             double y = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet)) + 1];
@@ -117,6 +148,15 @@ public final class SkyCanvasPainter {
         }
     }
 
+    /**
+     * SkyCanvasPainter public method used to draw the sun onto the canvas in their right position
+     *
+     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
+     *                                sun in the canvas
+     * @param transform (Transform) : gives the transformation we will be using to modify the projection
+     *                  in the good frame
+     */
     public void drawSun(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
         final Color SUN_WHITE = Color.WHITE;
@@ -140,6 +180,15 @@ public final class SkyCanvasPainter {
 
     }
 
+    /**
+     * SkyCanvasPainter public method used to draw the moon onto the canvas in their right position
+     *
+     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
+     *                                moon in the canvas
+     * @param transform (Transform) : gives the transformation we will be using to modify the projection
+     *                  in the good frame
+     */
     public void drawMoon(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
         final Color MOON_COLOR = Color.WHITE;
@@ -154,14 +203,20 @@ public final class SkyCanvasPainter {
         drawCircle(ctx, point.getX(), point.getY(), moonAngSize);
     }
 
-    public void drawHorizon (StereographicProjection stereographicProjection, Transform transform) {
+    /**
+     * SkyCanvasPainter public method used to draw the horizon and the cardinal points onto the canvas in their right position
+     *
+     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
+     *                                horizon and the cardinal points in the canvas
+     * @param transform (Transform) : gives the transformation we will be using to modify the projection
+     *                  in the good frame
+     */
+    public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
+
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);
         ctx.setFill(Color.RED);
-
-        /*
-        Vérifier si optimisable avec horizontal coordinates
-         */
 
         HashMap<String, CartesianCoordinates> cardinalPoints = new HashMap<>();
         cardinalPoints.put("N", stereographicProjection.apply(HorizontalCoordinates.ofDeg(0,-0.5)));
@@ -174,15 +229,19 @@ public final class SkyCanvasPainter {
         cardinalPoints.put("NO", stereographicProjection.apply(HorizontalCoordinates.ofDeg(315, -0.5)));
 
         for (String s : cardinalPoints.keySet()) {
+
             CartesianCoordinates cartesCoor = cardinalPoints.get(s);
             Point2D point = transform.transform(cartesCoor.x(), cartesCoor.y());
+            
             ctx.setTextAlign(TextAlignment.CENTER);
             ctx.setTextBaseline(VPos.TOP);
             ctx.fillText(s, point.getX(), point.getY());
         }
 
         double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
+       
         CartesianCoordinates centerCoords = stereographicProjection.circleCenterForParallel(HorizontalCoordinates.of(0,0));
+        
         Point2D transformedCenter = transform.transform(centerCoords.x() ,centerCoords.y());
         Point2D rad = transform.deltaTransform(-r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
@@ -192,20 +251,45 @@ public final class SkyCanvasPainter {
         ctx.strokeOval(transformedCenter.getX() - radius/2,transformedCenter.getY() -radius/2,radius,radius);
     }
 
-
+    /**
+     * SkyCanvasPainter private method used to cap the magnitude
+     *
+     * @param magnitude (double) : gives the magnitude we want to cap
+     * @return (double) : return the capped magnitude
+     */
     private double cappedMagnitude(double magnitude) {
         return ClosedInterval.of(-2,5).clip(magnitude);
     }
 
+    /**
+     * SkyCanvasPainter private method used to calculate the size factor of some celestial objects
+     *
+     * @param magnitude (double) : gives the magnitude we want to cap
+     * @return (double) : return the size factor obtained thanks to the magnitude
+     */
     private double sizeFactor(double magnitude) {
         return (99 - 17 * cappedMagnitude(magnitude)) / 140;
     }
 
+    /**
+     * SkyCanvasPainter private method used to calculate the diameter of some celestial objects
+     *
+     * @param magnitude (double) : gives the magnitude we want to cap
+     * @param projection (StereographicProjection) : gives the projection used to set the objects onto the canvas
+     * @return (double) : return the diameter of the chosen object
+     */
     private double objectDiameter(double magnitude, StereographicProjection projection) {
         return sizeFactor(magnitude) * projection.applyToAngle(ofDeg(0.5));
     }
 
-
+    /**
+     * SkyCanvasPainter private method used to draw a circle
+     *
+     * @param ctx (GraphicsContext) : gives the place of canvas where we want to draw the circle
+     * @param x (double) : gives the x for the center of the circle
+     * @param y (double) : gives the y for the center of the circle
+     * @param d (double) : gives the diameter of the circle we search to draw
+     */
     private static void drawCircle(GraphicsContext ctx, double x, double y, double d){
         ctx.fillOval(x-d/2, y-d/2, d,d);
     }
