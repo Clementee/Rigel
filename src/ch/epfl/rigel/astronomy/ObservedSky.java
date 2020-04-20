@@ -8,6 +8,12 @@ import java.util.*;
 import static ch.epfl.rigel.astronomy.Epoch.J2010;
 import static ch.epfl.rigel.astronomy.SunModel.*;
 
+/**
+ * The observed sky
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public class ObservedSky {
 
     private static Sun sun;
