@@ -25,12 +25,12 @@ public enum NamedTimeAccelerator {
         this.accelerator = accelerator;
     }
 
-    public String getName(NamedTimeAccelerator namedTimeAccelerator){
-        return namedTimeAccelerator.name;
+    public String getName(){
+        return name;
     }
 
-    public TimeAccelerator getAccelerator(NamedTimeAccelerator namedTimeAccelerator){
-        return namedTimeAccelerator.accelerator;
+    public TimeAccelerator getAccelerator(){
+        return accelerator;
     }
 
     @Override
