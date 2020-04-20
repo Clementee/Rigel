@@ -1,14 +1,15 @@
 package ch.epfl.rigel.gui;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.time.*;
 
 public final class DateTimeBean {
 
-    private ObjectProperty<LocalDate> date = null;
-    private ObjectProperty<LocalTime> time = null;
-    private ObjectProperty<ZoneId> zone = null;
+    private ObjectProperty<LocalDate> date = new SimpleObjectProperty<>(null);
+    private ObjectProperty<LocalTime> time = new SimpleObjectProperty<>(null);
+    private ObjectProperty<ZoneId> zone = new SimpleObjectProperty<>(null);
 
     public ObjectProperty<LocalDate> dateProperty(){
         return date;
@@ -32,8 +33,7 @@ public final class DateTimeBean {
     }
 
     public void setTime(LocalTime time){
-        this.time
-                .setValue(time);
+        this.time.setValue(time);
     }
 
     public ObjectProperty<ZoneId> zoneProperty(){
@@ -55,8 +55,9 @@ public final class DateTimeBean {
     }
 
     public void setZonedDateTime(ZonedDateTime zonedDateTime){
-        zone.setValue(zonedDateTime.getOffset().normalized());
-        time.setValue(zonedDateTime.toLocalTime());
-        date.setValue(zonedDateTime.toLocalDate());
+
+        setZone(zonedDateTime.getOffset().normalized());
+        setTime(zonedDateTime.toLocalTime());
+        setDate(zonedDateTime.toLocalDate());
     }
 }
