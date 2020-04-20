@@ -16,6 +16,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Transform;
 import org.w3c.dom.ls.LSOutput;
 
@@ -88,7 +89,6 @@ public class SkyCanvasPainter {
 
             double starDiameter = transform.deltaTransform(0, objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
 
-
             double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
             double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
 
@@ -101,13 +101,11 @@ public class SkyCanvasPainter {
 
     public void drawPlanets(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
-        final Color PLANET_COLOR = Color.LIGHTGRAY;
+        final Color PLANET_COLOR = Color.LIGHTBLUE;
 
         for (Planet planet : observedSky.planets()) {
 
             double planetDiameter = transform.deltaTransform(0, objectDiameter(planet.magnitude(), stereographicProjection)).magnitude();
-
-            System.out.println(planetDiameter);
 
             double x = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet))];
             double y = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet)) + 1];
@@ -156,7 +154,7 @@ public class SkyCanvasPainter {
         drawCircle(ctx, point.getX(), point.getY(), moonAngSize);
     }
 
-    public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
+    public void drawHorizon (StereographicProjection stereographicProjection, Transform transform) {
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);
         ctx.setFill(Color.RED);
@@ -183,22 +181,11 @@ public class SkyCanvasPainter {
             ctx.fillText(s, point.getX(), point.getY());
         }
 
-
-
         double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
         CartesianCoordinates centerCoords = stereographicProjection.circleCenterForParallel(HorizontalCoordinates.of(0,0));
         Point2D transformedCenter = transform.transform(centerCoords.x() ,centerCoords.y());
         Point2D rad = transform.deltaTransform(-r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
-
-        System.out.println("r: " +r);
-        System.out.println("coords : " + centerCoords.x()  + " " +centerCoords.y());
-        System.out.println("transformedCenter : " + transformedCenter.getX() + " " + transformedCenter.getY());
-
-
-        Ellipse ellipse = new Ellipse(transformedCenter.getX()-radius, transformedCenter.getY()-radius, radius, radius);
-        Point2D test = transform.transform(cardinalPoints.get("NO").x(), cardinalPoints.get("NO").y());
-        System.out.println(ellipse.contains(test));
 
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);

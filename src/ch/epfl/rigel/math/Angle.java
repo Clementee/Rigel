@@ -51,8 +51,7 @@ public final class Angle {
      * @throws IllegalArgumentException : if illegal values entered
      */
     public static double ofDMS(int deg, int min, double sec) {
-
-        checkArgument(!(min < 0 || min >= 60 || sec < 0 || sec >= 60));
+        checkArgument(!(min < 0 || min >= 60 || sec < 0 || sec >= 60|| deg < 0));
 
         double angle = deg + (min * MIN_TO_SEC + sec) / SEC_PER_DEG;
 
