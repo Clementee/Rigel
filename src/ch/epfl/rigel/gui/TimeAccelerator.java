@@ -3,7 +3,7 @@ package ch.epfl.rigel.gui;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
-//@FunctionalInterface
+@FunctionalInterface
 public interface TimeAccelerator{
     ZonedDateTime adjust(ZonedDateTime T0, long elapsedTime);
 
