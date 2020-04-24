@@ -7,56 +7,55 @@ import java.time.*;
 
 public final class DateTimeBean {
 
-    private ObjectProperty<LocalDate> date = new SimpleObjectProperty<>(null);
-    private ObjectProperty<LocalTime> time = new SimpleObjectProperty<>(null);
-    private ObjectProperty<ZoneId> zone = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<LocalDate> dateProperty = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<LocalTime> timeProperty = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<ZoneId> zoneProperty = new SimpleObjectProperty<>(null);
 
     public ObjectProperty<LocalDate> dateProperty(){
-        return date;
+        return dateProperty;
     }
 
     public LocalDate getDate(){
-        return date.getValue();
+        return dateProperty.getValue();
     }
 
     public void setDate(LocalDate date){
-        this.date
+        this.dateProperty
                 .setValue(date);
     }
 
     public ObjectProperty<LocalTime> timeProperty(){
-        return time;
+        return timeProperty;
     }
 
     public LocalTime getTime(){
-        return time.getValue();
+        return timeProperty.getValue();
     }
 
     public void setTime(LocalTime time){
-        this.time.setValue(time);
+        this.timeProperty.setValue(time);
     }
 
-    public ObjectProperty<ZoneId> zoneProperty(){
-        return zone;
+    public ObjectProperty<ZoneId> zonePropertyProperty(){
+        return zoneProperty;
     }
 
     public ZoneId getZone(){
-        return zone.getValue();
+        return zoneProperty.getValue();
     }
 
-    public void setZone(ZoneId zone){
-        this.zone
-                .setValue(zone);
+    public void setZone(ZoneId zoneProperty){
+        this.zoneProperty
+                .setValue(zoneProperty);
     }
 
     public ZonedDateTime getZonedDateTime(){
-        LocalDateTime localDateTime = date.getValue().atTime(time.getValue());
-        return localDateTime.atZone(zone.getValue());
+        return ZonedDateTime.of(getDate(), getTime(), getZone());
     }
 
     public void setZonedDateTime(ZonedDateTime zonedDateTime){
 
-        setZone(zonedDateTime.getOffset().normalized());
+        setZone(zonedDateTime.getZone());
         setTime(zonedDateTime.toLocalTime());
         setDate(zonedDateTime.toLocalDate());
     }
