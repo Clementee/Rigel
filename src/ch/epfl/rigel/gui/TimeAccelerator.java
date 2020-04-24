@@ -39,6 +39,6 @@ public interface TimeAccelerator{
      * @return (TimeAccelerator) : return a discrete accelerator
      */
     static TimeAccelerator discrete(int v, Duration S){
-        return (T0, elapsedTime) -> T0.plusNanos((long) Math.floor(elapsedTime/v)*S.getNano());
+        return (T0, elapsedTime) -> T0.plusNanos((long) Math.floor(v*1e-9*(elapsedTime))*S.toNanos());
     }
-}   
+}
