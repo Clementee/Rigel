@@ -10,7 +10,8 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  */
 public final class Angle {
 
-    public final static double TAU = 2 * Math.PI;
+    private final static double PI = Math.PI;
+    public final static double TAU = 2 * PI;
     private final static double RAD_PER_HOUR = TAU / 24;
 
     private final static int SEC_PER_DEG = 3600;

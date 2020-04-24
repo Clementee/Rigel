@@ -53,7 +53,7 @@ public final class DrawSky extends Application {
                 HorizontalCoordinates projCenterGlobal = HorizontalCoordinates.ofDeg(0, 90);
                 //Transform planeToCanvas = Transform.affine(260, 0, 0, -260, 400, 300);
                 StereographicProjection projection =
-                        new StereographicProjection(projCenterSun);
+                        new StereographicProjection(projCenter);
                 ObservedSky sky =
                         new ObservedSky(when, where, projection, catalogue);
 
@@ -69,7 +69,7 @@ public final class DrawSky extends Application {
                 painter.drawPlanets(sky, projection, planeToCanvas);
                 painter.drawSun(sky, projection, planeToCanvas);
                 painter.drawMoon(sky, projection, planeToCanvas);
-                painter.drawHorizon(projection, planeToCanvas);
+                painter.drawHorizon(sky,projection, planeToCanvas);
 
                 WritableImage fxImage =
                         canvas.snapshot(null, null);

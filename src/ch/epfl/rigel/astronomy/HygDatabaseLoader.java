@@ -4,6 +4,7 @@ import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -35,12 +36,9 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
             try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
 
                 String inputLine = bufferedReader.readLine();
+                bufferedReader.lines().map(str->str.split(",")).map(inputTab::add);
 
-                while (bufferedReader.ready()) {
-
-                    inputLine = bufferedReader.readLine();
-                    inputTab.add(inputLine.split(","));
-                }
+                //while (bufferedReader.ready()) {inputLine = bufferedReader.readLine();inputTab.add(inputLine.split(","));}
 
                 for (String[] strings : inputTab) {
 

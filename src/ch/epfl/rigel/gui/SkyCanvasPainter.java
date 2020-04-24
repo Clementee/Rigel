@@ -136,8 +136,6 @@ public final class SkyCanvasPainter {
 
             double planetDiameter = transform.deltaTransform(0, objectDiameter(planet.magnitude(), stereographicProjection)).magnitude();
 
-            System.out.println(planetDiameter);
-
             double x = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet))];
             double y = observedSky.planetsPosition()[2 * (observedSky.planets().indexOf(planet)) + 1];
 
@@ -212,7 +210,7 @@ public final class SkyCanvasPainter {
      * @param transform (Transform) : gives the transformation we will be using to modify the projection
      *                  in the good frame
      */
-    public void drawHorizon (ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
+    public void drawHorizon(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);
@@ -239,13 +237,14 @@ public final class SkyCanvasPainter {
         }
 
         double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
+        System.out.println(r);
        
         CartesianCoordinates centerCoords = stereographicProjection.circleCenterForParallel(HorizontalCoordinates.of(0,0));
         
         Point2D transformedCenter = transform.transform(centerCoords.x() ,centerCoords.y());
         Point2D rad = transform.deltaTransform(-r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
-
+        System.out.println(radius);
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);
         ctx.strokeOval(transformedCenter.getX() - radius/2,transformedCenter.getY() -radius/2,radius,radius);
