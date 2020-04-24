@@ -20,19 +20,40 @@ public enum NamedTimeAccelerator {
     private final String name;
     private final TimeAccelerator accelerator;
 
+    /**
+     * NamedTimeAccelerator package private constructor initializing its name and the accelerator
+     * 
+     * @param name (String) : gives the name we want to initialize
+     * @param accelerator (TimeAccelerator) : gives the accelerator we use
+     */
     NamedTimeAccelerator(String name, TimeAccelerator accelerator){
         this.name = name;
         this.accelerator = accelerator;
     }
 
+    /**
+     * NamedTimeAccelerator public method returning the name
+     * 
+     * @return name (String) : return the name
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * NamedTimeAccelerator public method returning the accelerator
+     * 
+     * @return accelerator (TimeAccelerator) : return the accelerator
+     */
     public TimeAccelerator getAccelerator(){
         return accelerator;
     }
 
+    /**
+     * NamedTimeAccelerator public and overridden method returning the name
+     * 
+     * @return (String) : return the name
+     */
     @Override
     public String toString(){
         return getName();
