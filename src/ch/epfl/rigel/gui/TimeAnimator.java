@@ -3,43 +3,42 @@ package ch.epfl.rigel.gui;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.*;
 
+
 public final class TimeAnimator extends AnimationTimer {
 
-    private long initialTime;
-    private long deltaTime;
     private boolean firstRun;
+    private long lastTime;
 
-    private BooleanProperty running = new SimpleBooleanProperty(false);
-    private ObjectProperty<TimeAccelerator> accelerator = new SimpleObjectProperty<>(null);
+    private final BooleanProperty running = new SimpleBooleanProperty();
+    private final ObjectProperty<TimeAccelerator> accelerator = new SimpleObjectProperty<>(null);
 
-    private DateTimeBean instantObservation = new DateTimeBean();
+    private DateTimeBean instantObservation;
 
     public TimeAnimator(DateTimeBean dateTimeBean){
-        instantObservation.setZonedDateTime(dateTimeBean.getZonedDateTime());
+        instantObservation = dateTimeBean;
     }
 
     @Override
     public void start() {
-        running.setValue(true);
         super.start();
+        running.setValue(true);
         firstRun = true;
     }
 
     @Override
     public void stop() {
-        running.setValue(false);
+        running.set(false);
         super.stop();
     }
 
     @Override
     public void handle(long l) {
         if(firstRun){
-            initialTime = l;
+            lastTime = l;
             firstRun = false;
-            System.out.println("Beg");
         }
-            deltaTime = l - initialTime;
-        System.out.println("oof");
+        instantObservation.setZonedDateTime(accelerator.getValue().adjust(instantObservation.getZonedDateTime(), l - lastTime));
+        lastTime = l;
     }
 
     public ObjectProperty<TimeAccelerator> getAcceleratorProperty(){
@@ -47,18 +46,18 @@ public final class TimeAnimator extends AnimationTimer {
     }
 
     public void setAccelerator(TimeAccelerator accelerator){
-        this.accelerator.setValue(accelerator);
+        this.accelerator.set(accelerator);
     }
 
     public TimeAccelerator getAccelerator(){
-        return accelerator.getValue();
+        return accelerator.get();
     }
 
-    public ReadOnlyBooleanProperty getRunningProperty(){
+    public ReadOnlyBooleanProperty runningProperty(){
         return running;
     }
 
-    public boolean getRunning(){
-        return running.getValue();
+    public boolean isRunning(){
+        return running.get();
     }
 }
