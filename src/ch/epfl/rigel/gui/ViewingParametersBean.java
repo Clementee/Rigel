@@ -20,23 +20,14 @@ public class ViewingParametersBean {
         return fieldOfViewDegProperty;
     }
 
-    public void setFieldOfViewDegProperty(double fieldOfView){
-        fieldOfViewDegProperty.set(fieldOfView);
-    }
+    public void setFieldOfViewDeg(double fieldOfView){fieldOfViewDegProperty.set(fieldOfView);}
 
-    public Double getFieldOfViewDeg(){
-        return fieldOfViewDegProperty.get();
-    }
+    public Double getFieldOfViewDeg(){return fieldOfViewDegProperty.get();}
 
-    public ObjectProperty<HorizontalCoordinates> centerProperty(){
-        return centerProperty;
-    }
 
-    public void setCenter(HorizontalCoordinates centerCoords){
-        centerProperty.set(centerCoords);
-    }
+    public ObjectProperty<HorizontalCoordinates> centerProperty(){return centerProperty;}
 
-    public HorizontalCoordinates getCenter(){
-        return centerProperty.get();
-    }
+    public void setCenter(HorizontalCoordinates centerCoords){centerProperty.set(centerCoords);}
+
+    public HorizontalCoordinates getCenter(){return centerProperty.get();}
 }

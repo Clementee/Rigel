@@ -1,4 +1,4 @@
-package ch.epfl.rigel.gui;
+package tutos;
 
 import javafx.application.Application;
 import javafx.geometry.VPos;

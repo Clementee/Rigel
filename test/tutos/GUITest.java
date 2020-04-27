@@ -1,4 +1,4 @@
-package ch.epfl.rigel.gui;
+package tutos;
 
 import ch.epfl.rigel.astronomy.ObservedSky;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;

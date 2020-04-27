@@ -1,4 +1,4 @@
-package ch.epfl.rigel.gui;
+package tutos;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
