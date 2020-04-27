@@ -8,15 +8,19 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
 
 public final class UseCreateBinding {
-    public static void main(String[] args) {
-        StringProperty s = new SimpleStringProperty("Hi!");
-        IntegerProperty b = new SimpleIntegerProperty(0);
-        IntegerProperty e = new SimpleIntegerProperty(3);
+    private static StringProperty s = new SimpleStringProperty("Hi!");
+    private static IntegerProperty b = new SimpleIntegerProperty(0);
+    private static IntegerProperty e = new SimpleIntegerProperty(3);
+    private static ObservableStringValue ss = test();
 
-        ObservableStringValue ss = Bindings.createStringBinding(
+    private static ObservableStringValue test(){
+        ObservableStringValue test = Bindings.createStringBinding(
                 () -> s.getValue().substring(b.get(), e.get()),
                 s, b, e);
-        ss.addListener(o -> System.out.println(ss.get()));
+        test.addListener(o -> System.out.println(test.get()));
+        return test;
+    }
+    public static void main(String[] args) {
 
         System.out.println("----");
         s.set("Hello, world!");
