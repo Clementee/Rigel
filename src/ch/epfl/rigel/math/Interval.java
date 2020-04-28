@@ -8,12 +8,12 @@ package ch.epfl.rigel.math;
  */
 public abstract class Interval {
 
-    private final double LOWER_BOUND, UPPER_BOUND;
+    private final double lowerBound, upperBound;
 
     protected Interval(double lowerBound, double upperBound) {
 
-        LOWER_BOUND = lowerBound;
-        UPPER_BOUND = upperBound;
+        this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
     }
 
     /**
@@ -22,7 +22,7 @@ public abstract class Interval {
      * @return (double) : the lower bound of the interval
      */
     public double low() {
-        return LOWER_BOUND;
+        return lowerBound;
     }
 
     /**
@@ -31,7 +31,7 @@ public abstract class Interval {
      * @return (double) : the upper bound of the interval
      */
     public double high() {
-        return UPPER_BOUND;
+        return upperBound;
     }
 
     /**
@@ -40,7 +40,7 @@ public abstract class Interval {
      * @return (double) :  the size of the interval
      */
     public double size() {
-        return UPPER_BOUND - LOWER_BOUND;
+        return upperBound - lowerBound;
     }
 
     /**
