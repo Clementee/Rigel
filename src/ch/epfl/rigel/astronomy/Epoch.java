@@ -12,10 +12,11 @@ import java.time.temporal.ChronoUnit;
 public enum Epoch {
 
     //values of the enumeration with its characteristics
-    J2000(LocalDate.of(2000, 1, 1), LocalTime.of(12, 0), ZoneOffset.UTC),
-    J2010(LocalDate.of(2010, 1, 1).minusDays(1), LocalTime.of(0, 0), ZoneOffset.UTC);
+    J2000(LocalDate.of(2000, 1, 1), LocalTime.NOON, ZoneOffset.UTC),
+    J2010(LocalDate.of(2010, 1, 1).minusDays(1), LocalTime.MIDNIGHT, ZoneOffset.UTC);
 
-    private ZonedDateTime thisZoneTime;
+    private final ZonedDateTime thisZoneTime;
+    private final double millisToDays = 1000*3600*24;
 
     /**
      * Epoch package-private constructor
@@ -37,7 +38,7 @@ public enum Epoch {
     public double daysUntil(ZonedDateTime when) {
 
         double deltaDays = -when.until(thisZoneTime, ChronoUnit.MILLIS);
-        deltaDays = deltaDays / (1000 * 3600 * 24);
+        deltaDays = deltaDays / millisToDays;
 
         return deltaDays;
     }
@@ -49,6 +50,9 @@ public enum Epoch {
      * @return (double) : return the number of julian centuries between the two dates
      */
     public double julianCenturiesUntil(ZonedDateTime when) {
-        return thisZoneTime.until(when, ChronoUnit.MILLIS) / (3600000.0 * 24 * 36525);
+
+        double millisToJulianCenturies = millisToDays*36525;
+        
+        return thisZoneTime.until(when, ChronoUnit.MILLIS) / millisToJulianCenturies;
     }
 }
