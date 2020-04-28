@@ -11,6 +11,9 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  * @author Clement Sanh (311427)
  */
 public final class RightOpenInterval extends Interval {
+    
+    private final double low = super.low();
+    private final double high = super.high();
 
     /**
      * RightOpenInterval private constructor
@@ -62,7 +65,7 @@ public final class RightOpenInterval extends Interval {
      */
     @Override
     public boolean contains(double v) {
-        return super.low() <= v && v < super.high();
+        return low <= v && v < high;
     }
 
     /**
@@ -73,11 +76,11 @@ public final class RightOpenInterval extends Interval {
      */
     public double reduce(double v) {
 
-        double x = v - super.low();
-        double y = super.high() - super.low();
+        double x = v - low;
+        double y = high - low;
         double floorMod = x - (y * Math.floor(x / y));
 
-        return super.low() + floorMod;
+        return low + floorMod;
     }
 
     /**
@@ -89,6 +92,6 @@ public final class RightOpenInterval extends Interval {
     public String toString() {
         return String.format(Locale.ROOT,
                 "The right open interval chosen can be represented as [%f,%f[",
-                super.low(), super.high());
+                low, high);
     }
 }
