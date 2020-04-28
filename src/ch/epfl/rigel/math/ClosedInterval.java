@@ -12,6 +12,10 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  */
 public final class ClosedInterval extends Interval {
 
+
+    private final double low = super.low();
+    private final double high = super.high();
+
     /**
      * ClosedInterval private constructor
      *
@@ -19,7 +23,6 @@ public final class ClosedInterval extends Interval {
      * @param high (double) : gives the upper bound of the closed interval
      */
     private ClosedInterval(double low, double high) {
-
         super(low, high);
     }
 
@@ -59,7 +62,7 @@ public final class ClosedInterval extends Interval {
      */
     @Override
     public boolean contains(double v) {
-        return super.low() <= v && v <= super.high();
+        return low <= v && v <= high;
     }
 
     /**
@@ -70,9 +73,9 @@ public final class ClosedInterval extends Interval {
      */
     public double clip(double v) {
 
-        if (v < super.low()) {
-            return super.low();
-        } else return Math.min(v, super.high());
+        if (v < low) {
+            return low;
+        } else return Math.min(v, high);
     }
 
     /**
@@ -82,6 +85,6 @@ public final class ClosedInterval extends Interval {
      */
     @Override
     public String toString() {
-        return String.format(Locale.ROOT, "The closed interval chosen can be represented as [%f,%f]", super.low(), super.high());
+        return String.format(Locale.ROOT, "The closed interval chosen can be represented as [%f,%f]", low, high);
     }
 }
