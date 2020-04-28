@@ -7,6 +7,7 @@ import ch.epfl.rigel.math.ClosedInterval;
 import ch.epfl.rigel.math.RightOpenInterval;
 
 import static ch.epfl.rigel.Preconditions.checkArgument;
+import static ch.epfl.rigel.Preconditions.checkInInterval;
 
 /**
  * An horizontal coordinate
@@ -40,7 +41,8 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
      */
     public static HorizontalCoordinates of(double az, double alt) {
 
-        checkArgument(AZ_INTERVAL.contains(az) && ALT_INTERVAL.contains(alt));
+        checkInInterval(AZ_INTERVAL,az);
+        checkInInterval(ALT_INTERVAL,alt);
 
         return new HorizontalCoordinates(az, alt);
     }
@@ -54,9 +56,13 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
      */
     public static HorizontalCoordinates ofDeg(double azDeg, double altDeg) {
 
-        checkArgument(AZ_INTERVAL.contains(Angle.ofDeg(azDeg)) && ALT_INTERVAL.contains(Angle.ofDeg(altDeg)));
+        double az = Angle.ofDeg(azDeg);
+        double alt = Angle.ofDeg(altDeg);
 
-        return new HorizontalCoordinates(Angle.ofDeg(azDeg), Angle.ofDeg(altDeg));
+        checkInInterval(AZ_INTERVAL, az);
+        checkInInterval(ALT_INTERVAL,alt);
+
+        return new HorizontalCoordinates(az, alt);
     }
 
     /**
@@ -97,34 +103,25 @@ public final class HorizontalCoordinates extends SphericalCoordinates {
 
             case 0:
             case 8:
-                string = n;
-                break;
+                return n;
             case 1:
-                string = n + e;
-                break;
-            case 2:
-                string = e;
-                break;
-            case 3:
-                string = s + e;
-                break;
-            case 4:
-                string = s;
-                break;
-            case 5:
-                string = s + w;
-                break;
-            case 6:
-                string = w;
-                break;
-            case 7:
-                string = n + w;
-                break;
-            default:
-                break;
-        }
+                return n + e;
 
-        return string;
+            case 2:
+                return e;
+            case 3:
+                return s + e;
+            case 4:
+                return s;
+            case 5:
+                return s + w;
+            case 6:
+                return w;
+            case 7:
+                return n + w;
+            default:
+                return "";
+        }
     }
 
     /**
