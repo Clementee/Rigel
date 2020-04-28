@@ -12,10 +12,6 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  */
 public final class RightOpenInterval extends Interval {
 
-    private final double lowerBound, upperBound;
-
-    public static RightOpenInterval rightOpenInterval;
-
     /**
      * RightOpenInterval private constructor
      *
@@ -25,9 +21,6 @@ public final class RightOpenInterval extends Interval {
     protected RightOpenInterval(double low, double high) {
 
         super(low, high);
-
-        lowerBound = low;
-        upperBound = high;
     }
 
     /**
@@ -42,9 +35,7 @@ public final class RightOpenInterval extends Interval {
 
         checkArgument(size > 0);
 
-        rightOpenInterval = new RightOpenInterval(-size / 2, size / 2);
-
-        return rightOpenInterval;
+        return new RightOpenInterval(-size / 2, size / 2);
     }
 
     /**
@@ -60,9 +51,7 @@ public final class RightOpenInterval extends Interval {
 
         checkArgument(low < high);
 
-        rightOpenInterval = new RightOpenInterval(low, high);
-
-        return rightOpenInterval;
+        return new RightOpenInterval(low, high);
     }
 
     /**
@@ -73,7 +62,7 @@ public final class RightOpenInterval extends Interval {
      */
     @Override
     public boolean contains(double v) {
-        return lowerBound <= v && v < upperBound;
+        return super.low() <= v && v < super.high();
     }
 
     /**
@@ -84,11 +73,11 @@ public final class RightOpenInterval extends Interval {
      */
     public double reduce(double v) {
 
-        double x = v - lowerBound;
-        double y = upperBound - lowerBound;
+        double x = v - super.low();
+        double y = super.high() - super.low();
         double floorMod = x - (y * Math.floor(x / y));
 
-        return lowerBound + floorMod;
+        return super.low() + floorMod;
     }
 
     /**
@@ -99,7 +88,7 @@ public final class RightOpenInterval extends Interval {
     @Override
     public String toString() {
         return String.format(Locale.ROOT,
-                "The right open interval chosen can be represented as [%s,%s[",
-                lowerBound, upperBound);
+                "The right open interval chosen can be represented as [%f,%f[",
+                super.low(), super.high());
     }
 }
