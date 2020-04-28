@@ -6,10 +6,15 @@ import java.util.function.Function;
 import static ch.epfl.rigel.math.Angle.normalizePositive;
 import static java.lang.Math.*;
 
+/**
+ * A stereographic projection
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public final class StereographicProjection implements Function<HorizontalCoordinates, CartesianCoordinates> {
 
     private final HorizontalCoordinates center;
-    private double radius;
 
     private final double centerLambda, cosPhy, sinPhy;
 
@@ -36,7 +41,7 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      */
     public CartesianCoordinates circleCenterForParallel(HorizontalCoordinates hor) {
 
-        radius = cosPhy / (Math.sin(hor.alt()) + sinPhy);
+        double radius = cosPhy / (Math.sin(hor.alt()) + sinPhy);
 
         return CartesianCoordinates.of(0, radius);
     }
@@ -49,8 +54,7 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      */
     public double circleRadiusForParallel(HorizontalCoordinates parallel) {
 
-        radius = Math.cos(parallel.alt()) / (Math.sin(parallel.alt()) + sinPhy);
-        return radius;
+        return Math.cos(parallel.alt()) / (Math.sin(parallel.alt()) + sinPhy);
     }
 
     /**
@@ -101,7 +105,10 @@ public final class StereographicProjection implements Function<HorizontalCoordin
         double rho = sqrt(x * x + y * y);
         double sinC = (2 * rho) / (rho * rho + 1);
         double cosC = (1 - rho * rho) / (rho * rho + 1);
-        return (x != 0 && y != 0) ? HorizontalCoordinates.of(normalizePositive(atan2(x * sinC, rho * cosPhy * cosC - y * sinPhy * sinC) + centerLambda), asin(cosC * sinPhy + (y * sinC * cosPhy) / rho)) : HorizontalCoordinates.of(centerLambda, sinPhy);
+        final double azimuth = normalizePositive(atan2(x * sinC, rho * cosPhy * cosC - y * sinPhy * sinC)+ centerLambda);
+        final double altitude = asin(cosC * sinPhy + (y * sinC * cosPhy) / rho);
+        return (x != 0 && y != 0) ? HorizontalCoordinates.of(azimuth, altitude)
+                : HorizontalCoordinates.of(centerLambda, sinPhy);
     }
 
     /**
@@ -132,6 +139,6 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      */
     @Override
     public final String toString() {
-        return String.format(Locale.ROOT, "The StereographicProjection is centered on %f", center);
+        return String.format(Locale.ROOT, "The StereographicProjection is centered on %s", center);
     }
 }
