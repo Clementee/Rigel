@@ -4,7 +4,6 @@ import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -36,9 +35,12 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
             try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
 
                 String inputLine = bufferedReader.readLine();
-                bufferedReader.lines().map(str->str.split(",")).map(inputTab::add);
 
-                //while (bufferedReader.ready()) {inputLine = bufferedReader.readLine();inputTab.add(inputLine.split(","));}
+                while (bufferedReader.ready()) {
+
+                    inputLine = bufferedReader.readLine();
+                    inputTab.add(inputLine.split(","));
+                }
 
                 for (String[] strings : inputTab) {
 
@@ -46,7 +48,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                     double rarad, decrad;
                     float magnitude, colorID;
 
-                    String valInt = strings[index.HIP.ordinal()];
+                    String valInt = strings[Index.HIP.ordinal()];
                     String name;
 
                     if (!valInt.equals("")) {
@@ -57,27 +59,28 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                         hipparcosID = 0;
                     }
 
-                    valInt = strings[index.PROPER.ordinal()];
+                    valInt = strings[Index.PROPER.ordinal()];
 
                     if (!valInt.equals("")) {
 
                         name = valInt;
                     } else {
 
-                        valInt = strings[index.BAYER.ordinal()];
+                        valInt = strings[Index.BAYER.ordinal()];
 
                         if (!valInt.equals("")) {
 
-                            name = valInt + " " + strings[index.CON.ordinal()];
-                        } else {
+                            name = valInt + " " + strings[Index.CON.ordinal()];
+                        }
+                        else {
 
-                            name = "? " + strings[index.CON.ordinal()];
+                            name = "? " + strings[Index.CON.ordinal()];
                         }
                     }
 
-                    rarad = Double.parseDouble(strings[index.RARAD.ordinal()]);
-                    decrad = Double.parseDouble(strings[index.DECRAD.ordinal()]);
-                    valInt = strings[index.MAG.ordinal()];
+                    rarad = Double.parseDouble(strings[Index.RARAD.ordinal()]);
+                    decrad = Double.parseDouble(strings[Index.DECRAD.ordinal()]);
+                    valInt = strings[Index.MAG.ordinal()];
 
                     EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad, decrad);
 
@@ -89,7 +92,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                         magnitude = 0;
                     }
 
-                    valInt = strings[index.CI.ordinal()];
+                    valInt = strings[Index.CI.ordinal()];
 
                     if (!valInt.equals("")) {
 
@@ -108,14 +111,14 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
     /**
      * Private enum of indexes for the loader
      */
-    private enum index {
+    private enum Index {
 
         ID, HIP, HD, HR, GL, BF, PROPER, RA, DEC, DIST, PMRA, PMDEC,
         RV, MAG, ABSMAG, SPECT, CI, X, Y, Z, VX, VY, VZ,
         RARAD, DECRAD, PMRARAD, PMDECRAD, BAYER, FLAM, CON,
         COMP, COMP_PRIMARY, BASE, LUM, VAR, VAR_MIN, VAR_MAX;
 
-        index() {
+        Index() {
         }
     }
 }
