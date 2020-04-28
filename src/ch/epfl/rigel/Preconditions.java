@@ -36,11 +36,8 @@ public final class Preconditions {
      * @throws IllegalArgumentException : if the value doesn't belong to the interval, throws IAE
      */
     public static double checkInInterval(Interval interval, double value) {
-        
-        double lowerBound = interval.low();
-        double upperBound = interval.high();
 
-        if (lowerBound <= value && value <= upperBound) {
+        if (interval.contains(value)) {
             return value;
         }
         else {
