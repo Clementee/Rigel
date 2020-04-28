@@ -59,26 +59,17 @@ public enum MoonModel implements CelestialObjectModel<Moon> {
     @Override
     public Moon at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
 
-        SUN_LAMBDA = SUN
-                .at(daysSinceJ2010, eclipticToEquatorialConversion)
-                .eclipticPos()
-                .lon();
+        SUN_LAMBDA = SUN.at(daysSinceJ2010, eclipticToEquatorialConversion).eclipticPos().lon();
 
-        SUN_M = SUN
-                .at(daysSinceJ2010, eclipticToEquatorialConversion)
-                .meanAnomaly();
+        SUN_M = SUN.at(daysSinceJ2010, eclipticToEquatorialConversion).meanAnomaly();
 
         sinSunM = sin(SUN_M);
 
         lPrimPrim = MoonLongitudinalOrbit(daysSinceJ2010);
 
-        EclipticCoordinates moonEclipticCoords = MoonEclipticCoordinates(daysSinceJ2010);
-        EquatorialCoordinates moonEquatorialPos = eclipticToEquatorialConversion.apply(moonEclipticCoords);
+        EquatorialCoordinates moonEquatorialPos = eclipticToEquatorialConversion.apply( MoonEclipticCoordinates(daysSinceJ2010));
 
-        float F = (float) MoonPhase();
-        float angularSize = (float) MoonAngularSize();
-
-        return new Moon(moonEquatorialPos, angularSize, 0, F);
+        return new Moon(moonEquatorialPos, (float) MoonAngularSize(), 0, (float) MoonPhase());
     }
 
     /**
