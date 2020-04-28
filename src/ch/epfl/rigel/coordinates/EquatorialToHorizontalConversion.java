@@ -16,8 +16,8 @@ import java.util.function.Function;
 public final class EquatorialToHorizontalConversion implements Function<EquatorialCoordinates, HorizontalCoordinates> {
 
     public final double siderealTime;
-    private final double cosPhy;
-    private final double sinPhy;
+    private final double cosPhi;
+    private final double sinPhi;
 
     /**
      * EquatorialToHorizontalConversion public constructor, initializing few values
@@ -30,8 +30,8 @@ public final class EquatorialToHorizontalConversion implements Function<Equatori
         double latObserver = where.lat();
 
         siderealTime = SiderealTime.local(when, where);
-        cosPhy = Math.cos(latObserver);
-        sinPhy = Math.sin(latObserver);
+        cosPhi = Math.cos(latObserver);
+        sinPhi = Math.sin(latObserver);
     }
 
     /**
@@ -47,8 +47,8 @@ public final class EquatorialToHorizontalConversion implements Function<Equatori
         double cosDelta = Math.cos(equ.dec());
         double hourAngle = siderealTime - equ.ra();
 
-        double heightHoriz = Math.asin(sinDelta * sinPhy + cosDelta * cosPhy * Math.cos(hourAngle));
-        final double azimuthHoriz = Math.atan2(-cosDelta * cosPhy * Math.sin(hourAngle), sinDelta - sinPhy * Math.sin(heightHoriz));
+        double heightHoriz = Math.asin(sinDelta * sinPhi + cosDelta * cosPhi * Math.cos(hourAngle));
+        final double azimuthHoriz = Math.atan2(-cosDelta * cosPhi * Math.sin(hourAngle), sinDelta - sinPhi * Math.sin(heightHoriz));
 
         return HorizontalCoordinates.of(Angle.normalizePositive(azimuthHoriz), heightHoriz);
     }
