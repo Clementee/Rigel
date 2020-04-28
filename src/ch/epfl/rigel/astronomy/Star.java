@@ -16,6 +16,8 @@ public final class Star extends CelestialObject {
 
     private final int starNumber;
     private final float starColorInd;
+    private final static RightOpenInterval STAR_COLOR_INTERVAL = RightOpenInterval.of(-0.5,5.5);
+    private int colorTemperature;
 
     /**
      * Star public constructor returning a celestial object and initializing some values
@@ -30,7 +32,7 @@ public final class Star extends CelestialObject {
 
         super(name, equatorialPos, 0, magnitude);
 
-        checkInInterval(RightOpenInterval.of(-0.5, 5.5), colorIndex);
+        checkInInterval(STAR_COLOR_INTERVAL, colorIndex);
         checkArgument(hipparcosId >= 0);
 
         starNumber = hipparcosId;
@@ -52,6 +54,7 @@ public final class Star extends CelestialObject {
      * @return colorTemperature (int) : return the temperature of the color of the star in kelvins
      */
     public int colorTemperature() {
-        return (int) Math.floor((4600 * ((1 / (0.92 * starColorInd + 1.7)) + (1 / (0.92 * starColorInd + 0.62)))));
+        colorTemperature = (int) Math.floor((4600 * ((1 / (0.92 * starColorInd + 1.7)) + (1 / (0.92 * starColorInd + 0.62)))));
+        return colorTemperature;
     }
 }
