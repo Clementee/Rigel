@@ -16,6 +16,7 @@ import static ch.epfl.rigel.Preconditions.checkInInterval;
 public final class Moon extends CelestialObject {
 
     private final float moonPhase;
+    private final static ClosedInterval MOON_INTERVAL = ClosedInterval.of(0,1);
 
     private final static String MOON_NAME = "Lune";
 
@@ -31,7 +32,7 @@ public final class Moon extends CelestialObject {
 
         super(MOON_NAME, equatorialPos, angularSize, magnitude);
 
-        checkInInterval(ClosedInterval.of(0, 1), phase);
+        checkInInterval(MOON_INTERVAL, phase);
 
         moonPhase = phase * 100;
     }
