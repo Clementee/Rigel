@@ -80,26 +80,22 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
     @Override
     public Planet at(double daysSinceJ2010, EclipticToEquatorialConversion eclipticToEquatorialConversion) {
 
-        double M = (TAU / DAYS_PER_YEAR) * (daysSinceJ2010 / Tp) + epsilon - varpi;
-        double v = M + 2 * eccentricity * sin(M);
-        double r = (a * (1 - Math.pow(eccentricity, 2))) / (1 + eccentricity * cos(v));
-        double l = v + varpi;
+        double l = l(daysSinceJ2010,this);
+        double r = r(daysSinceJ2010,this);
+
         double phi = asin(sin(l - omega) * sin(i));
         double rPrim = r * cos(phi);
         double lPrim = atan2((sin(l - omega) * cos(i)), cos(l - omega)) + omega;
 
-        double MEarth = (TAU / DAYS_PER_YEAR) * (daysSinceJ2010 / EARTH.Tp) + EARTH.epsilon - EARTH.varpi;
-        double vEARTH = MEarth + 2 * EARTH.eccentricity * sin(MEarth);
-        double R = (EARTH.a * (1 - Math.pow(EARTH.eccentricity, 2)) / (1 + EARTH.eccentricity * cos(vEARTH)));
-        double L = vEARTH + EARTH.varpi;
+        double R = r(daysSinceJ2010,EARTH);
+        double L = l(daysSinceJ2010,EARTH);
+
         double lambda;
         double k = R * sin(lPrim - L);
 
-        if (createInnerPlanet().contains(this)) {
-
+        if (this.a<1) {
             lambda = PI + L + atan(((rPrim * sin(L - lPrim))) / (R - (rPrim * cos(L - lPrim))));
         } else {
-
             lambda = lPrim + atan(k / (rPrim - (R * cos(lPrim - L))));
         }
 
@@ -116,18 +112,15 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         return new Planet(frenchName, equatorialCoordinates, (float) theta, (float) m);
     }
 
-    /**
-     * PlanetModel method createInnerPlanet, creating a list of the inner planets and returning it
-     *
-     * @return list   (List<PlanetModel>) : returns the list of inner planets initialized with Mercury and Venus
-     */
-    private List<PlanetModel> createInnerPlanet() {
+    private double l(double daysSinceJ2010, PlanetModel planet){
+        double M = (TAU / DAYS_PER_YEAR) * (daysSinceJ2010 / planet.Tp) + planet.epsilon - planet.varpi;
+        double v = M + 2 * planet.eccentricity * sin(M);
+        return v + planet.varpi;
+    }
 
-        List<PlanetModel> list = new ArrayList<>();
-
-        list.add(0, MERCURY);
-        list.add(1, VENUS);
-
-        return list;
+    private double r(double daysSinceJ2010, PlanetModel planet){
+        double M = (TAU / DAYS_PER_YEAR) * (daysSinceJ2010 / planet.Tp) + planet.epsilon - planet.varpi;
+        double v = M + 2 * planet.eccentricity * sin(M);
+        return (planet.a * (1 - Math.pow(planet.eccentricity, 2))) / (1 + planet.eccentricity * cos(v));
     }
 }
