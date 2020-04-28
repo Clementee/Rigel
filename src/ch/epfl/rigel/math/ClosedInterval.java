@@ -12,10 +12,6 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
  */
 public final class ClosedInterval extends Interval {
 
-    public static ClosedInterval closedInterval;
-
-    private final double lowerBound, upperBound;
-
     /**
      * ClosedInterval private constructor
      *
@@ -25,9 +21,6 @@ public final class ClosedInterval extends Interval {
     private ClosedInterval(double low, double high) {
 
         super(low, high);
-
-        lowerBound = low;
-        upperBound = high;
     }
 
     /**
@@ -42,9 +35,7 @@ public final class ClosedInterval extends Interval {
 
         checkArgument(low < high);
 
-        closedInterval = new ClosedInterval(low, high);
-
-        return closedInterval;
+        return new ClosedInterval(low, high);
     }
 
     /**
@@ -58,9 +49,7 @@ public final class ClosedInterval extends Interval {
 
         checkArgument(size > 0);
 
-        closedInterval = new ClosedInterval(-size / 2, size / 2);
-
-        return closedInterval;
+        return new ClosedInterval(-size / 2, size / 2);
     }
 
     /**
@@ -70,7 +59,7 @@ public final class ClosedInterval extends Interval {
      */
     @Override
     public boolean contains(double v) {
-        return lowerBound <= v && v <= upperBound;
+        return super.low() <= v && v <= super.high();
     }
 
     /**
@@ -81,9 +70,9 @@ public final class ClosedInterval extends Interval {
      */
     public double clip(double v) {
 
-        if (v < lowerBound) {
-            return lowerBound;
-        } else return Math.min(v, upperBound);
+        if (v < super.low()) {
+            return super.low();
+        } else return Math.min(v, super.high());
     }
 
     /**
@@ -93,6 +82,6 @@ public final class ClosedInterval extends Interval {
      */
     @Override
     public String toString() {
-        return String.format(Locale.ROOT, "The closed interval chosen can be represented as [%s,%s]", lowerBound, upperBound);
+        return String.format(Locale.ROOT, "The closed interval chosen can be represented as [%f,%f]", super.low(), super.high());
     }
 }
