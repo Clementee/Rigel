@@ -27,4 +27,16 @@ public class ObserverLocationBean {
         obj.addListener(o-> System.out.println(obj.getValue()));
         return obj;
     }
+
+    public GeographicCoordinates getCoordinates() {
+        return coordinates.get();
+    }
+
+    public ObjectProperty<GeographicCoordinates> coordinatesProperty() {
+        return coordinates;
+    }
+
+    public void setCoordinates(GeographicCoordinates coordinates) {
+        this.coordinates.set(coordinates);
+    }
 }

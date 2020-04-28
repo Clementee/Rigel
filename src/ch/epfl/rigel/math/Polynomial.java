@@ -65,93 +65,39 @@ public final class Polynomial {
         StringBuilder text = new StringBuilder();
 
         for (int i = 0; i < tab.length; i++) {
-
             if (i == 0) {
-
                 if (tab.length == 1) {
-
                     text.append(tab[i]);
                 } else {
                     if (tab.length == 2) {
-
-                        if (tab[i] != 1 && tab[i] != -1) {
-
+                        if (tab[i] != 1 && tab[i] != -1)
                             text.append(tab[i]).append("x");
-                        } else {
-                            if (tab[i] == 1) {
-
-                                text.append("x");
-                            } else {
-                                text.append("-x");
-                            }
-                        }
+                        else
+                            text.append(tab[i] == 1 ? "x" : "-x");
                     } else {
-                        if (tab[i] != 1 && tab[i] != -1) {
-
+                        if (tab[i] != 1 && tab[i] != -1)
                             text.append(tab[i]).append("x^").append(tab.length - 1);
-                        } else {
-                            if (tab[i] == 1) {
-
-                                text.append("x^").append(tab.length - 1);
-                            } else {
-
-                                text.append("-x^").append(tab.length - 1);
-                            }
-                        }
-
+                        else
+                            text.append(tab[i] == 1 ? "x^" : "-x^   ").append(tab.length - 1);
                     }
                 }
             } else {
-                if (i == tab.length - 1) {
+                if (tab[i] != 0) {
+                    if (i == tab.length - 1)
+                        text.append(tab[i] > 0 ? "+" : "").append(tab[i]);
+                    else if (i == tab.length - 2)
+                        text.append(tab[i] > 0 ? "+" : "").append(tab[i]).append("x");
+                    else if (tab[i] != 1)
+                        text.append(tab[i] > 0 ? "+" : "").append(tab[i]).append("x^").append(tab.length - i - 1);
+                    else
+                        text.append(tab[i] == 1 ? "+x^" : "-x^").append(tab.length - i - 1);
 
-                    if (tab[i] > 0) {
-
-                        text.append("+").append(tab[i]);
-                    }
-
-                    if (tab[i] < 0) {
-
-                        text.append(tab[i]);
-                    }
-                } else {
-                    if (i == tab.length - 2) {
-
-                        if (tab[i] > 0) {
-
-                            text.append("+").append(tab[i]).append("x");
-                        }
-                        if (tab[i] < 0) {
-
-                            text.append(tab[i]).append("x");
-                        }
-                    } else {
-                        if (tab[i] > 0 && tab[i] != 1) {
-
-                            text.append("+").append(tab[i]).append("x^").append(tab.length - i - 1);
-                        }
-
-                        if (tab[i] < 0 && tab[i] != -1) {
-
-                            text.append(tab[i]).append("x^").append(tab.length - i - 1);
-                        }
-
-                        if (tab[i] == 1) {
-
-                            text.append("+x^").append(tab.length - i - 1);
-                        }
-
-                        if (tab[i] == -1) {
-
-                            text.append("-x^").append(tab.length - i - 1);
-                        }
-                    }
                 }
-
-
             }
         }
         return text.toString();
     }
+
 
     /**
      * Method throwing an UnsupportedOperationException (UOE)
