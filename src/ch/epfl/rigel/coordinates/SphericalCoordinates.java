@@ -10,8 +10,8 @@ import ch.epfl.rigel.math.Angle;
  */
 abstract class SphericalCoordinates {
 
-    private double longitudeCoords;
-    private double latitudeCoords;
+    private final double longitudeCoords;
+    private final double latitudeCoords;
 
     /**
      * SphericalCoordinates package-private constructor
@@ -81,4 +81,3 @@ abstract class SphericalCoordinates {
         throw new UnsupportedOperationException();
     }
 }
-
