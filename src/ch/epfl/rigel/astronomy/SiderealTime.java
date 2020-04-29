@@ -51,14 +51,7 @@ public final class SiderealTime {
         double S1 = S1_COEFF * t;
         double Sg = S0 + S1;
 
-        if (Sg < 0) {
-
-            Sg = Sg % 24 + 24;
-        } else {
-            Sg = Sg % 24;
-        }
-
-        return ofHr(Sg);
+        return normalizePositive(ofHr(Sg));
     }
 
     /**

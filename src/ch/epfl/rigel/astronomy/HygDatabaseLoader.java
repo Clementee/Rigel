@@ -52,10 +52,8 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                     String name;
 
                     if (!valInt.equals("")) {
-
                         hipparcosID = Integer.parseInt(valInt);
                     } else {
-
                         hipparcosID = 0;
                     }
 

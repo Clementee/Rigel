@@ -1,5 +1,7 @@
 package ch.epfl.rigel.astronomy;
 
+import ch.epfl.rigel.gui.SkyCanvasPainter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -26,18 +28,17 @@ public final class StarCatalogue {
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms) {
 
         starList = List.copyOf(stars);
-
+        Map<Star, Integer> starMap = new HashMap<>();
+        for (Star star : starList) {
+            starMap.put(star, starList.indexOf(star));
+        }
         for (Asterism ast : asterisms) {
-
             List<Integer> index = new LinkedList<>();
-
-            checkArgument(stars.containsAll(ast.stars()));
+            checkArgument(starList.containsAll(ast.stars()));
 
             for (Star star : ast.stars()) {
-
-                index.add(starList.indexOf(star));
+                index.add(starMap.get(star));
             }
-
             asterismMap.put(ast, index);
         }
     }
