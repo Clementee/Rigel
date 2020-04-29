@@ -33,7 +33,7 @@ public final class StarCatalogue {
             starMap.put(star, starList.indexOf(star));
         }
         for (Asterism ast : asterisms) {
-            List<Integer> index = new LinkedList<>();
+            List<Integer> index = new ArrayList<>();
             checkArgument(starList.containsAll(ast.stars()));
 
             for (Star star : ast.stars()) {
@@ -49,7 +49,7 @@ public final class StarCatalogue {
      * @return starList (List<Stars>) : returning the list of stars
      */
     public List<Star> stars() {
-        return Collections.unmodifiableList(starList);
+        return starList;
     }
 
     /**
