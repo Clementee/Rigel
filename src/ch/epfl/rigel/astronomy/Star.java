@@ -16,7 +16,7 @@ public final class Star extends CelestialObject {
 
     private final int starNumber;
     private final float starColorInd;
-    private final static RightOpenInterval STAR_COLOR_INTERVAL = RightOpenInterval.of(-0.5,5.5);
+    private final static ClosedInterval STAR_COLOR_INTERVAL = ClosedInterval.of(-0.5,5.5);
     private int colorTemperature;
 
     /**
