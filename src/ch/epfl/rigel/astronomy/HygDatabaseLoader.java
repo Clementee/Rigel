@@ -31,7 +31,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII); BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
             bufferedReader.readLine();
             String inputLine = bufferedReader.readLine();
-            while (bufferedReader.ready()) {
+            while (inputLine!=null) {
                 String[] lineTab = inputLine.split(",");
 
                 int hipparcosID = Integer.parseInt(validOrDefault(lineTab[Index.HIP.ordinal()], lineTab[Index.HIP.ordinal()], "0"));

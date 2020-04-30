@@ -45,9 +45,7 @@ public enum AsterismLoader implements StarCatalogue.Loader {
                 List<Star> asterismList = new LinkedList<>();
 
                 for (String string : inputLineTab) {
-
                     if (Integer.parseInt(string) != 0) {
-
                         asterismList.
                                 add(asterismListed.get(Integer.parseInt(string)));
                     }
