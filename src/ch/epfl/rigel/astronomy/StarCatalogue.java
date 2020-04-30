@@ -1,7 +1,5 @@
 package ch.epfl.rigel.astronomy;
 
-import ch.epfl.rigel.gui.SkyCanvasPainter;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -17,7 +15,7 @@ import static ch.epfl.rigel.Preconditions.checkArgument;
 public final class StarCatalogue {
 
     private final List<Star> starList;
-    private final Map<Asterism, List<Integer>> asterismMap = new HashMap<>();
+    private final Map<Asterism, List<Integer>> asterismMap;
 
     /**
      * StarCatalogue public constructor creating and initializing a catalogue of stars
@@ -28,19 +26,26 @@ public final class StarCatalogue {
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms) {
 
         starList = List.copyOf(stars);
+
         Map<Star, Integer> starMap = new HashMap<>();
+        Map<Asterism,List<Integer>> astMap = new HashMap<>();
+
         for (Star star : starList) {
             starMap.put(star, starList.indexOf(star));
         }
+
         for (Asterism ast : asterisms) {
+
             List<Integer> index = new ArrayList<>();
+
             checkArgument(starList.containsAll(ast.stars()));
 
             for (Star star : ast.stars()) {
                 index.add(starMap.get(star));
             }
-            asterismMap.put(ast, index);
+            astMap.put(ast, Collections.unmodifiableList(index));
         }
+        asterismMap = Map.copyOf(astMap);
     }
 
     /**
@@ -58,7 +63,7 @@ public final class StarCatalogue {
      * @return asterismMap (Set<Asterism>) : returning the key set of the map of asterism
      */
     public Set<Asterism> asterisms() {
-        return Set.copyOf(asterismMap.keySet());
+        return asterismMap.keySet();
     }
 
 
@@ -69,9 +74,7 @@ public final class StarCatalogue {
      */
     public List<Integer> asterismIndices(Asterism asterism) {
 
-        checkArgument(asterismMap.containsKey(asterism));
-
-        return List.copyOf(asterismMap.get(asterism));
+        return asterismMap.get(asterism);
     }
 
     // A builder of a catalogue of stars
