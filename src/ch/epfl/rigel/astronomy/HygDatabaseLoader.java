@@ -27,72 +27,32 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
      */
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
+
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII); BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-
-
+            bufferedReader.readLine();
             String inputLine = bufferedReader.readLine();
-
             while (bufferedReader.ready()) {
+                String[] lineTab = inputLine.split(",");
 
-                inputLine = bufferedReader.readLine();
-                String[] strings = inputLine.split(",");
-
-                int hipparcosID;
-                double rarad, decrad;
-                float magnitude, colorID;
-
-                String valInt = strings[Index.HIP.ordinal()];
-                String name;
-
-                if (!valInt.equals("")) {
-                    hipparcosID = Integer.parseInt(valInt);
-                } else {
-                    hipparcosID = 0;
-                }
-
-                valInt = strings[Index.PROPER.ordinal()];
-
-                if (!valInt.equals("")) {
-
-                    name = valInt;
-                } else {
-                    valInt = strings[Index.BAYER.ordinal()];
-                    if (!valInt.equals("")) {
-                        name = valInt + " " + strings[Index.CON.ordinal()];
-                    } else {
-
-                        name = "? " + strings[Index.CON.ordinal()];
-                    }
-                }
-
-                rarad = Double.parseDouble(strings[Index.RARAD.ordinal()]);
-                decrad = Double.parseDouble(strings[Index.DECRAD.ordinal()]);
-                valInt = strings[Index.MAG.ordinal()];
-
+                int hipparcosID = Integer.parseInt(validOrDefault(lineTab[Index.HIP.ordinal()], lineTab[Index.HIP.ordinal()], "0"));
+                String name = validOrDefault(lineTab[Index.PROPER.ordinal()], lineTab[Index.PROPER.ordinal()],
+                        validOrDefault(lineTab[Index.BAYER.ordinal()], lineTab[Index.BAYER.ordinal()]
+                                + " " + lineTab[Index.CON.ordinal()], "? " + lineTab[Index.CON.ordinal()]));
+                double rarad = Double.parseDouble(lineTab[Index.RARAD.ordinal()]);
+                double decrad = Double.parseDouble(lineTab[Index.DECRAD.ordinal()]);
                 EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad, decrad);
-
-                if (!valInt.equals("")) {
-
-                    magnitude = Float.parseFloat(valInt);
-                } else {
-
-                    magnitude = 0;
-                }
-
-                valInt = strings[Index.CI.ordinal()];
-
-                if (!valInt.equals("")) {
-
-                    colorID = Float.parseFloat(valInt);
-                } else {
-
-                    colorID = 0;
-                }
+                float magnitude = Float.parseFloat(validOrDefault(lineTab[Index.MAG.ordinal()], lineTab[Index.MAG.ordinal()], "0"));
+                float colorID = Float.parseFloat(validOrDefault(lineTab[Index.CI.ordinal()], lineTab[Index.CI.ordinal()], "0"));
 
                 builder.addStar(new Star(hipparcosID, name, equatorialCoordinates, magnitude, colorID));
+                inputLine = bufferedReader.readLine();
             }
 
         }
+    }
+
+    private static String validOrDefault(String toTest, String validValue, String defaultValue) {
+        return !toTest.isEmpty() ? validValue : defaultValue;
     }
 
     /**

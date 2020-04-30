@@ -24,7 +24,7 @@ public final class StarCatalogue {
      * @param asterisms (List<Asterism>) : gives the list of asterisms
      */
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms) {
-
+        Map<Asterism, List<Integer>> trans = new HashMap<>();
         starList = List.copyOf(stars);
 
         Map<Star, Integer> starMap = new HashMap<>();
