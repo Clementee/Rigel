@@ -51,16 +51,16 @@ public final class DrawSky extends Application {
                         HorizontalCoordinates.ofDeg(3.7, -65);
                 HorizontalCoordinates projCenterNorth = HorizontalCoordinates.ofDeg(0, 23);
                 HorizontalCoordinates projCenterGlobal = HorizontalCoordinates.ofDeg(0, 90);
-                //Transform planeToCanvas = Transform.affine(260, 0, 0, -260, 400, 300);
+                Transform planeToCanvas = Transform.affine(260, 0, 0, -260, 400, 300);
                 StereographicProjection projection =
-                        new StereographicProjection(projCenter);
+                        new StereographicProjection(projCenterGlobal);
                 ObservedSky sky =
                         new ObservedSky(when, where, projection, catalogue);
 
                 Canvas canvas =
                         new Canvas(800, 600);
-                Transform planeToCanvas =
-                        Transform.affine(1300, 0, 0, -1300, 400, 300);
+                //Transform planeToCanvas =
+                //        Transform.affine(1300, 0, 0, -1300, 400, 300);
                 SkyCanvasPainter painter =
                         new SkyCanvasPainter(canvas);
 

@@ -216,35 +216,31 @@ public final class SkyCanvasPainter {
         ctx.setStroke(Color.RED);
         ctx.setFill(Color.RED);
 
-        HashMap<String, CartesianCoordinates> cardinalPoints = new HashMap<>();
-        cardinalPoints.put("N", stereographicProjection.apply(HorizontalCoordinates.ofDeg(0,-0.5)));
-        cardinalPoints.put("NE", stereographicProjection.apply(HorizontalCoordinates.ofDeg(45,-0.5)));
-        cardinalPoints.put("E", stereographicProjection.apply(HorizontalCoordinates.ofDeg(90, -0.5)));
-        cardinalPoints.put("SE", stereographicProjection.apply(HorizontalCoordinates.ofDeg(135, -0.5)));
-        cardinalPoints.put("S", stereographicProjection.apply(HorizontalCoordinates.ofDeg(180, -0.5)));
-        cardinalPoints.put("SO", stereographicProjection.apply(HorizontalCoordinates.ofDeg(225, -0.5)));
-        cardinalPoints.put("O", stereographicProjection.apply(HorizontalCoordinates.ofDeg(270, -0.5)));
-        cardinalPoints.put("NO", stereographicProjection.apply(HorizontalCoordinates.ofDeg(315, -0.5)));
+        ctx.setLineWidth(2);
+        ctx.setStroke(Color.RED);
+        ctx.setFill(Color.RED);
 
-        for (String s : cardinalPoints.keySet()) {
 
-            CartesianCoordinates cartesCoor = cardinalPoints.get(s);
-            Point2D point = transform.transform(cartesCoor.x(), cartesCoor.y());
-            
+        for (double i = 0 ; i < 360 ; i += 45) {
+
+            HorizontalCoordinates coords = HorizontalCoordinates.ofDeg(i,-0.5);
+
+            String octantName = coords.azOctantName("N","E","S","O");
+
+            Point2D point = transform.transform(stereographicProjection.apply(coords).x(), stereographicProjection.apply(coords).y());
+
             ctx.setTextAlign(TextAlignment.CENTER);
             ctx.setTextBaseline(VPos.TOP);
-            ctx.fillText(s, point.getX(), point.getY());
+            ctx.fillText(octantName, point.getX(), point.getY());
         }
 
         double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
-        System.out.println(r);
-       
+
         CartesianCoordinates centerCoords = stereographicProjection.circleCenterForParallel(HorizontalCoordinates.of(0,0));
         
         Point2D transformedCenter = transform.transform(centerCoords.x() ,centerCoords.y());
         Point2D rad = transform.deltaTransform(-r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
-        System.out.println(radius);
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);
         ctx.strokeOval(transformedCenter.getX() - radius/2,transformedCenter.getY() -radius/2,radius,radius);

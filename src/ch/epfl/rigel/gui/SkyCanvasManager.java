@@ -16,6 +16,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.transform.Transform;
 
+import javax.crypto.spec.PSource;
+
 import static java.lang.Math.abs;
 
 public class SkyCanvasManager {
@@ -81,9 +83,10 @@ public class SkyCanvasManager {
         });
         canvas.setOnScroll(evt -> {
             double before = viewingParametersBean.getFieldOfViewDeg();
-            double newFOV = before + (abs(evt.getDeltaX() > abs(evt.getDeltaY()) ? evt.getDeltaX() : evt.getDeltaY()));
+            double newFOV = before + (abs(evt.getDeltaX())> abs(evt.getDeltaY()) ? evt.getDeltaX() : evt.getDeltaY());
+
             if (zoomInter.contains(newFOV)) {
-                viewingParametersBean.setFieldOfViewDeg(before + (abs(evt.getDeltaX() > abs(evt.getDeltaY()) ? evt.getDeltaX() : evt.getDeltaY())));
+                viewingParametersBean.setFieldOfViewDeg(newFOV);
             }
         });
 
@@ -133,7 +136,6 @@ public class SkyCanvasManager {
     }
 
     private void updateCanvas() {
-        System.out.println("ceci est un affichage");
         painter.clear();
         painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
         painter.drawHorizon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
