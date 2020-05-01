@@ -7,6 +7,8 @@ import ch.epfl.rigel.coordinates.CartesianCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
 import ch.epfl.rigel.math.Angle;
+import ch.epfl.rigel.math.ClosedInterval;
+import ch.epfl.rigel.math.Interval;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -35,6 +37,7 @@ public class SkyCanvasManager {
 
     private Canvas canvas = new Canvas();
     private SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
+    private ClosedInterval zoomInter = ClosedInterval.of(30, 150);
 
     public SkyCanvasManager(StarCatalogue starCatalogue, DateTimeBean dateTimeBean, ObserverLocationBean observerLocationBean, ViewingParametersBean viewingParametersBean) {
         mouseAzDeg = new SimpleObjectProperty<>(null);
@@ -54,16 +57,16 @@ public class SkyCanvasManager {
                 new ObservedSky(dateTimeBean.getZonedDateTime(), observerLocationBean.getCoordinates(), projection.getValue(), starCatalogue)
         );
 
-        projection.addListener((e, i,o)->{
-            test();
+        projection.addListener((e, i, o) -> {
+            updateCanvas();
         });
 
-        observedSky.addListener((e, i,o)->{
-            test();
+        observedSky.addListener((e, i, o) -> {
+            updateCanvas();
         });
 
-        planeToCanvas.addListener((e, i,o)->{
-            test();
+        planeToCanvas.addListener((e, i, o) -> {
+            updateCanvas();
         });
 
         canvas = canvas();
@@ -78,7 +81,10 @@ public class SkyCanvasManager {
         });
         canvas.setOnScroll(evt -> {
             double before = viewingParametersBean.getFieldOfViewDeg();
-            viewingParametersBean.setFieldOfViewDeg(before + (abs(evt.getDeltaX() > abs(evt.getDeltaY()) ? evt.getDeltaX() : evt.getDeltaY())));
+            double newFOV = before + (abs(evt.getDeltaX() > abs(evt.getDeltaY()) ? evt.getDeltaX() : evt.getDeltaY()));
+            if (zoomInter.contains(newFOV)) {
+                viewingParametersBean.setFieldOfViewDeg(before + (abs(evt.getDeltaX() > abs(evt.getDeltaY()) ? evt.getDeltaX() : evt.getDeltaY())));
+            }
         });
 
 
@@ -126,7 +132,7 @@ public class SkyCanvasManager {
         return canvas;
     }
 
-    private void test() {
+    private void updateCanvas() {
         System.out.println("ceci est un affichage");
         painter.clear();
         painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
