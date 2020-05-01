@@ -1,6 +1,7 @@
 package tutos;
 
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -9,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
 
 public class EpflLogo extends Application {
