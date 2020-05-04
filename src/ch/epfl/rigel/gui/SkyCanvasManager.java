@@ -92,7 +92,6 @@ public class SkyCanvasManager {
             switch (event.getCode()) {
                 case LEFT:
                     modifyCenterPropertyAzDeg(-10.0);
-
                     break;
                 case RIGHT:
                     modifyCenterPropertyAzDeg(10.0);
@@ -101,7 +100,7 @@ public class SkyCanvasManager {
                     modifyCenterPropertyAltDeg(-5);
                     break;
                 case UP:
-                   modifyCenterPropertyAltDeg(5);
+                    modifyCenterPropertyAltDeg(5);
                     break;
                 default:
                     break;
@@ -181,12 +180,14 @@ public class SkyCanvasManager {
 
     private void modifyCenterPropertyAzDeg(double valueToAdd) {
         double newValue = viewingParametersBean.getCenter().azDeg() + valueToAdd;
-        viewingParametersBean.setCenter(HorizontalCoordinates.of(normalizePositive(ofDeg(newValue)), viewingParametersBean.getCenter().alt()));
+        System.out.println(normalizePositive(ofDeg(newValue)));
+        newValue = abs(normalizePositive(ofDeg(newValue)) - TAU) < 10e-6 ? normalizePositive(ofDeg(newValue)) - 10e-4 : normalizePositive(ofDeg(newValue));
+        viewingParametersBean.setCenter(HorizontalCoordinates.of(newValue, viewingParametersBean.getCenter().alt()));
     }
 
     private void modifyCenterPropertyAltDeg(double valueToAdd) {
         double newValue = viewingParametersBean.getCenter().altDeg() + valueToAdd;
-        System.out.println(newValue);
-        viewingParametersBean.setCenter(HorizontalCoordinates.of(viewingParametersBean.getCenter().az(), ClosedInterval.symmetric(TAU/2.0).re(ofDeg(newValue))));
+            viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(),ClosedInterval.of(5,90).clip(newValue)));
+
     }
 }

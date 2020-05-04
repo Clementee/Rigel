@@ -3,6 +3,7 @@ package ch.epfl.rigel.math;
 import java.util.Locale;
 
 import static ch.epfl.rigel.Preconditions.checkArgument;
+import static java.lang.Math.floorMod;
 
 /**
  * A Closed Interval
@@ -76,6 +77,15 @@ public final class ClosedInterval extends Interval {
         if (v < low) {
             return low;
         } else return Math.min(v, high);
+    }
+
+    public double reduce(double v){
+
+        double x = v - low;
+        double y = high - low;
+        double floorMod = x - (y * Math.floor(x / y));
+
+        return low + floorMod;
     }
 
     /**
