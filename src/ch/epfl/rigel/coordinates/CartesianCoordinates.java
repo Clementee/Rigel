@@ -1,5 +1,7 @@
 package ch.epfl.rigel.coordinates;
 
+import javafx.geometry.Point2D;
+
 import java.util.Locale;
 
 /**
@@ -55,6 +57,16 @@ public final class CartesianCoordinates {
     public double y() {
 
         return y;
+    }
+
+    /**
+     * A Point2D to Cartesian Coordinates converter
+     *
+     * @param point2D (Point2D) : the coordinates of the point that has to be converted
+     * @return (double ) : the converted point
+     */
+    public static CartesianCoordinates point2DToCartesianCoordinates(Point2D point2D){
+        return CartesianCoordinates.of(point2D.getX(), point2D.getY());
     }
 
     /**

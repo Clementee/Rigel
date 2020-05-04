@@ -4,9 +4,6 @@ import ch.epfl.rigel.astronomy.HygDatabaseLoader;
 import ch.epfl.rigel.astronomy.StarCatalogue;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
-import ch.epfl.rigel.gui.DateTimeBean;
-import ch.epfl.rigel.gui.ObserverLocationBean;
-import ch.epfl.rigel.gui.ViewingParametersBean;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,6 +13,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
+
+import static javafx.application.Application.launch;
 
 public final class UseSkyCanvasManager extends Application {
     public static void main(String[] args) { launch(args); }
@@ -71,8 +70,6 @@ public final class UseSkyCanvasManager extends Application {
             primaryStage.show();
 
             sky.requestFocus();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
