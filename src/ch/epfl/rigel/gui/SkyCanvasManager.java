@@ -83,13 +83,9 @@ public class SkyCanvasManager {
 
         canvas = canvas();
 
-        mouseHorizontalPosition.addListener((e, i, o) -> {
-
-        });
 
         canvas.setOnKeyPressed(event -> {
             canvas.requestFocus();
-            System.out.println(viewingParametersBean.getCenter());
             switch (event.getCode()) {
                 case LEFT:
                     modifyCenterPropertyAzDeg(-10.0);
@@ -112,16 +108,23 @@ public class SkyCanvasManager {
 
         canvas.setOnMousePressed(event -> {
             if (event.isPrimaryButtonDown()) {
-                System.out.println("test");
                 canvas.requestFocus();
             }
         });
 
         canvas.setOnMouseMoved(event -> {
-            mousePosition.set(CartesianCoordinates.of(event.getX(),event.getY()));
-            System.out.println(event.getX());
-            System.out.println(event.getY());
-            System.out.println(observedSky.getValue().objectClosestTo(mousePosition.get(),1));
+            mousePosition.set(CartesianCoordinates.of(event.getX(), event.getY()));
+            Point2D point = Point2D.ZERO;
+            try {
+                point = planeToCanvas.getValue().inverseTransform(mousePosition.getValue().x(), mousePosition.get().y());
+            } catch (NonInvertibleTransformException e) {
+                e.printStackTrace();
+            }
+            objectUnderMouse.set(observedSky.getValue().objectClosestTo(CartesianCoordinates.of(point.getX(), point.getY()), 1).get());
+        });
+
+        objectUnderMouse.addListener((e,i,o)->{
+            System.out.println(o);
         });
 
         canvas.setOnScroll(evt -> {
@@ -185,14 +188,13 @@ public class SkyCanvasManager {
 
     private void modifyCenterPropertyAzDeg(double valueToAdd) {
         double newValue = viewingParametersBean.getCenter().azDeg() + valueToAdd;
-        System.out.println(normalizePositive(ofDeg(newValue)));
         newValue = abs(normalizePositive(ofDeg(newValue)) - TAU) < 10e-6 ? normalizePositive(ofDeg(newValue)) - 10e-4 : normalizePositive(ofDeg(newValue));
         viewingParametersBean.setCenter(HorizontalCoordinates.of(newValue, viewingParametersBean.getCenter().alt()));
     }
 
     private void modifyCenterPropertyAltDeg(double valueToAdd) {
         double newValue = viewingParametersBean.getCenter().altDeg() + valueToAdd;
-        viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(),ClosedInterval.of(5,90).clip(newValue)));
+        viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(), ClosedInterval.of(5, 90).clip(newValue)));
 
     }
 }
