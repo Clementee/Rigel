@@ -117,6 +117,10 @@ public class SkyCanvasManager {
         });
 
         canvas.setOnMouseMoved(event -> {
+            mousePosition.set(CartesianCoordinates.of(event.getX(),event.getY()));
+            System.out.println(event.getX());
+            System.out.println(event.getY());
+            System.out.println(observedSky.getValue().objectClosestTo(mousePosition.get(),1));
         });
 
         canvas.setOnScroll(evt -> {
