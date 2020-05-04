@@ -26,7 +26,6 @@ public final class StereographicProjection implements Function<HorizontalCoordin
     public StereographicProjection(HorizontalCoordinates center) {
         this.center = center;
         centerLambda = center.lon();
-
         double centerPhy = center.lat();
 
         cosPhy = Math.cos(centerPhy);
@@ -116,10 +115,10 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      *
      * @throws UnsupportedOperationException : throws this exception when the method is called
      */
-    @Override
-    public final int hashCode() {
-        throw new UnsupportedOperationException();
-    }
+    //@Override
+    //public final int hashCode() {
+    //    throw new UnsupportedOperationException();
+    //}
 
     /**
      * StereographicProjection overrode method throwing UOE
@@ -127,10 +126,10 @@ public final class StereographicProjection implements Function<HorizontalCoordin
      * @param obj (Object) : gives the object to compare
      * @throws UnsupportedOperationException : throws this exception when the method is called
      */
-    @Override
-    public final boolean equals(Object obj) {
-        throw new UnsupportedOperationException();
-    }
+    //@Override
+    //public final boolean equals(Object obj) {
+     //   throw new UnsupportedOperationException();
+    //}
 
     /**
      * StereographicProjection overrode method returning a string with the coordinates of the center
