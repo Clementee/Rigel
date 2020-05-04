@@ -63,7 +63,8 @@ public class SkyCanvasManager {
         }, canvas.heightProperty(), canvas.widthProperty(), projection, viewingParametersBean.fieldOfViewDegProperty());
 
         observedSky = Bindings.createObjectBinding(() ->
-                new ObservedSky(dateTimeBean.getZonedDateTime(), observerLocationBean.getCoordinates(), projection.getValue(), starCatalogue)
+                        new ObservedSky(dateTimeBean.getZonedDateTime(), observerLocationBean.getCoordinates(), projection.getValue(), starCatalogue),
+                dateTimeBean.dateProperty(), dateTimeBean.zoneProperty(), dateTimeBean.timeProperty(), projection, observerLocationBean.coordinatesProperty()
         );
 
         projection.addListener((e, i, o) -> {
@@ -191,7 +192,7 @@ public class SkyCanvasManager {
 
     private void modifyCenterPropertyAltDeg(double valueToAdd) {
         double newValue = viewingParametersBean.getCenter().altDeg() + valueToAdd;
-            viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(),ClosedInterval.of(5,90).clip(newValue)));
+        viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(),ClosedInterval.of(5,90).clip(newValue)));
 
     }
 }
