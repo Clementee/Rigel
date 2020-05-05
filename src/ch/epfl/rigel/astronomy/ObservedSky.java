@@ -26,15 +26,15 @@ public class ObservedSky {
     private List<Planet> planetList;
     private List<Star> starList;
     private List<CartesianCoordinates> planetCoords, starCoords;
-    private Map<CelestialObject, CartesianCoordinates>  celestialObjectMap;
+    private Map<CelestialObject, CartesianCoordinates> celestialObjectMap;
 
     /**
      * ObservedSky public constructor initializing some values
      *
-     * @param when (ZoneDateTime) : the date / time zone couple
-     * @param where (GeographicCoordinates) : the place where we observe the sky
+     * @param when                    (ZoneDateTime) : the date / time zone couple
+     * @param where                   (GeographicCoordinates) : the place where we observe the sky
      * @param stereographicProjection (StereographicProjection) : the projection allowing to have all of our Celestial Object in our 2D plan
-     * @param catalogue (StarCatalogue) : the data base of all the stars and the asterisms
+     * @param catalogue               (StarCatalogue) : the data base of all the stars and the asterisms
      */
     public ObservedSky(ZonedDateTime when, GeographicCoordinates where, StereographicProjection stereographicProjection, StarCatalogue catalogue) {
 
@@ -85,10 +85,8 @@ public class ObservedSky {
         starList = catalogue.stars();
 
         for (Star star : starList) {
-
             CartesianCoordinates starCoord = stereographicProjection
                     .apply(equatorialToHorizontalConversion.apply(star.equatorialPos()));
-
             starCoords.add(starCoord);
             celestialObjectMap.put(star, starCoord);
         }
@@ -108,7 +106,7 @@ public class ObservedSky {
      *
      * @return sunCoords  (CartesianCoordinates) : return the coordinates of the sun
      */
-    public CartesianCoordinates sunPosition(){
+    public CartesianCoordinates sunPosition() {
         return sunCoords;
     }
 
@@ -117,7 +115,7 @@ public class ObservedSky {
      *
      * @return moon  (Moon) : return the moon
      */
-    public Moon moon(){
+    public Moon moon() {
         return moon;
     }
 
@@ -126,25 +124,25 @@ public class ObservedSky {
      *
      * @return moonCoords  (CartesianCoordinates) : return the coordinates of the moon
      */
-    public CartesianCoordinates moonPosition(){
+    public CartesianCoordinates moonPosition() {
         return moonCords;
     }
 
     /**
      * ObservedSky public method returning the list of planets
      *
-     * @return (List<Planet>) : return the list of planets
+     * @return (List < Planet >) : return the list of planets
      */
-    public List<Planet> planets(){
+    public List<Planet> planets() {
         return List.copyOf(planetList);
     }
 
     /**
      * ObservedSky public method returning the list of stars
      *
-     * @return (List<Star>) : return the list of stars
+     * @return (List < Star >) : return the list of stars
      */
-    public List<Star> stars(){
+    public List<Star> stars() {
         return List.copyOf(starList);
     }
 
@@ -152,20 +150,20 @@ public class ObservedSky {
      * Observed sky public method giving all the stars positions
      *
      * @return (double[]) :  an array containing all the cartesian coordinates, for example,
-     *                       if our array contains only the coordinates(x,y) of the Celestial Object,
-     *                       the array will be [x ; y]
+     * if our array contains only the coordinates(x,y) of the Celestial Object,
+     * the array will be [x ; y]
      */
-    public double[] starsPosition(){
+    public double[] starsPosition() {
 
         double[] tab = new double[10134];
-        int i =0;
+        int i = 0;
 
         for (CartesianCoordinates coordinates : starCoords) {
 
-            tab[i]=coordinates.x();
+            tab[i] = coordinates.x();
             i++;
-            
-            tab[i]=coordinates.y();
+
+            tab[i] = coordinates.y();
             i++;
         }
 
@@ -176,20 +174,20 @@ public class ObservedSky {
      * ObservedSky public method giving all the planet positions
      *
      * @return (double[]) :  an array containing all the cartesian coordinates, for example,
-     *                       if our array contains only the coordinates(x,y) of the Celestial Object,
-     *                       the array will be [x ; y]
+     * if our array contains only the coordinates(x,y) of the Celestial Object,
+     * the array will be [x ; y]
      */
-    public double[] planetsPosition(){
+    public double[] planetsPosition() {
 
         double[] tab = new double[14];
-        int i =0;
+        int i = 0;
 
         for (CartesianCoordinates planetCoord : planetCoords) {
 
-            tab[i]=planetCoord.x();
+            tab[i] = planetCoord.x();
             i++;
-            
-            tab[i]=planetCoord.y();
+
+            tab[i] = planetCoord.y();
             i++;
         }
 
@@ -199,34 +197,32 @@ public class ObservedSky {
     /**
      * ObservedSky public method returning the set of asterisms in the observed sky
      *
-     * @return (Set<Asterism>) : return the set of asterisms
+     * @return (Set < Asterism >) : return the set of asterisms
      */
-    public Set<Asterism> asterism(){
+    public Set<Asterism> asterism() {
         return Set.copyOf(catalogue.asterisms());
     }
 
-    public List<Integer> asterismIndexList(Asterism asterism){
-        return catalogue.asterismIndices(asterism); 
+    public List<Integer> asterismIndexList(Asterism asterism) {
+        return catalogue.asterismIndices(asterism);
     }
 
     /**
      * Method finding the closest Celestial object to a point, here the cursor, or returning nothing if there is no object closest than the minimal distance
      *
      * @param coordinates (CartesianCoordinates) : the position of our cursor
-     * @param distance (double) : the minimal distance
-     * @return (Optional (CelestialObject)) : an Optional containing our closest Celestial object or nothing if the object does not exist
+     * @param distance    (double) : the minimal distance
+     * @return (Optional ( CelestialObject)) : an Optional containing our closest Celestial object or nothing if the object does not exist
      */
     public Optional<CelestialObject> objectClosestTo(CartesianCoordinates coordinates, double distance) {
 
         MapComparator comp = new MapComparator(celestialObjectMap, coordinates);
         CelestialObject selectedObject = Collections.min(celestialObjectMap.keySet(), comp);
 
-        if (celestialObjectMap.containsKey(selectedObject) && (distance(celestialObjectMap.get(selectedObject), coordinates)) <= distance){
+        if (celestialObjectMap.containsKey(selectedObject) && (distance(celestialObjectMap.get(selectedObject), coordinates)) <= distance) {
 
             return Optional.of(selectedObject);
-        }
-
-        else{
+        } else {
 
             return Optional.empty();
         }
@@ -239,9 +235,9 @@ public class ObservedSky {
      * @param o2 (CartesianCoordinates) : gives the cartesian coordinates of the second object
      * @return (double) : the distance between the two objects
      */
-    private static double distance(CartesianCoordinates o1, CartesianCoordinates o2){
+    private static double distance(CartesianCoordinates o1, CartesianCoordinates o2) {
 
-        return Math.hypot( o1.x() - o2.x() , o1.y() - o2.y());
+        return Math.hypot(o1.x() - o2.x(), o1.y() - o2.y());
     }
 
     //Private class MapComparator which role is to compare two maps
@@ -254,13 +250,13 @@ public class ObservedSky {
         /**
          * MapComparator private constructor initializing some values
          *
-         * @param map      (Map<CelestialObject, CartesianCoordinates>) : gives the map of celestial objects linked with their coordinates
-         * @param pointer  (CartesianCoordinates) : gives the cartesian coordinates of the position from which we observe the sky
+         * @param map     (Map<CelestialObject, CartesianCoordinates>) : gives the map of celestial objects linked with their coordinates
+         * @param pointer (CartesianCoordinates) : gives the cartesian coordinates of the position from which we observe the sky
          */
-        private MapComparator(Map<CelestialObject, CartesianCoordinates> map, CartesianCoordinates pointer){
+        private MapComparator(Map<CelestialObject, CartesianCoordinates> map, CartesianCoordinates pointer) {
 
-            this.map=map;
-            this.pointer=pointer;
+            this.map = map;
+            this.pointer = pointer;
         }
 
         /**
@@ -273,10 +269,9 @@ public class ObservedSky {
         @Override
         public int compare(Object o1, Object o2) {
 
-            if ( distance(map.get(o1), pointer) >= distance(map.get(o2), pointer)) {
+            if (distance(map.get(o1), pointer) >= distance(map.get(o2), pointer)) {
                 return 1;
-            }
-            else {
+            } else {
                 return -1;
             }
         }

@@ -37,7 +37,7 @@ public final class SkyCanvasPainter {
      * SkyCanvasPainter public constructor initializing the canvas and the
      * graphic context we will be using to draw the sky
      *
-     * @param canvas   (Canvas) : set the canvas we are going to use to draw the sky
+     * @param canvas (Canvas) : set the canvas we are going to use to draw the sky
      */
     public SkyCanvasPainter(Canvas canvas) {
         this.canvas = canvas;
@@ -46,7 +46,6 @@ public final class SkyCanvasPainter {
 
     /**
      * SkyCanvasPainter public method used to clear the canvas by reformatting it as a black canvas
-     *
      */
     public void clear() {
         ctx.setFill(Color.BLACK);
@@ -56,11 +55,11 @@ public final class SkyCanvasPainter {
     /**
      * SkyCanvasPainter public method used to draw the multiple stars onto the canvas in their right position
      *
-     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param observedSky             (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
      * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
      *                                stars in the canvas
-     * @param transform (Transform) : gives the transformation we will be using to modify the projection
-     *                  in the good frame
+     * @param transform               (Transform) : gives the transformation we will be using to modify the projection
+     *                                in the good frame
      */
     public void drawStars(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
@@ -77,41 +76,39 @@ public final class SkyCanvasPainter {
             ctx.setLineWidth(1);
 
 
-            for(int i = 0 ; i < starFromAsterism.size();i++){
+            for (int i = 0; i < starFromAsterism.size(); i++) {
 
                 Star star = starFromAsterism.get(i);
-                double x1 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
-                double y1 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
+                double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
+                double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
 
                 Point2D begTransformed = transform.transform(x1, y1);
 
-                if(i<starFromAsterism.size()-1){
+                if (i < starFromAsterism.size() - 1) {
 
-                    Star star2 = starFromAsterism.get(i+1);
+                    Star star2 = starFromAsterism.get(i + 1);
+                    int u = observedSky.stars().indexOf(star2);
+                    double x2 = starPosition[2 * u];
+                    double y2 = starPosition[2 * u + 1];
 
-                    double x2 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star2))];
-                    double y2 = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star2)) + 1];
+                    Point2D endTransformed = transform.transform(x2, y2);
 
-                    Point2D endTransformed = transform.transform(x2,y2);
-
-                    if(bound.contains(endTransformed) || bound.contains(begTransformed)){
-                        ctx.strokeLine(begTransformed.getX(),begTransformed.getY(),endTransformed.getX(),endTransformed.getY());
+                    if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
+                        ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
                     }
                 }
             }
         }
 
-        for (Star star : observedSky.stars()) {
-
+        for (int i = 0; i < starPosition.length; i += 2) {
+            Star star = observedSky.stars().get(i / 2);
             starColor = BlackBodyColor
                     .colorForTemperature(star.colorTemperature());
-
             double starDiameter = transform.deltaTransform(0, objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
-            int i = observedSky.stars().indexOf(star);
-            double x =starPosition[2 * (i)];
-            double y = starPosition[2 * (i) + 1];
+            double x = starPosition[i];
+            double y = starPosition[i + 1];
 
-            Point2D point = transform.transform(x,y);
+            Point2D point = transform.transform(x, y);
 
             ctx.setFill(starColor);
             drawCircle(ctx, point.getX(), point.getY(), starDiameter);
@@ -121,11 +118,11 @@ public final class SkyCanvasPainter {
     /**
      * SkyCanvasPainter public method used to draw the planets onto the canvas in their right position
      *
-     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param observedSky             (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
      * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
      *                                stars in the canvas
-     * @param transform (Transform) : gives the transformation we will be using to modify the projection
-     *                  in the good frame
+     * @param transform               (Transform) : gives the transformation we will be using to modify the projection
+     *                                in the good frame
      */
     public void drawPlanets(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
@@ -141,18 +138,18 @@ public final class SkyCanvasPainter {
             Point2D point = transform.transform(x, y);
 
             ctx.setFill(PLANET_COLOR);
-            drawCircle(ctx,point.getX(),point.getY(),planetDiameter);
+            drawCircle(ctx, point.getX(), point.getY(), planetDiameter);
         }
     }
 
     /**
      * SkyCanvasPainter public method used to draw the sun onto the canvas in their right position
      *
-     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param observedSky             (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
      * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
      *                                sun in the canvas
-     * @param transform (Transform) : gives the transformation we will be using to modify the projection
-     *                  in the good frame
+     * @param transform               (Transform) : gives the transformation we will be using to modify the projection
+     *                                in the good frame
      */
     public void drawSun(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
@@ -160,17 +157,17 @@ public final class SkyCanvasPainter {
         final Color SUN_YELLOW = Color.YELLOW;
         final Color SUN_YELLOW2 = Color.rgb(255, 255, 0, 0.25);
 
-        final double sunAngularSize = transform.deltaTransform(0,observedSky.sun().angularSize()).magnitude()/2;
+        final double sunAngularSize = transform.deltaTransform(0, observedSky.sun().angularSize()).magnitude() / 2;
         final double x = observedSky.sunPosition().x();
         final double y = observedSky.sunPosition().y();
 
         Point2D point = transform.transform(x, y);
 
         ctx.setFill(SUN_YELLOW2);
-        drawCircle(ctx, point.getX(), point.getY(), 2.2*sunAngularSize);
+        drawCircle(ctx, point.getX(), point.getY(), 2.2 * sunAngularSize);
 
         ctx.setFill(SUN_YELLOW);
-        drawCircle(ctx, point.getX(), point.getY(), (2+sunAngularSize));
+        drawCircle(ctx, point.getX(), point.getY(), (2 + sunAngularSize));
 
         ctx.setFill(SUN_WHITE);
         drawCircle(ctx, point.getX(), point.getY(), sunAngularSize);
@@ -180,17 +177,17 @@ public final class SkyCanvasPainter {
     /**
      * SkyCanvasPainter public method used to draw the moon onto the canvas in their right position
      *
-     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param observedSky             (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
      * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
      *                                moon in the canvas
-     * @param transform (Transform) : gives the transformation we will be using to modify the projection
-     *                  in the good frame
+     * @param transform               (Transform) : gives the transformation we will be using to modify the projection
+     *                                in the good frame
      */
     public void drawMoon(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
         final Color MOON_COLOR = Color.WHITE;
 
-        final double moonAngSize = transform.deltaTransform(0,stereographicProjection.applyToAngle(observedSky.moon().angularSize())).magnitude();
+        final double moonAngSize = transform.deltaTransform(0, stereographicProjection.applyToAngle(observedSky.moon().angularSize())).magnitude();
         final double x = observedSky.moonPosition().x();
         final double y = observedSky.moonPosition().y();
 
@@ -203,11 +200,11 @@ public final class SkyCanvasPainter {
     /**
      * SkyCanvasPainter public method used to draw the horizon and the cardinal points onto the canvas in their right position
      *
-     * @param observedSky (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
+     * @param observedSky             (ObservedSky) : gives the components of the sky we are going to draw onto the canvas
      * @param stereographicProjection (StereographicProjection) : offers the projection we will be using to place the
      *                                horizon and the cardinal points in the canvas
-     * @param transform (Transform) : gives the transformation we will be using to modify the projection
-     *                  in the good frame
+     * @param transform               (Transform) : gives the transformation we will be using to modify the projection
+     *                                in the good frame
      */
     public void drawHorizon(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
 
@@ -220,11 +217,11 @@ public final class SkyCanvasPainter {
         ctx.setFill(Color.RED);
 
 
-        for (double i = 0 ; i < 360 ; i += 45) {
+        for (double i = 0; i < 360; i += 45) {
 
-            HorizontalCoordinates coords = HorizontalCoordinates.ofDeg(i,-0.5);
+            HorizontalCoordinates coords = HorizontalCoordinates.ofDeg(i, -0.5);
 
-            String octantName = coords.azOctantName("N","E","S","O");
+            String octantName = coords.azOctantName("N", "E", "S", "O");
 
             Point2D point = transform.transform(stereographicProjection.apply(coords).x(), stereographicProjection.apply(coords).y());
 
@@ -233,16 +230,16 @@ public final class SkyCanvasPainter {
             ctx.fillText(octantName, point.getX(), point.getY());
         }
 
-        double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
+        double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0, 0));
 
-        CartesianCoordinates centerCoords = stereographicProjection.circleCenterForParallel(HorizontalCoordinates.of(0,0));
+        CartesianCoordinates centerCoords = stereographicProjection.circleCenterForParallel(HorizontalCoordinates.of(0, 0));
 
-        Point2D transformedCenter = transform.transform(centerCoords.x() ,centerCoords.y());
+        Point2D transformedCenter = transform.transform(centerCoords.x(), centerCoords.y());
         Point2D rad = transform.deltaTransform(-r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);
-        ctx.strokeOval(transformedCenter.getX() - radius/2,transformedCenter.getY() -radius/2,radius,radius);
+        ctx.strokeOval(transformedCenter.getX() - radius / 2, transformedCenter.getY() - radius / 2, radius, radius);
     }
 
     /**
@@ -252,7 +249,7 @@ public final class SkyCanvasPainter {
      * @return (double) : return the capped magnitude
      */
     private double cappedMagnitude(double magnitude) {
-        return ClosedInterval.of(-2,5).clip(magnitude);
+        return ClosedInterval.of(-2, 5).clip(magnitude);
     }
 
     /**
@@ -268,7 +265,7 @@ public final class SkyCanvasPainter {
     /**
      * SkyCanvasPainter private method used to calculate the diameter of some celestial objects
      *
-     * @param magnitude (double) : gives the magnitude we want to cap
+     * @param magnitude  (double) : gives the magnitude we want to cap
      * @param projection (StereographicProjection) : gives the projection used to set the objects onto the canvas
      * @return (double) : return the diameter of the chosen object
      */
@@ -280,11 +277,11 @@ public final class SkyCanvasPainter {
      * SkyCanvasPainter private method used to draw a circle
      *
      * @param ctx (GraphicsContext) : gives the place of canvas where we want to draw the circle
-     * @param x (double) : gives the x for the center of the circle
-     * @param y (double) : gives the y for the center of the circle
-     * @param d (double) : gives the diameter of the circle we search to draw
+     * @param x   (double) : gives the x for the center of the circle
+     * @param y   (double) : gives the y for the center of the circle
+     * @param d   (double) : gives the diameter of the circle we search to draw
      */
-    private static void drawCircle(GraphicsContext ctx, double x, double y, double d){
-        ctx.fillOval(x-d/2, y-d/2, d,d);
+    private static void drawCircle(GraphicsContext ctx, double x, double y, double d) {
+        ctx.fillOval(x - d / 2, y - d / 2, d, d);
     }
 }

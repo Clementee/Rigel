@@ -43,7 +43,7 @@ public class SkyCanvasManager {
     private ViewingParametersBean viewingParametersBean;
 
     private ObservableValue<StereographicProjection> projection;
-    private ObservableValue<Transform> planeToCanvas;
+    private ObjectBinding<Transform> planeToCanvas;
     private ObservableValue<ObservedSky> observedSky;
 
     private ObjectProperty<Point2D> mousePosition = new SimpleObjectProperty<>(Point2D.ZERO);
@@ -92,20 +92,17 @@ public class SkyCanvasManager {
 
         mouseAltDeg = Bindings.createDoubleBinding(() -> mouseHorizontalPosition.getValue().altDeg(), mouseHorizontalPosition);
 
-        objectUnderMouse = Bindings.createObjectBinding(() ->{
-            if(mousePosition.get()==Point2D.ZERO)
-                return null;
-            else
-                return observedSky.getValue().objectClosestTo(point2DToCartesianCoordinates(planeToCanvas.getValue().transform(mousePosition.getValue())), 10).orElse(null);},
+        objectUnderMouse = Bindings.createObjectBinding(() -> {
+                    if (mousePosition.get() == Point2D.ZERO)
+                        return null;
+                    else
+                        return observedSky.getValue().objectClosestTo(point2DToCartesianCoordinates(planeToCanvas.get().inverseTransform(mousePosition.getValue())), planeToCanvas.get().inverseTransform(0, 10).magnitude()).orElse(null);
+                },
                 observedSky, planeToCanvas, mousePosition);
-
-        objectUnderMouse.addListener((e,i,o)-> System.out.println(o));
 
         canvas.setOnMousePressed(event -> {
             if (event.isPrimaryButtonDown()) {
                 canvas.requestFocus();
-                System.out.println(point2DToCartesianCoordinates(planeToCanvas.getValue().transform(mousePosition.getValue())));
-                System.out.println(planeToCanvas.getValue());
             }
 
 
