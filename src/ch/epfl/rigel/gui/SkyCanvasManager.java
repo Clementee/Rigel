@@ -112,10 +112,10 @@ public class SkyCanvasManager {
             canvas.requestFocus();
             switch (event.getCode()) {
                 case LEFT:
-                    modifyCenterPropertyAzDeg(-10.0);
+                    modifyCenterPropertyAzDeg(-7.0);
                     break;
                 case RIGHT:
-                    modifyCenterPropertyAzDeg(10.0);
+                    modifyCenterPropertyAzDeg(7.0);
                     break;
                 case DOWN:
                     modifyCenterPropertyAltDeg(-5);
