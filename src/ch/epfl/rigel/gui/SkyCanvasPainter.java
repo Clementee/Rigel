@@ -67,7 +67,7 @@ public final class SkyCanvasPainter {
         final Color ASTERISM_COLOR = Color.BLUE;
         Color starColor;
         Bounds bound = canvas.getBoundsInLocal();
-
+        double[] starPosition = observedSky.starsPosition();
 
         for (Asterism asterism : observedSky.asterism()) {
 
@@ -107,10 +107,9 @@ public final class SkyCanvasPainter {
                     .colorForTemperature(star.colorTemperature());
 
             double starDiameter = transform.deltaTransform(0, objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
-
-
-            double x = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star))];
-            double y = observedSky.starsPosition()[2 * (observedSky.stars().indexOf(star)) + 1];
+            int i = observedSky.stars().indexOf(star);
+            double x =starPosition[2 * (i)];
+            double y = starPosition[2 * (i) + 1];
 
             Point2D point = transform.transform(x,y);
 
@@ -237,7 +236,7 @@ public final class SkyCanvasPainter {
         double r = stereographicProjection.circleRadiusForParallel(HorizontalCoordinates.of(0,0));
 
         CartesianCoordinates centerCoords = stereographicProjection.circleCenterForParallel(HorizontalCoordinates.of(0,0));
-        
+
         Point2D transformedCenter = transform.transform(centerCoords.x() ,centerCoords.y());
         Point2D rad = transform.deltaTransform(-r, r);
         double radius = Math.abs(rad.getX()) + Math.abs(rad.getY());

@@ -99,6 +99,6 @@ public final class CartesianCoordinates {
     @Override
     public final String toString() {
 
-        return String.format(Locale.ROOT, "(abscisse =%.4f°, ordonnée =%.4f°)", x(), y());
+        return String.format(Locale.ROOT, "(abscisse =%.4f, ordonnée =%.4f)", x(), y());
     }
 }

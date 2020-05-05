@@ -47,7 +47,7 @@ public class SkyCanvasManager {
     private ObservableValue<ObservedSky> observedSky;
 
     private ObjectProperty<Point2D> mousePosition = new SimpleObjectProperty<>(Point2D.ZERO);
-    private ObservableValue<HorizontalCoordinates> mouseHorizontalPosition = new SimpleObjectProperty<>(null);
+    private ObjectBinding<HorizontalCoordinates> mouseHorizontalPosition;
 
     private Canvas canvas = new Canvas();
     private SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
@@ -86,22 +86,29 @@ public class SkyCanvasManager {
 
         mouseHorizontalPosition = Bindings.createObjectBinding(() ->
                         projection.getValue().inverseApply(point2DToCartesianCoordinates(planeToCanvas.getValue().transform(mousePosition.getValue()))),
-                planeToCanvas, mouseHorizontalPosition, projection);
+                planeToCanvas, mousePosition, projection);
 
         mouseAzDeg = Bindings.createDoubleBinding(() -> mouseHorizontalPosition.getValue().azDeg(), mouseHorizontalPosition);
 
         mouseAltDeg = Bindings.createDoubleBinding(() -> mouseHorizontalPosition.getValue().altDeg(), mouseHorizontalPosition);
 
-        objectUnderMouse = Bindings.createObjectBinding(() ->
-             observedSky.getValue().objectClosestTo(point2DToCartesianCoordinates(planeToCanvas.getValue().transform(mousePosition.getValue())), 10).orElse(null),
-                planeToCanvas, observedSky, mousePosition);
+        objectUnderMouse = Bindings.createObjectBinding(() ->{
+            if(mousePosition.get()==Point2D.ZERO)
+                return null;
+            else
+                return observedSky.getValue().objectClosestTo(point2DToCartesianCoordinates(planeToCanvas.getValue().transform(mousePosition.getValue())), 10).orElse(null);},
+                observedSky, planeToCanvas, mousePosition);
 
         objectUnderMouse.addListener((e,i,o)-> System.out.println(o));
 
         canvas.setOnMousePressed(event -> {
             if (event.isPrimaryButtonDown()) {
                 canvas.requestFocus();
+                System.out.println(point2DToCartesianCoordinates(planeToCanvas.getValue().transform(mousePosition.getValue())));
+                System.out.println(planeToCanvas.getValue());
             }
+
+
         });
 
         canvas.setOnKeyPressed(event -> {
@@ -125,14 +132,11 @@ public class SkyCanvasManager {
             event.consume();
         });
 
-
         canvas.setOnScroll(evt -> {
             double before = viewingParametersBean.getFieldOfViewDeg();
             double newFOV = before - (abs(evt.getDeltaX()) > abs(evt.getDeltaY()) ? evt.getDeltaX() / 2 : evt.getDeltaY() / 2);
             viewingParametersBean.setFieldOfViewDeg(zoomInter.clip(newFOV));
         });
-
-
     }
 
     public CelestialObject getObjectUnderMouse() {
@@ -149,11 +153,11 @@ public class SkyCanvasManager {
 
     private void updateCanvas() {
         painter.clear();
-        painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-        painter.drawHorizon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-        painter.drawMoon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-        painter.drawSun(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
         painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+        painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+        painter.drawSun(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+        painter.drawMoon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+        painter.drawHorizon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
     }
 
     private void modifyCenterPropertyAzDeg(double valueToAdd) {
