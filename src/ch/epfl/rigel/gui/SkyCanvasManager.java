@@ -1,14 +1,11 @@
 package ch.epfl.rigel.gui;
 
-import ch.epfl.rigel.astronomy.*;
-import ch.epfl.rigel.coordinates.CartesianCoordinates;
-import ch.epfl.rigel.coordinates.EquatorialCoordinates;
+import ch.epfl.rigel.astronomy.CelestialObject;
+import ch.epfl.rigel.astronomy.ObservedSky;
+import ch.epfl.rigel.astronomy.StarCatalogue;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
-import ch.epfl.rigel.math.Angle;
 import ch.epfl.rigel.math.ClosedInterval;
-import ch.epfl.rigel.math.Interval;
-import ch.epfl.rigel.math.RightOpenInterval;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -17,41 +14,32 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
-import jdk.jfr.FlightRecorder;
-
-import java.util.Objects;
-import java.util.Optional;
-import java.util.spi.AbstractResourceBundleProvider;
 
 import static ch.epfl.rigel.coordinates.CartesianCoordinates.point2DToCartesianCoordinates;
 import static ch.epfl.rigel.math.Angle.*;
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
 
 public class SkyCanvasManager {
-    public DoubleBinding mouseAzDeg;
-    public DoubleBinding mouseAltDeg;
+    public final DoubleBinding mouseAzDeg;
+    public final DoubleBinding mouseAltDeg;
 
-    public ObjectBinding<CelestialObject> objectUnderMouse;
+    public final ObjectBinding<CelestialObject> objectUnderMouse;
 
-    private ObserverLocationBean observerLocationBean;
-    private DateTimeBean dateTimeBean;
-    private ViewingParametersBean viewingParametersBean;
+    private final ObserverLocationBean observerLocationBean;
+    private final DateTimeBean dateTimeBean;
+    private final ViewingParametersBean viewingParametersBean;
 
-    private ObservableValue<StereographicProjection> projection;
-    private ObjectBinding<Transform> planeToCanvas;
-    private ObservableValue<ObservedSky> observedSky;
+    private final ObservableValue<StereographicProjection> projection;
+    private final ObjectBinding<Transform> planeToCanvas;
+    private final ObservableValue<ObservedSky> observedSky;
 
-    private ObjectProperty<Point2D> mousePosition = new SimpleObjectProperty<>(Point2D.ZERO);
-    private ObjectBinding<HorizontalCoordinates> mouseHorizontalPosition;
+    private final ObjectProperty<Point2D> mousePosition = new SimpleObjectProperty<>(Point2D.ZERO);
+    private final ObjectBinding<HorizontalCoordinates> mouseHorizontalPosition;
 
     private Canvas canvas = new Canvas();
-    private SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
-    private ClosedInterval zoomInter = ClosedInterval.of(30, 150);
+    private final SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
+    private final ClosedInterval zoomInter = ClosedInterval.of(30, 150);
 
     public SkyCanvasManager(StarCatalogue starCatalogue, DateTimeBean dTimeBean, ObserverLocationBean obsLocationBean, ViewingParametersBean vParametersBean) {
         viewingParametersBean = vParametersBean;
@@ -112,10 +100,10 @@ public class SkyCanvasManager {
             canvas.requestFocus();
             switch (event.getCode()) {
                 case LEFT:
-                    modifyCenterPropertyAzDeg(-7.0);
+                    modifyCenterPropertyAzDeg(-10);
                     break;
                 case RIGHT:
-                    modifyCenterPropertyAzDeg(7.0);
+                    modifyCenterPropertyAzDeg(10);
                     break;
                 case DOWN:
                     modifyCenterPropertyAltDeg(-5);
