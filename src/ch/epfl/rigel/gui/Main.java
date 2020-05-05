@@ -1,6 +1,5 @@
 package ch.epfl.rigel.gui;
 
-import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
@@ -50,8 +49,8 @@ public class Main extends Application {
         actualLon.setStyle("-fx-pref-width: 60;\n" + "-fx-alignment: baseline-right;");
 
         HBox controlBar = new HBox(separator,observationPos,observationInstant,timeAdvancement);
-
         controlBar.setStyle("-fx-spacing: 4; -fx-padding: 4;");
+        controlBar.getChildren().addAll(longitude,latitude);
         return controlBar;
     }
 }
