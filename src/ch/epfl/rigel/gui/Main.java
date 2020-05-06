@@ -3,16 +3,18 @@ package ch.epfl.rigel.gui;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import javafx.application.Application;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
+import org.w3c.dom.Text;
 
+import javax.script.Bindings;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
 
 public class Main extends Application {
@@ -30,6 +32,7 @@ public class Main extends Application {
 
         Pane skyView = new Pane();
         HBox controlBar = controlBarCreator();
+        controlBar.setStyle("-fx-spacing: 4; -fx-padding: 4;");
         Pane informationBar = new Pane();
 
         BorderPane mainPane = new BorderPane(skyView, controlBar, null, informationBar, null);
@@ -39,16 +42,53 @@ public class Main extends Application {
 
     private HBox controlBarCreator() {
 
-        HBox observationPos = new HBox();
-        HBox observationInstant = new HBox();
+        HBox observationPos = createObservationPosition();
+
+        HBox observationInstant = createObservationInstant();
+
         HBox timeAdvancement = new HBox();
 
         Separator separator = new Separator(Orientation.VERTICAL);
 
+        HBox controlBar = new HBox(separator, observationPos, observationInstant, timeAdvancement);
+        controlBar.setStyle("-fx-spacing: 4; -fx-padding: 4;");
+        return controlBar;
+    }
+
+
+    private HBox createObservationInstant(){
+
+        HBox position = new HBox();
+        position.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
+
+        Label date = new Label("Date :");
+
+        // à instancier I guess
+        DatePicker datePicker = new DatePicker();
+        datePicker.setStyle("-fx-pref-width: 120;");
+
+        Label hour = new Label("Heure :");
+
+        TextField actHour = new TextField();
+        actHour.setStyle("-fx-pref-width: 75;\n" + "-fx-alignment: baseline-right;");
+       
+        DateTimeFormatter hmsFormatter =
+                DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalTimeStringConverter stringConverter =
+                new LocalTimeStringConverter(hmsFormatter, hmsFormatter);
+        TextFormatter<LocalTime> timeFormatter =
+                new TextFormatter<>(stringConverter);
+        
+        actHour.setTextFormatter(timeFormatter);
+        
+        position.getChildren().addAll(date, datePicker, hour, actHour);
+        return position;
+    }
+
+    private HBox createObservationPosition(){
+
         Label longitude = new Label("Longitude (°) :");
-        longitude.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
         Label latitude = new Label("Latitude (°) :");
-        latitude.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
 
         TextField actualLon = new TextField();
         actualLon.setStyle("-fx-pref-width: 60;\n" + "-fx-alignment: baseline-right;");
@@ -60,10 +100,10 @@ public class Main extends Application {
         lonTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
         latTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
 
-        HBox controlBar = new HBox(separator, observationPos, observationInstant, timeAdvancement);
-        controlBar.setStyle("-fx-spacing: 4; -fx-padding: 4;");
-        controlBar.getChildren().addAll(longitude, lonTextField, latitude, latTextField);
-        return controlBar;
+        HBox observation = new HBox();
+        observation.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
+        observation.getChildren().addAll(longitude, lonTextField, latitude, latTextField);
+        return observation;
     }
 
     private TextField longitudeTextField() {
@@ -90,7 +130,7 @@ public class Main extends Application {
         TextField lonTextField =
                 new TextField();
         lonTextField.setTextFormatter(lonTextFormatter);
-        
+
         return lonTextField;
     }
 
