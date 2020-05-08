@@ -84,7 +84,7 @@ public class SkyCanvasManager {
         }, canvas.heightProperty(), canvas.widthProperty(), projection, viewingParametersBean.fieldOfViewDegProperty());
 
         objectUnderMouse = Bindings.createObjectBinding(() -> {
-                    if (mousePosition.get() == Point2D.ZERO)
+                    if (mousePosition.get() ==null)
                         return null;
                     else
                         return observedSky.getValue().objectClosestTo(point2DToCartesianCoordinates(planeToCanvas.get().inverseTransform(mousePosition.getValue())), planeToCanvas.get().inverseTransform(0, 10).magnitude()).orElse(null);
