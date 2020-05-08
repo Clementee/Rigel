@@ -26,6 +26,18 @@ public class SkyCanvasManager {
 
     public final ObjectBinding<CelestialObject> objectUnderMouse;
 
+    public ObserverLocationBean getObserverLocationBean() {
+        return observerLocationBean;
+    }
+
+    public DateTimeBean getDateTimeBean() {
+        return dateTimeBean;
+    }
+
+    public ViewingParametersBean getViewingParametersBean() {
+        return viewingParametersBean;
+    }
+
     private final ObserverLocationBean observerLocationBean;
     private final DateTimeBean dateTimeBean;
     private final ViewingParametersBean viewingParametersBean;

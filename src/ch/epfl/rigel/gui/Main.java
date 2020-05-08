@@ -5,15 +5,19 @@ import ch.epfl.rigel.astronomy.StarCatalogue;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
@@ -31,9 +35,7 @@ import java.util.stream.Collectors;
 public class Main extends Application {
 
     private Stage Rigel;
-    private ObserverLocationBean observerLocationBean = new ObserverLocationBean();
-    private DateTimeBean dateTimeBean = new DateTimeBean();
-    private ViewingParametersBean viewingParametersBean = new ViewingParametersBean();
+    private SkyCanvasManager canvasManager;
 
     public void main() {
         launch();
@@ -49,13 +51,15 @@ public class Main extends Application {
         Pane skyView = createSkyView();
         HBox controlBar = controlBarCreator();
         controlBar.setStyle("-fx-spacing: 4; -fx-padding: 4;");
-        Pane informationBar = new Pane();
+        Pane informationBar = createInformationBar();
 
         BorderPane mainPane = new BorderPane(skyView, controlBar, null, informationBar, null);
         mainPane.setMinWidth(800);
         mainPane.setMinHeight(600);
         Rigel.setScene(new Scene(mainPane));
         Rigel.show();
+        Rigel.requestFocus();
+
     }
 
     private HBox controlBarCreator() throws IOException {
@@ -98,11 +102,11 @@ public class Main extends Application {
                 new TextFormatter<>(stringConverter);
 
         actHour.setTextFormatter(timeFormatter);
-        timeFormatter.valueProperty().addListener((e, i, o) -> dateTimeBean.setTime(o));
+        timeFormatter.valueProperty().addListener((e, i, o) -> canvasManager.getDateTimeBean().setTime(o));
 
         ComboBox<String> zoneIdComboBox = new ComboBox<>();
         zoneIdComboBox.getItems().addAll(ZoneId.getAvailableZoneIds().stream().sorted().collect(Collectors.toList()));
-        zoneIdComboBox.setOnAction((e) -> dateTimeBean.zoneProperty().set(ZoneId.of(zoneIdComboBox.getValue())));
+        zoneIdComboBox.setOnAction((e) -> canvasManager.getDateTimeBean().zoneProperty().set(ZoneId.of(zoneIdComboBox.getValue())));
         zoneIdComboBox.setStyle("-fx-pref-width: 180;");
 
         position.getChildren().addAll(date, datePicker, hour, actHour,zoneIdComboBox);
@@ -116,14 +120,12 @@ public class Main extends Application {
         Label latitude = new Label();
         latitude.setText("Latitude (°) :");
 
-        TextField actualLon = new TextField();
-        actualLon.setStyle("-fx-pref-width: 60;\n" + "-fx-alignment: baseline-right;");
-        actualLon.setText(observerLocationBean.toString());
-
         TextField lonTextField = longitudeTextField();
         lonTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
+        lonTextField.setText(canvasManager.getObserverLocationBean().getLonDeg().toString());
 
         TextField latTextField = latitudeTextField();
+        latTextField.setText(canvasManager.getObserverLocationBean().getLatDeg().toString());
         latTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
 
         HBox observation = new HBox();
@@ -169,6 +171,10 @@ public class Main extends Application {
                     .loadFrom(hs, HygDatabaseLoader.INSTANCE)
                     .build();
 
+            ObserverLocationBean observerLocationBean = new ObserverLocationBean();
+            DateTimeBean dateTimeBean = new DateTimeBean();
+            ViewingParametersBean viewingParametersBean = new ViewingParametersBean();
+
             ZonedDateTime when =
                     ZonedDateTime.parse("2020-02-17T20:15:00+01:00");
             dateTimeBean.setZonedDateTime(when);
@@ -178,7 +184,7 @@ public class Main extends Application {
                     HorizontalCoordinates.ofDeg(180, 42));
             viewingParametersBean.setFieldOfViewDeg(70);
 
-            SkyCanvasManager canvasManager = new SkyCanvasManager(
+            canvasManager = new SkyCanvasManager(
                     catalogue,
                     dateTimeBean,
                     observerLocationBean,
@@ -222,7 +228,7 @@ public class Main extends Application {
         TextField lonTextField =
                 new TextField();
         lonTextField.setTextFormatter(lonTextFormatter);
-        lonTextFormatter.valueProperty().addListener((e, i, o) -> observerLocationBean.lonDegProperty().set(o.doubleValue()));
+        lonTextFormatter.valueProperty().addListener((e, i, o) -> canvasManager.getObserverLocationBean().lonDegProperty().set(o.doubleValue()));
         return lonTextField;
     }
 
@@ -247,7 +253,18 @@ public class Main extends Application {
         TextField latTextField =
                 new TextField();
         latTextField.setTextFormatter(latTextFormatter);
-        latTextFormatter.valueProperty().addListener((e, i, o) -> observerLocationBean.latDegProperty().set(o.doubleValue()));
+        latTextFormatter.valueProperty().addListener((e, i, o) -> canvasManager.getObserverLocationBean().latDegProperty().set(o.doubleValue()));
         return latTextField;
+    }
+
+    private BorderPane createInformationBar(){
+        BorderPane borderPane =  new BorderPane();
+        borderPane.setStyle("-fx-padding: 4;" +
+                "-fx-background-color: white;");
+        Text fovText = new Text(Bindings.format("Champ de vue : %1f°", canvasManager.getViewingParametersBean().getFieldOfViewDeg()).toString());
+        Text objectUnderMouseInfo = new Text(Objects.requireNonNullElse(canvasManager.getObjectUnderMouse().info(), " ") );
+        Text azimut = new Text(Bindings.format("Azimut : %2f°, hauteur : %2f°", canvasManager.mouseAzDeg, canvasManager.mouseAltDeg).toString());
+        borderPane.getChildren().addAll(fovText, objectUnderMouseInfo, azimut);
+        return borderPane;
     }
 }
