@@ -62,12 +62,11 @@ public class Main extends Application {
     }
 
     private HBox controlBarCreator() throws IOException {
+        HBox timeAdvancement = createTimeAnimator();
 
         HBox observationPos = createObservationPosition();
 
         HBox observationInstant = createObservationInstant();
-
-        HBox timeAdvancement = createTimeAnimator();
 
         Separator separator = new Separator(Orientation.VERTICAL);
 
@@ -83,18 +82,16 @@ public class Main extends Application {
 
         Label date = new Label("Date :");
 
-        // à instancier I guess
         DatePicker datePicker = new DatePicker(canvasManager.getDateTimeBean().getDate());
         datePicker.setStyle("-fx-pref-width: 120;");
         datePicker.valueProperty().addListener((e, i, o) -> {
             canvasManager.getDateTimeBean().setDate(o);
         });
-
+        datePicker.disableProperty().bind(timeAnimator.runningProperty());
         Label hour = new Label("Heure :");
 
         TextField actHour = new TextField(canvasManager.getDateTimeBean().getTime().toString());
         actHour.setStyle("-fx-pref-width: 75;\n" + "-fx-alignment: baseline-right;");
-
         DateTimeFormatter hmsFormatter =
                 DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalTimeStringConverter stringConverter =
@@ -104,14 +101,14 @@ public class Main extends Application {
 
         actHour.setTextFormatter(timeFormatter);
         actHour.setText(canvasManager.getDateTimeBean().getTime().toString());
+        actHour.disableProperty().bind(timeAnimator.runningProperty());
         timeFormatter.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().timeProperty());
-
 
         ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.<ZoneId>toList())));
         zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
-
-        zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
+            zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
         zoneIdComboBox.setStyle("-fx-pref-width: 180;");
+        zoneIdComboBox.disableProperty().bind(timeAnimator.runningProperty());
 
         position.getChildren().addAll(date, datePicker, hour, actHour, zoneIdComboBox);
         return position;
@@ -141,16 +138,14 @@ public class Main extends Application {
     private HBox createTimeAnimator() throws IOException {
 
 
-        TimeAnimator animator = new TimeAnimator(canvasManager.getDateTimeBean());
-
-
-        HBox timeAnimator = new HBox();
+        timeAnimator = new TimeAnimator(canvasManager.getDateTimeBean());
+        HBox timeAnimatorBox = new HBox();
         ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
         choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
-        choiceOfTheAnimator.setOnAction(e -> animator.setAccelerator(choiceOfTheAnimator.getValue().getAccelerator()));
+        choiceOfTheAnimator.setOnAction(e -> timeAnimator.setAccelerator(choiceOfTheAnimator.getValue().getAccelerator()));
         choiceOfTheAnimator.setValue(NamedTimeAccelerator.TIMES_3000);
-
-        timeAnimator.setStyle("-fx-spacing: inherit;");
+        choiceOfTheAnimator.disableProperty().bind(timeAnimator.runningProperty());
+        timeAnimatorBox.setStyle("-fx-spacing: inherit;");
 
         InputStream fontStream = getClass()
                 .getResourceAsStream("/Font Awesome 5 Free-Solid-900.otf");
@@ -164,19 +159,20 @@ public class Main extends Application {
         Button resetButton = new Button(undoString);
         resetButton.setOnAction((e) -> canvasManager.getDateTimeBean().setZonedDateTime(ZonedDateTime.now()));
         resetButton.setFont(fontAwesome);
+        resetButton.disableProperty().bind(timeAnimator.runningProperty());
 
         Button playPauseButton = new Button(pauseString);
         playPauseButton.setFont(fontAwesome);
         playPauseButton.setOnAction((e) -> {
             playPauseButton.setText(playPauseButton.getText().equals(playString) ? pauseString : playString);
             if (playPauseButton.getText().equals(playString)) {
-                animator.start();
+                timeAnimator.start();
             } else {
-                animator.stop();
+                timeAnimator.stop();
             }
         });
-        timeAnimator.getChildren().addAll(choiceOfTheAnimator, resetButton, playPauseButton);
-        return timeAnimator;
+        timeAnimatorBox.getChildren().addAll(choiceOfTheAnimator, resetButton, playPauseButton);
+        return timeAnimatorBox;
     }
 
     private Pane createSkyView() {

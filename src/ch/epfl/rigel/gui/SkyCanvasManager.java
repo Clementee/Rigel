@@ -112,8 +112,6 @@ public class SkyCanvasManager {
             if (event.isPrimaryButtonDown()) {
                 canvas.requestFocus();
             }
-
-
         });
 
         canvas.setOnKeyPressed(event -> {
