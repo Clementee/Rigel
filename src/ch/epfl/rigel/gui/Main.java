@@ -17,9 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
-import org.w3c.dom.Text;
 
-import javax.script.Bindings;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalTime;
@@ -100,18 +98,14 @@ public class Main extends Application {
                 new TextFormatter<>(stringConverter);
 
         actHour.setTextFormatter(timeFormatter);
-        timeFormatter.valueProperty().addListener((e, i, o) -> {
-            dateTimeBean.setTime(o);
-        });
+        timeFormatter.valueProperty().addListener((e, i, o) -> dateTimeBean.setTime(o));
 
         ComboBox<String> zoneIdComboBox = new ComboBox<>();
         zoneIdComboBox.getItems().addAll(ZoneId.getAvailableZoneIds().stream().sorted().collect(Collectors.toList()));
-        zoneIdComboBox.setOnAction((e) -> {
-            dateTimeBean.zoneProperty().set(ZoneId.of(zoneIdComboBox.getValue()));
-        });
+        zoneIdComboBox.setOnAction((e) -> dateTimeBean.zoneProperty().set(ZoneId.of(zoneIdComboBox.getValue())));
         zoneIdComboBox.setStyle("-fx-pref-width: 180;");
 
-        position.getChildren().addAll(date, datePicker, hour, actHour);
+        position.getChildren().addAll(date, datePicker, hour, actHour,zoneIdComboBox);
         return position;
     }
 
@@ -139,6 +133,7 @@ public class Main extends Application {
     }
 
     private HBox createTimeAnimator() throws IOException {
+
         HBox timeAnimator = new HBox();
         ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
         choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
@@ -155,16 +150,12 @@ public class Main extends Application {
         String pauseString = "\uf04c";
 
         Button resetButton = new Button(undoString);
-        resetButton.setOnAction((e) -> {
-            System.out.println("resetButtonPressed");
-        });
+        resetButton.setOnAction((e) -> System.out.println("resetButtonPressed"));
         resetButton.setFont(fontAwesome);
 
         Button playPauseButton = new Button(pauseString);
         playPauseButton.setFont(fontAwesome);
-        playPauseButton.setOnAction((e) -> {
-            playPauseButton.setText(playPauseButton.getText().equals(playString) ? pauseString : playString);
-        });
+        playPauseButton.setOnAction((e) -> playPauseButton.setText(playPauseButton.getText().equals(playString) ? pauseString : playString));
         timeAnimator.getChildren().addAll(choiceOfTheAnimator, resetButton, playPauseButton);
         return timeAnimator;
     }
@@ -197,9 +188,12 @@ public class Main extends Application {
 
             skyView = new Pane();
             skyView.getChildren().add(sky);
+            sky.widthProperty().bind(skyView.widthProperty());
+            sky.heightProperty().bind(skyView.heightProperty());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return skyView;
     }
 
@@ -228,9 +222,7 @@ public class Main extends Application {
         TextField lonTextField =
                 new TextField();
         lonTextField.setTextFormatter(lonTextFormatter);
-        lonTextFormatter.valueProperty().addListener((e, i, o) -> {
-            observerLocationBean.lonDegProperty().set(o.doubleValue());
-        });
+        lonTextFormatter.valueProperty().addListener((e, i, o) -> observerLocationBean.lonDegProperty().set(o.doubleValue()));
         return lonTextField;
     }
 
@@ -249,12 +241,13 @@ public class Main extends Application {
             }
         });
 
-        TextField latTextField = new TextField();
-        TextFormatter latTextFormater = new TextFormatter<>(stringConverter, 0, latFilter);
-        latTextFormater.valueProperty().addListener((e, i, o) -> {
-            observerLocationBean.latDegProperty().set((double)o);
-        });
-        latTextField.setTextFormatter(latTextFormater);
+        TextFormatter<Number> latTextFormatter =
+                new TextFormatter<>(stringConverter, 0, latFilter);
+
+        TextField latTextField =
+                new TextField();
+        latTextField.setTextFormatter(latTextFormatter);
+        latTextFormatter.valueProperty().addListener((e, i, o) -> observerLocationBean.latDegProperty().set(o.doubleValue()));
         return latTextField;
     }
 }
