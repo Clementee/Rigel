@@ -10,7 +10,7 @@ import java.time.Duration;
  */
 public enum NamedTimeAccelerator {
 
-    TIMES_ONE("1x", TimeAccelerator.continuous(1)),
+    TIMES_1("1x", TimeAccelerator.continuous(1)),
     TIMES_30("30x",TimeAccelerator.continuous(30)),
     TIMES_300("300x",TimeAccelerator.continuous(300)),
     TIMES_3000("3000x", TimeAccelerator.continuous(3000)),
