@@ -1,5 +1,6 @@
 package ch.epfl.rigel.gui;
 
+import ch.epfl.rigel.astronomy.AsterismLoader;
 import ch.epfl.rigel.astronomy.HygDatabaseLoader;
 import ch.epfl.rigel.astronomy.StarCatalogue;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
@@ -164,10 +165,10 @@ public class Main extends Application {
     private Pane createSkyView() {
 
         Pane skyView = new Pane();
-        try (InputStream hs = getClass().getResourceAsStream("/hygdata_v3.csv")) {
+        try (InputStream hs = getClass().getResourceAsStream("/hygdata_v3.csv");InputStream is = getClass().getResourceAsStream("/asterisms.txt")) {
 
             StarCatalogue catalogue = new StarCatalogue.Builder()
-                    .loadFrom(hs, HygDatabaseLoader.INSTANCE)
+                    .loadFrom(hs, HygDatabaseLoader.INSTANCE).loadFrom(is, AsterismLoader.INSTANCE)
                     .build();
 
             ObserverLocationBean observerLocationBean = new ObserverLocationBean();
@@ -260,7 +261,7 @@ public class Main extends Application {
         Text fovText = new Text();
         fovText.textProperty().bind(Bindings.format("Champ de vue : %.1f°", canvasManager.getViewingParametersBean().fieldOfViewDegProperty()));
         Text azimut = new Text(Bindings.format("Azimut : %.2f°, hauteur : %.2f°", canvasManager.mouseAzDeg, canvasManager.mouseAltDeg).getValue());
-        BorderPane borderPane = new BorderPane(fovText,null, azimut,null,null);
+        BorderPane borderPane = new BorderPane(null,null, azimut,null,fovText);
         borderPane.setStyle("-fx-padding: 4;-fx-background-color: white;");
         return borderPane;
     }

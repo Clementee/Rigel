@@ -89,7 +89,6 @@ public class SkyCanvasManager {
                 planeToCanvas, mousePosition, projection);
 
         mouseAzDeg = Bindings.createDoubleBinding(() -> mouseHorizontalPosition.getValue().azDeg(), mouseHorizontalPosition);
-
         mouseAltDeg = Bindings.createDoubleBinding(() -> mouseHorizontalPosition.getValue().altDeg(), mouseHorizontalPosition);
 
         objectUnderMouse = Bindings.createObjectBinding(() -> {
