@@ -7,6 +7,8 @@ import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -20,6 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +38,7 @@ public class Main extends Application {
 
 
     private SkyCanvasManager canvasManager;
+    private TimeAnimator timeAnimator;
 
     public void main() {
         launch();
@@ -103,7 +107,7 @@ public class Main extends Application {
         timeFormatter.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().timeProperty());
 
 
-        ComboBox<ZoneId> zoneIdComboBox = new ComboBox(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.toList())));
+        ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.<ZoneId>toList())));
         zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
 
         zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
@@ -136,9 +140,13 @@ public class Main extends Application {
 
     private HBox createTimeAnimator() throws IOException {
 
+
+        TimeAnimator animator = new TimeAnimator(canvasManager.getDateTimeBean());
+
         HBox timeAnimator = new HBox();
         ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
         choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
+        choiceOfTheAnimator.setOnAction(e -> animator.setAccelerator(choiceOfTheAnimator.getValue().getAccelerator()));
         timeAnimator.setStyle("-fx-spacing: inherit;");
 
         InputStream fontStream = getClass()
@@ -147,16 +155,24 @@ public class Main extends Application {
         fontStream.close();
 
         String undoString = "\uf0e2";
-        String playString = "\uf04b";
-        String pauseString = "\uf04c";
+        String pauseString = "\uf04b";
+        String playString = "\uf04c";
 
         Button resetButton = new Button(undoString);
         resetButton.setOnAction((e) -> System.out.println("resetButtonPressed"));
         resetButton.setFont(fontAwesome);
 
+
         Button playPauseButton = new Button(pauseString);
         playPauseButton.setFont(fontAwesome);
-        playPauseButton.setOnAction((e) -> playPauseButton.setText(playPauseButton.getText().equals(playString) ? pauseString : playString));
+        playPauseButton.setOnAction((e) -> {
+            playPauseButton.setText(playPauseButton.getText().equals(playString) ? pauseString : playString);
+            if (playPauseButton.getText().equals(playString)) {
+                animator.start();
+            } else {
+                animator.stop();
+            }
+        });
         timeAnimator.getChildren().addAll(choiceOfTheAnimator, resetButton, playPauseButton);
         return timeAnimator;
     }
@@ -164,7 +180,7 @@ public class Main extends Application {
     private Pane createSkyView() {
 
         Pane skyView = new Pane();
-        try (InputStream hs = getClass().getResourceAsStream("/hygdata_v3.csv");InputStream is = getClass().getResourceAsStream("/asterisms.txt")) {
+        try (InputStream hs = getClass().getResourceAsStream("/hygdata_v3.csv"); InputStream is = getClass().getResourceAsStream("/asterisms.txt")) {
 
             StarCatalogue catalogue = new StarCatalogue.Builder()
                     .loadFrom(hs, HygDatabaseLoader.INSTANCE).loadFrom(is, AsterismLoader.INSTANCE)
@@ -206,7 +222,7 @@ public class Main extends Application {
         NumberStringConverter stringConverter =
                 new NumberStringConverter("#0.00");
 
-        UnaryOperator<TextFormatter.Change> lonFilter = (change -> {
+        UnaryOperator<TextFormatter.Change> lonFilter = change -> {
             try {
                 String newText =
                         change.getControlNewText();
@@ -217,10 +233,10 @@ public class Main extends Application {
             } catch (Exception e) {
                 return null;
             }
-        });
+        };
 
         TextFormatter<Number> lonTextFormatter =
-                new TextFormatter(stringConverter, 0, lonFilter);
+                new TextFormatter<>(stringConverter, 0, lonFilter);
 
         TextField lonTextField =
                 new TextField();
@@ -261,9 +277,9 @@ public class Main extends Application {
         fovText.textProperty().bind(Bindings.format("Champ de vue : %.1f°", canvasManager.getViewingParametersBean().fieldOfViewDegProperty()));
         Text objectUnderMouseText = new Text();
         objectUnderMouseText.textProperty().bind(canvasManager.objectUnderMouseProperty().asString());
-        Text azimut = new Text();
-        azimut.textProperty().bind(Bindings.format("Azimut : %.2f°, hauteur : %.2f°", canvasManager.getMouseAzDegProperty(), canvasManager.getMouseAltDegProperty()));
-        BorderPane borderPane = new BorderPane(objectUnderMouseText,null, azimut,null,fovText);
+        Text azimutText = new Text();
+        azimutText.textProperty().bind(Bindings.format("Azimut : %.2f°, hauteur : %.2f°", canvasManager.getMouseAzDegProperty(), canvasManager.getMouseAltDegProperty()));
+        BorderPane borderPane = new BorderPane(objectUnderMouseText, null, azimutText, null, fovText);
         borderPane.setStyle("-fx-padding: 4;-fx-background-color: white;");
         return borderPane;
     }

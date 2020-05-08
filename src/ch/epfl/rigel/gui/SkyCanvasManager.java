@@ -84,7 +84,7 @@ public class SkyCanvasManager {
         }, canvas.heightProperty(), canvas.widthProperty(), projection, viewingParametersBean.fieldOfViewDegProperty());
 
         objectUnderMouse = Bindings.createObjectBinding(() -> {
-                    if (mousePosition.get() ==null)
+                    if (mousePosition.get() == null)
                         return null;
                     else
                         return observedSky.getValue().objectClosestTo(point2DToCartesianCoordinates(planeToCanvas.get().inverseTransform(mousePosition.getValue())), planeToCanvas.get().inverseTransform(0, 10).magnitude()).orElse(null);
@@ -102,7 +102,7 @@ public class SkyCanvasManager {
                         CartesianCoordinates inverseCoordinates = CartesianCoordinates.point2DToCartesianCoordinates(planeToCanvas.get().inverseTransform(mousePosition.get()));
                         return projection.getValue().inverseApply(inverseCoordinates);
                     }
-                    return HorizontalCoordinates.of(0,0);
+                    return HorizontalCoordinates.of(0, 0);
                 }, planeToCanvas, mousePosition, projection);
 
         mouseAzDeg = Bindings.createDoubleBinding(() -> mouseHorizontalPosition.get().azDeg(), mouseHorizontalPosition);
@@ -156,11 +156,11 @@ public class SkyCanvasManager {
         return canvas;
     }
 
-    public DoubleBinding getMouseAzDegProperty(){
+    public DoubleBinding getMouseAzDegProperty() {
         return mouseAzDeg;
     }
 
-    public DoubleBinding getMouseAltDegProperty(){
+    public DoubleBinding getMouseAltDegProperty() {
         return mouseAltDeg;
     }
 
