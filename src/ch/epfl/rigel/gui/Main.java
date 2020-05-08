@@ -72,7 +72,6 @@ public class Main extends Application {
         return controlBar;
     }
 
-
     private HBox createObservationInstant() {
 
         HBox position = new HBox();
@@ -260,8 +259,11 @@ public class Main extends Application {
 
         Text fovText = new Text();
         fovText.textProperty().bind(Bindings.format("Champ de vue : %.1f°", canvasManager.getViewingParametersBean().fieldOfViewDegProperty()));
-        Text azimut = new Text(Bindings.format("Azimut : %.2f°, hauteur : %.2f°", canvasManager.mouseAzDeg, canvasManager.mouseAltDeg).getValue());
-        BorderPane borderPane = new BorderPane(null,null, azimut,null,fovText);
+        Text objectUnderMouseText = new Text();
+        objectUnderMouseText.textProperty().bind(canvasManager.objectUnderMouseProperty().asString());
+        Text azimut = new Text();
+        azimut.textProperty().bind(Bindings.format("Azimut : %.2f°, hauteur : %.2f°", canvasManager.getMouseAzDegProperty(), canvasManager.getMouseAltDegProperty()));
+        BorderPane borderPane = new BorderPane(objectUnderMouseText,null, azimut,null,fovText);
         borderPane.setStyle("-fx-padding: 4;-fx-background-color: white;");
         return borderPane;
     }
