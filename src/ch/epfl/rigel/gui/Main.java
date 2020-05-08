@@ -7,8 +7,6 @@ import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -22,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +27,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -106,7 +103,7 @@ public class Main extends Application {
 
         ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.<ZoneId>toList())));
         zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
-            zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
+        zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
         zoneIdComboBox.setStyle("-fx-pref-width: 180;");
         zoneIdComboBox.disableProperty().bind(timeAnimator.runningProperty());
 
@@ -192,8 +189,8 @@ public class Main extends Application {
             observerLocationBean.setCoordinates(
                     GeographicCoordinates.ofDeg(6.57, 46.52));
             viewingParametersBean.setCenter(
-                    HorizontalCoordinates.ofDeg(180, 42));
-            viewingParametersBean.setFieldOfViewDeg(70);
+                    HorizontalCoordinates.ofDeg(180.000000000001, 15));
+            viewingParametersBean.setFieldOfViewDeg(100);
 
             canvasManager = new SkyCanvasManager(
                     catalogue,
