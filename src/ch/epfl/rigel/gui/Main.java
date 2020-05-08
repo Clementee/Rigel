@@ -6,13 +6,11 @@ import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -24,7 +22,6 @@ import javafx.util.converter.NumberStringConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -35,7 +32,7 @@ import java.util.stream.Collectors;
 
 public class Main extends Application {
 
-    private Stage Rigel;
+
     private SkyCanvasManager canvasManager;
 
     public void main() {
@@ -45,18 +42,17 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Rigel = stage;
-        Rigel.setMinWidth(800);
-        Rigel.setMinHeight(600);
+        stage.setMinWidth(800);
+        stage.setMinHeight(600);
 
         Pane skyView = createSkyView();
         HBox controlBar = controlBarCreator();
         Pane informationBar = createInformationBar();
 
         BorderPane mainPane = new BorderPane(skyView, controlBar, null, informationBar, null);
-        Rigel.setScene(new Scene(mainPane));
-        Rigel.show();
-        Rigel.requestFocus();
+        stage.setScene(new Scene(mainPane));
+        stage.show();
+        skyView.requestFocus();
 
     }
 
@@ -86,13 +82,13 @@ public class Main extends Application {
         // à instancier I guess
         DatePicker datePicker = new DatePicker(canvasManager.getDateTimeBean().getDate());
         datePicker.setStyle("-fx-pref-width: 120;");
-        datePicker.valueProperty().addListener((e,i,o)->{
+        datePicker.valueProperty().addListener((e, i, o) -> {
             canvasManager.getDateTimeBean().setDate(o);
         });
 
         Label hour = new Label("Heure :");
 
-        TextField actHour = new TextField();
+        TextField actHour = new TextField(canvasManager.getDateTimeBean().getTime().toString());
         actHour.setStyle("-fx-pref-width: 75;\n" + "-fx-alignment: baseline-right;");
 
         DateTimeFormatter hmsFormatter =
@@ -103,15 +99,17 @@ public class Main extends Application {
                 new TextFormatter<>(stringConverter);
 
         actHour.setTextFormatter(timeFormatter);
-        timeFormatter.valueProperty().addListener((e, i, o) -> canvasManager.getDateTimeBean().setTime(o));
+        actHour.setText(canvasManager.getDateTimeBean().getTime().toString());
+        timeFormatter.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().timeProperty());
 
-        ComboBox<String> zoneIdComboBox = new ComboBox<>();
-        zoneIdComboBox.getItems().addAll(ZoneId.getAvailableZoneIds().stream().sorted().collect(Collectors.toList()));
-        zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().toString());
-        zoneIdComboBox.setOnAction((e) -> canvasManager.getDateTimeBean().zoneProperty().set(ZoneId.of(zoneIdComboBox.getValue())));
+
+        ComboBox<ZoneId> zoneIdComboBox = new ComboBox(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.toList())));
+        zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
+
+        zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
         zoneIdComboBox.setStyle("-fx-pref-width: 180;");
 
-        position.getChildren().addAll(date, datePicker, hour, actHour,zoneIdComboBox);
+        position.getChildren().addAll(date, datePicker, hour, actHour, zoneIdComboBox);
         return position;
     }
 
@@ -142,7 +140,6 @@ public class Main extends Application {
         ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
         choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
         timeAnimator.setStyle("-fx-spacing: inherit;");
-
 
         InputStream fontStream = getClass()
                 .getResourceAsStream("/Font Awesome 5 Free-Solid-900.otf");
@@ -177,9 +174,7 @@ public class Main extends Application {
             DateTimeBean dateTimeBean = new DateTimeBean();
             ViewingParametersBean viewingParametersBean = new ViewingParametersBean();
 
-            ZonedDateTime when =
-                    ZonedDateTime.parse("2020-02-17T20:15:00+01:00");
-            dateTimeBean.setZonedDateTime(when);
+            dateTimeBean.setZonedDateTime(ZonedDateTime.now());
             observerLocationBean.setCoordinates(
                     GeographicCoordinates.ofDeg(6.57, 46.52));
             viewingParametersBean.setCenter(
@@ -225,12 +220,12 @@ public class Main extends Application {
         });
 
         TextFormatter<Number> lonTextFormatter =
-                new TextFormatter<>(stringConverter, 0, lonFilter);
+                new TextFormatter(stringConverter, 0, lonFilter);
 
         TextField lonTextField =
                 new TextField();
         lonTextField.setTextFormatter(lonTextFormatter);
-        lonTextFormatter.valueProperty().addListener((e, i, o) -> canvasManager.getObserverLocationBean().lonDegProperty().set(o.doubleValue()));
+        lonTextFormatter.valueProperty().bindBidirectional(canvasManager.getObserverLocationBean().lonDegProperty());
         return lonTextField;
     }
 
@@ -255,16 +250,18 @@ public class Main extends Application {
         TextField latTextField =
                 new TextField();
         latTextField.setTextFormatter(latTextFormatter);
-        latTextFormatter.valueProperty().addListener((e, i, o) -> canvasManager.getObserverLocationBean().latDegProperty().set(o.doubleValue()));
+        latTextFormatter.valueProperty()
+                .bindBidirectional(canvasManager.getObserverLocationBean().lonDegProperty());
         return latTextField;
     }
 
-    private BorderPane createInformationBar(){
-        BorderPane borderPane =  new BorderPane();
+    private BorderPane createInformationBar() {
+
+        Text fovText = new Text();
+        fovText.textProperty().bind(Bindings.format("Champ de vue : %.1f°", canvasManager.getViewingParametersBean().fieldOfViewDegProperty()));
+        Text azimut = new Text(Bindings.format("Azimut : %.2f°, hauteur : %.2f°", canvasManager.mouseAzDeg, canvasManager.mouseAltDeg).getValue());
+        BorderPane borderPane = new BorderPane(fovText,null, azimut,null,null);
         borderPane.setStyle("-fx-padding: 4;-fx-background-color: white;");
-        Text fovText = new Text(Bindings.format("Champ de vue : %1f°", canvasManager.getViewingParametersBean().getFieldOfViewDeg()).toString());
-        Text azimut = new Text(Bindings.format("Azimut : %2f°, hauteur : %2f°", canvasManager.mouseAzDeg, canvasManager.mouseAltDeg).toString());
-        borderPane.getChildren().addAll(fovText, azimut);
         return borderPane;
     }
 }

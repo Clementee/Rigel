@@ -2,15 +2,12 @@ package ch.epfl.rigel.gui;
 
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 
 public class ObserverLocationBean {
-    private final ObjectProperty<Double> lonDeg = new SimpleObjectProperty<>(null);
-    private final ObjectProperty<Double> latDeg = new SimpleObjectProperty<>(null);
+    private final DoubleProperty lonDeg = new SimpleDoubleProperty(0);
+    private final DoubleProperty latDeg = new SimpleDoubleProperty(0);
     private ObservableValue<GeographicCoordinates> coordinates = new SimpleObjectProperty<>(null);
 
     public ObserverLocationBean(){
@@ -21,11 +18,11 @@ public class ObserverLocationBean {
 
     public Double getLonDeg() {return lonDeg.get();}
 
-    public ObjectProperty<Double> lonDegProperty() {return lonDeg;}
+    public DoubleProperty lonDegProperty() {return lonDeg;}
 
     public Double getLatDeg() {return latDeg.get();}
 
-    public ObjectProperty<Double> latDegProperty() {return latDeg;}
+    public DoubleProperty latDegProperty() {return latDeg;}
 
 
 
