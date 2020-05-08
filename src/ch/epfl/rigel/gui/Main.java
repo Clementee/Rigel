@@ -125,12 +125,12 @@ public class Main extends Application {
         latitude.setText("Latitude (°) :");
 
         TextField lonTextField = longitudeTextField();
+        lonTextField.textProperty().bind(Bindings.format("%.2f", canvasManager.getObserverLocationBean().getLonDeg()));
         lonTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
-        lonTextField.setText(canvasManager.getObserverLocationBean().getLonDeg().toString());
 
         TextField latTextField = latitudeTextField();
-        latTextField.setText(canvasManager.getObserverLocationBean().getLatDeg().toString());
         latTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
+        latTextField.textProperty().bind(Bindings.format("%.2f", canvasManager.getObserverLocationBean().getLatDeg()));
 
         HBox observation = new HBox();
         observation.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
@@ -146,6 +146,7 @@ public class Main extends Application {
         HBox timeAnimator = new HBox();
         ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
         choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
+        choiceOfTheAnimator.setValue(NamedTimeAccelerator.TIMES_3000);
         choiceOfTheAnimator.setOnAction(e -> animator.setAccelerator(choiceOfTheAnimator.getValue().getAccelerator()));
         timeAnimator.setStyle("-fx-spacing: inherit;");
 
@@ -159,9 +160,8 @@ public class Main extends Application {
         String playString = "\uf04c";
 
         Button resetButton = new Button(undoString);
-        resetButton.setOnAction((e) -> System.out.println("resetButtonPressed"));
+        resetButton.setOnAction((e) -> canvasManager.getDateTimeBean().setZonedDateTime(ZonedDateTime.now()));
         resetButton.setFont(fontAwesome);
-
 
         Button playPauseButton = new Button(pauseString);
         playPauseButton.setFont(fontAwesome);
@@ -267,7 +267,7 @@ public class Main extends Application {
                 new TextField();
         latTextField.setTextFormatter(latTextFormatter);
         latTextFormatter.valueProperty()
-                .bindBidirectional(canvasManager.getObserverLocationBean().lonDegProperty());
+                .bindBidirectional(canvasManager.getObserverLocationBean().latDegProperty());
         return latTextField;
     }
 
