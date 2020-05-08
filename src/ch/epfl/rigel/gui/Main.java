@@ -24,6 +24,7 @@ import javafx.util.converter.NumberStringConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -50,12 +51,9 @@ public class Main extends Application {
 
         Pane skyView = createSkyView();
         HBox controlBar = controlBarCreator();
-        controlBar.setStyle("-fx-spacing: 4; -fx-padding: 4;");
         Pane informationBar = createInformationBar();
 
         BorderPane mainPane = new BorderPane(skyView, controlBar, null, informationBar, null);
-        mainPane.setMinWidth(800);
-        mainPane.setMinHeight(600);
         Rigel.setScene(new Scene(mainPane));
         Rigel.show();
         Rigel.requestFocus();
@@ -86,8 +84,11 @@ public class Main extends Application {
         Label date = new Label("Date :");
 
         // à instancier I guess
-        DatePicker datePicker = new DatePicker();
+        DatePicker datePicker = new DatePicker(canvasManager.getDateTimeBean().getDate());
         datePicker.setStyle("-fx-pref-width: 120;");
+        datePicker.valueProperty().addListener((e,i,o)->{
+            canvasManager.getDateTimeBean().setDate(o);
+        });
 
         Label hour = new Label("Heure :");
 
@@ -106,6 +107,7 @@ public class Main extends Application {
 
         ComboBox<String> zoneIdComboBox = new ComboBox<>();
         zoneIdComboBox.getItems().addAll(ZoneId.getAvailableZoneIds().stream().sorted().collect(Collectors.toList()));
+        zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().toString());
         zoneIdComboBox.setOnAction((e) -> canvasManager.getDateTimeBean().zoneProperty().set(ZoneId.of(zoneIdComboBox.getValue())));
         zoneIdComboBox.setStyle("-fx-pref-width: 180;");
 
@@ -259,12 +261,10 @@ public class Main extends Application {
 
     private BorderPane createInformationBar(){
         BorderPane borderPane =  new BorderPane();
-        borderPane.setStyle("-fx-padding: 4;" +
-                "-fx-background-color: white;");
+        borderPane.setStyle("-fx-padding: 4;-fx-background-color: white;");
         Text fovText = new Text(Bindings.format("Champ de vue : %1f°", canvasManager.getViewingParametersBean().getFieldOfViewDeg()).toString());
-        Text objectUnderMouseInfo = new Text(Objects.requireNonNullElse(canvasManager.getObjectUnderMouse().info(), " ") );
         Text azimut = new Text(Bindings.format("Azimut : %2f°, hauteur : %2f°", canvasManager.mouseAzDeg, canvasManager.mouseAltDeg).toString());
-        borderPane.getChildren().addAll(fovText, objectUnderMouseInfo, azimut);
+        borderPane.getChildren().addAll(fovText, azimut);
         return borderPane;
     }
 }
