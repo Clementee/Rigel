@@ -143,11 +143,13 @@ public class Main extends Application {
 
         TimeAnimator animator = new TimeAnimator(canvasManager.getDateTimeBean());
 
+
         HBox timeAnimator = new HBox();
         ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
         choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
-        choiceOfTheAnimator.setValue(NamedTimeAccelerator.TIMES_3000);
         choiceOfTheAnimator.setOnAction(e -> animator.setAccelerator(choiceOfTheAnimator.getValue().getAccelerator()));
+        choiceOfTheAnimator.setValue(NamedTimeAccelerator.TIMES_3000);
+
         timeAnimator.setStyle("-fx-spacing: inherit;");
 
         InputStream fontStream = getClass()
