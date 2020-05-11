@@ -7,8 +7,6 @@ import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -29,7 +27,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -42,7 +40,7 @@ public class Main extends Application {
     private final String pauseString = "\uf04b";
     private final String playString = "\uf04c";
 
-    private Font fontAwesome;
+    private final Font fontAwesome;
 
     public Main() throws IOException {
         try (InputStream inputStream = getClass().getResourceAsStream("/Font Awesome 5 Free-Solid-900.otf")) {
@@ -51,7 +49,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
 
         stage.setMinWidth(800);
         stage.setMinHeight(600);
@@ -66,7 +64,7 @@ public class Main extends Application {
         skyView.requestFocus();
     }
 
-    private HBox controlBarCreator() throws IOException {
+    private HBox controlBarCreator() {
         HBox timeAdvancement = createTimeAnimator();
 
         HBox observationPos = createObservationPosition();
@@ -141,8 +139,8 @@ public class Main extends Application {
             observerLocationBean.setCoordinates(
                     GeographicCoordinates.ofDeg(6.57, 46.52));
             viewingParametersBean.setCenter(
-                    HorizontalCoordinates.ofDeg(180, 42));
-            viewingParametersBean.setFieldOfViewDeg(70);
+                    HorizontalCoordinates.ofDeg(180.000000000001, 15));
+            viewingParametersBean.setFieldOfViewDeg(100);
 
             canvasManager = new SkyCanvasManager(
                     catalogue,
@@ -267,7 +265,7 @@ public class Main extends Application {
     }
 
     private ComboBox<ZoneId> createZoneIdComboBox() {
-        ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.<ZoneId>toList())));
+        ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.toList())));
         zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
         zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
         zoneIdComboBox.setStyle("-fx-pref-width: 180;");
@@ -278,9 +276,8 @@ public class Main extends Application {
     private DatePicker createDatePicker() {
         DatePicker datePicker = new DatePicker(canvasManager.getDateTimeBean().getDate());
         datePicker.setStyle("-fx-pref-width: 120;");
-        datePicker.valueProperty().addListener((e, i, o) -> {
-            canvasManager.getDateTimeBean().setDate(o);
-        });
+        datePicker.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().dateProperty());
+        datePicker.valueProperty().addListener((e, i, o) -> canvasManager.getDateTimeBean().setDate(o));
         datePicker.disableProperty().bind(timeAnimator.runningProperty());
         return datePicker;
     }
