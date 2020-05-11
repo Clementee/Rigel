@@ -22,7 +22,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,12 +35,19 @@ import java.util.stream.Collectors;
 
 public class Main extends Application {
 
-
     private SkyCanvasManager canvasManager;
     private TimeAnimator timeAnimator;
 
-    public void main() {
-        launch();
+    private final String undoString = "\uf0e2";
+    private final String pauseString = "\uf04b";
+    private final String playString = "\uf04c";
+
+    private Font fontAwesome;
+
+    public Main() throws IOException {
+        try (InputStream inputStream = getClass().getResourceAsStream("/Font Awesome 5 Free-Solid-900.otf")) {
+            fontAwesome = Font.loadFont(inputStream, 15);
+        }
     }
 
     @Override
@@ -58,7 +64,6 @@ public class Main extends Application {
         stage.setScene(new Scene(mainPane));
         stage.show();
         skyView.requestFocus();
-
     }
 
     private HBox controlBarCreator() throws IOException {
@@ -76,102 +81,46 @@ public class Main extends Application {
     }
 
     private HBox createObservationInstant() {
-
-        HBox position = new HBox();
-        position.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
-
         Label date = new Label("Date :");
+        DatePicker datePicker = createDatePicker();
 
-        DatePicker datePicker = new DatePicker(canvasManager.getDateTimeBean().getDate());
-        datePicker.setStyle("-fx-pref-width: 120;");
-        datePicker.valueProperty().addListener((e, i, o) -> {
-            canvasManager.getDateTimeBean().setDate(o);
-        });
-        datePicker.disableProperty().bind(timeAnimator.runningProperty());
         Label hour = new Label("Heure :");
+        TextField actHour = createActHour();
 
-        TextField actHour = new TextField(canvasManager.getDateTimeBean().getTime().toString());
-        actHour.setStyle("-fx-pref-width: 75;\n" + "-fx-alignment: baseline-right;");
-        DateTimeFormatter hmsFormatter =
-                DateTimeFormatter.ofPattern("HH:mm:ss");
-        LocalTimeStringConverter stringConverter =
-                new LocalTimeStringConverter(hmsFormatter, hmsFormatter);
-        TextFormatter<LocalTime> timeFormatter =
-                new TextFormatter<>(stringConverter);
+        ComboBox<ZoneId> zoneIdComboBox = createZoneIdComboBox();
 
-        actHour.setTextFormatter(timeFormatter);
-        actHour.setText(canvasManager.getDateTimeBean().getTime().toString());
-        actHour.disableProperty().bind(timeAnimator.runningProperty());
-        timeFormatter.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().timeProperty());
 
-        ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.<ZoneId>toList())));
-        zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
-            zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
-        zoneIdComboBox.setStyle("-fx-pref-width: 180;");
-        zoneIdComboBox.disableProperty().bind(timeAnimator.runningProperty());
-
-        position.getChildren().addAll(date, datePicker, hour, actHour, zoneIdComboBox);
+        HBox position = new HBox(date, datePicker, hour, actHour, zoneIdComboBox);
+        position.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
         return position;
     }
 
     private HBox createObservationPosition() {
-
-        Label longitude = new Label();
-        longitude.setText("Longitude (°) :");
-        Label latitude = new Label();
-        latitude.setText("Latitude (°) :");
-
+        Label longitude = new Label("Longitude (°) :");
         TextField lonTextField = longitudeTextField();
-        lonTextField.textProperty().bind(Bindings.format("%.2f", canvasManager.getObserverLocationBean().getLonDeg()));
-        lonTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
 
+        Label latitude = new Label("Latitude (°) :");
         TextField latTextField = latitudeTextField();
-        latTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
-        latTextField.textProperty().bind(Bindings.format("%.2f", canvasManager.getObserverLocationBean().getLatDeg()));
 
-        HBox observation = new HBox();
+
+        HBox observation = new HBox(longitude, lonTextField, latitude, latTextField);
         observation.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
-        observation.getChildren().addAll(longitude, lonTextField, latitude, latTextField);
         return observation;
     }
 
-    private HBox createTimeAnimator() throws IOException {
-
+    private HBox createTimeAnimator() {
 
         timeAnimator = new TimeAnimator(canvasManager.getDateTimeBean());
-        HBox timeAnimatorBox = new HBox();
-        ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
-        choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
-        choiceOfTheAnimator.setOnAction(e -> timeAnimator.setAccelerator(choiceOfTheAnimator.getValue().getAccelerator()));
-        choiceOfTheAnimator.setValue(NamedTimeAccelerator.TIMES_3000);
-        choiceOfTheAnimator.disableProperty().bind(timeAnimator.runningProperty());
+
+        ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = createNamedTimeAnimatorChoiceBox();
+
+        Button resetButton = createResetButton();
+
+        Button playPauseButton = createPlayPauseButton();
+
+
+        HBox timeAnimatorBox = new HBox(choiceOfTheAnimator, resetButton, playPauseButton);
         timeAnimatorBox.setStyle("-fx-spacing: inherit;");
-
-        InputStream fontStream = getClass()
-                .getResourceAsStream("/Font Awesome 5 Free-Solid-900.otf");
-        Font fontAwesome = Font.loadFont(fontStream, 15);
-        fontStream.close();
-
-        String undoString = "\uf0e2";
-        String pauseString = "\uf04b";
-        String playString = "\uf04c";
-
-        Button resetButton = new Button(undoString);
-        resetButton.setOnAction((e) -> canvasManager.getDateTimeBean().setZonedDateTime(ZonedDateTime.now()));
-        resetButton.setFont(fontAwesome);
-        resetButton.disableProperty().bind(timeAnimator.runningProperty());
-
-        Button playPauseButton = new Button(pauseString);
-        playPauseButton.setFont(fontAwesome);
-        playPauseButton.setOnAction((e) -> {
-            playPauseButton.setText(playPauseButton.getText().equals(playString) ? pauseString : playString);
-            if (playPauseButton.getText().equals(playString)) {
-                timeAnimator.start();
-            } else {
-                timeAnimator.stop();
-            }
-        });
-        timeAnimatorBox.getChildren().addAll(choiceOfTheAnimator, resetButton, playPauseButton);
         return timeAnimatorBox;
     }
 
@@ -240,6 +189,8 @@ public class Main extends Application {
                 new TextField();
         lonTextField.setTextFormatter(lonTextFormatter);
         lonTextFormatter.valueProperty().bindBidirectional(canvasManager.getObserverLocationBean().lonDegProperty());
+        lonTextField.textProperty().bind(Bindings.format("%.2f", canvasManager.getObserverLocationBean().getLonDeg()));
+        lonTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
         return lonTextField;
     }
 
@@ -266,11 +217,13 @@ public class Main extends Application {
         latTextField.setTextFormatter(latTextFormatter);
         latTextFormatter.valueProperty()
                 .bindBidirectional(canvasManager.getObserverLocationBean().latDegProperty());
+        latTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
+        latTextField.textProperty().bind(Bindings.format("%.2f", canvasManager.getObserverLocationBean().getLatDeg()));
+
         return latTextField;
     }
 
     private BorderPane createInformationBar() {
-
         Text fovText = new Text();
         fovText.textProperty().bind(Bindings.format("Champ de vue : %.1f°", canvasManager.getViewingParametersBean().fieldOfViewDegProperty()));
         Text objectUnderMouseText = new Text();
@@ -280,5 +233,72 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane(objectUnderMouseText, null, azimutText, null, fovText);
         borderPane.setStyle("-fx-padding: 4;-fx-background-color: white;");
         return borderPane;
+    }
+
+    private ChoiceBox<NamedTimeAccelerator> createNamedTimeAnimatorChoiceBox() {
+        ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
+        choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
+        choiceOfTheAnimator.setOnAction(e -> timeAnimator.setAccelerator(choiceOfTheAnimator.getValue().getAccelerator()));
+        choiceOfTheAnimator.setValue(NamedTimeAccelerator.TIMES_3000);
+        choiceOfTheAnimator.disableProperty().bind(timeAnimator.runningProperty());
+        return choiceOfTheAnimator;
+    }
+
+    private Button createResetButton() {
+        Button resetButton = new Button(undoString);
+        resetButton.setOnAction((e) -> canvasManager.getDateTimeBean().setZonedDateTime(ZonedDateTime.now()));
+        resetButton.setFont(fontAwesome);
+        resetButton.disableProperty().bind(timeAnimator.runningProperty());
+        return resetButton;
+    }
+
+    private Button createPlayPauseButton() {
+        Button playPauseButton = new Button(pauseString);
+        playPauseButton.setFont(fontAwesome);
+        playPauseButton.setOnAction((e) -> {
+            playPauseButton.setText(playPauseButton.getText().equals(playString) ? pauseString : playString);
+            if (playPauseButton.getText().equals(playString)) {
+                timeAnimator.start();
+            } else {
+                timeAnimator.stop();
+            }
+        });
+        return playPauseButton;
+    }
+
+    private ComboBox<ZoneId> createZoneIdComboBox() {
+        ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.<ZoneId>toList())));
+        zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
+        zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
+        zoneIdComboBox.setStyle("-fx-pref-width: 180;");
+        zoneIdComboBox.disableProperty().bind(timeAnimator.runningProperty());
+        return zoneIdComboBox;
+    }
+
+    private DatePicker createDatePicker() {
+        DatePicker datePicker = new DatePicker(canvasManager.getDateTimeBean().getDate());
+        datePicker.setStyle("-fx-pref-width: 120;");
+        datePicker.valueProperty().addListener((e, i, o) -> {
+            canvasManager.getDateTimeBean().setDate(o);
+        });
+        datePicker.disableProperty().bind(timeAnimator.runningProperty());
+        return datePicker;
+    }
+
+    private TextField createActHour() {
+        TextField actHour = new TextField(canvasManager.getDateTimeBean().getTime().toString());
+        actHour.setStyle("-fx-pref-width: 75;\n" + "-fx-alignment: baseline-right;");
+        DateTimeFormatter hmsFormatter =
+                DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalTimeStringConverter stringConverter =
+                new LocalTimeStringConverter(hmsFormatter, hmsFormatter);
+        TextFormatter<LocalTime> timeFormatter =
+                new TextFormatter<>(stringConverter);
+
+        actHour.setTextFormatter(timeFormatter);
+        actHour.setText(canvasManager.getDateTimeBean().getTime().toString());
+        actHour.disableProperty().bind(timeAnimator.runningProperty());
+        timeFormatter.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().timeProperty());
+        return actHour;
     }
 }
