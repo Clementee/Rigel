@@ -237,7 +237,7 @@ public class Main extends Application {
         ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
         choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
         choiceOfTheAnimator.setOnAction(e -> timeAnimator.setAccelerator(choiceOfTheAnimator.getValue().getAccelerator()));
-        choiceOfTheAnimator.setValue(NamedTimeAccelerator.TIMES_3000);
+        choiceOfTheAnimator.setValue(NamedTimeAccelerator.TIMES_300);
         choiceOfTheAnimator.disableProperty().bind(timeAnimator.runningProperty());
         return choiceOfTheAnimator;
     }
