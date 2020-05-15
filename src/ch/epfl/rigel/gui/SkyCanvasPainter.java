@@ -77,6 +77,7 @@ public final class SkyCanvasPainter {
         }
         if (drawConstellation) {
             for (Constellation constellation : observedSky.constellations()) {
+                System.out.println(constellation.getConstellationName());
                 drawGroups(observedSky, transform, CONSTELLATION_COLOR, bound, starPosition, constellation.stars());
             }
         }
@@ -97,22 +98,20 @@ public final class SkyCanvasPainter {
     }
 
     private void drawGroups(ObservedSky observedSky, Transform transform, Color CONSTELLATION_COLOR, Bounds bound, double[] starPosition, List<Star> stars) {
-        List<Star> starFromConstellation = stars;
-
         ctx.setStroke(CONSTELLATION_COLOR);
         ctx.setLineWidth(1);
 
 
-        for (int i = 0; i < starFromConstellation.size(); i++) {
-            Star star = starFromConstellation.get(i);
+        for (int i = 1; i < stars.size(); i++) {
+            Star star = stars.get(i);
             double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
             double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
 
             Point2D begTransformed = transform.transform(x1, y1);
 
-            if (i < starFromConstellation.size() - 1) {
+            if (i < stars.size() - 1) {
 
-                Star star2 = starFromConstellation.get(i + 1);
+                Star star2 = stars.get(i + 1);
                 int u = observedSky.stars().indexOf(star2);
                 double x2 = starPosition[2 * u];
                 double y2 = starPosition[2 * u + 1];

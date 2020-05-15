@@ -20,36 +20,25 @@ public enum ConstellationLoader implements StarCatalogue.Loader {
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
 
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII); BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-
-            List<Star> starList = builder.stars();
-
-            Map<Integer, Star> constellationsListed = new HashMap<>();
-
-            for (Star starInter : starList) {
-                constellationsListed.put(starInter.hipparcosId(), starInter);
-            }
+            Map<String, String> bayerToFullNameMap = new HashMap<>();
 
             String line = bufferedReader.readLine();
             while (line != null) {
-                String[] inputLineTab = line.split(" ");
-
-                List<Star> starsList = new LinkedList<>();
-
-                String name = "";
-
-
-                for (int k = 0; k < inputLineTab.length; k++) {
-                    String string = inputLineTab[k];
-                    if (k == 0) {
-                        name = string;
-                    } else if (Integer.parseInt(string) != 0) {
-                        starsList.add(constellationsListed.get(Integer.parseInt(string)));
-                    }
-                }
-                builder.addConstellation(new Constellation(name, starsList));
+                String[] inputLineTab = line.split(",");
+                bayerToFullNameMap.put(inputLineTab[0], inputLineTab[1]);
                 line = bufferedReader.readLine();
             }
+            List<Asterism> asterisms = builder.asterisms();
+            for (Asterism ast : asterisms) {
+                Objects.requireNonNull(ast.stars());
+                String str = ast.stars().get(0).bayer();
+                if (!str.equals("?"))
+                    builder.addConstellation(new Constellation(bayerToFullNameMap.get(str), ast));
+            }
+
+            builder.addConstellation(new Constellation(null, null));
         }
     }
+}
 
 }

@@ -51,8 +51,7 @@ public final class StarCatalogue {
         }
         for (Constellation constellation : constellations) {
             List<Integer> index = new ArrayList<>();
-            System.out.println(constellation.getConstellationName());
-            //checkArgument(starList.containsAll(constellation.stars()));
+            checkArgument(starList.containsAll(constellation.stars()));
             for (Star star : constellation.stars()) {
                 index.add(starMap.get(star));
             }
