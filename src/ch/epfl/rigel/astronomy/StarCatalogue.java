@@ -51,8 +51,8 @@ public final class StarCatalogue {
         }
         for (Constellation constellation : constellations) {
             List<Integer> index = new ArrayList<>();
-            checkArgument(starList.containsAll(constellation.stars()));
-            for (Star star : constellation.stars()) {
+            checkArgument(starList.containsAll(constellation.asterism().stars()));
+            for (Star star : constellation.asterism().stars()) {
                 index.add(starMap.get(star));
             }
             constMap.put(constellation, Collections.unmodifiableList(index));

@@ -17,7 +17,7 @@ public class Constellation {
      *
      * @return constellation (List<Star>) : return the list of stars composing the constellation
      */
-    public Asterism stars() {
+    public Asterism asterism() {
         return constellation;
     }
 

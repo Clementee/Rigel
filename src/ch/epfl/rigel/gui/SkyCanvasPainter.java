@@ -77,8 +77,7 @@ public final class SkyCanvasPainter {
         }
         if (drawConstellation) {
             for (Constellation constellation : observedSky.constellations()) {
-                System.out.println(constellation.getConstellationName());
-                drawGroups(observedSky, transform, CONSTELLATION_COLOR, bound, starPosition, constellation.stars());
+                drawGroups(observedSky, transform, CONSTELLATION_COLOR, bound, starPosition, constellation.asterism().stars());
             }
         }
 

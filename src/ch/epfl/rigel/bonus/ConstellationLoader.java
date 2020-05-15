@@ -35,10 +35,6 @@ public enum ConstellationLoader implements StarCatalogue.Loader {
                 if (!str.equals("?"))
                     builder.addConstellation(new Constellation(bayerToFullNameMap.get(str), ast));
             }
-
-            builder.addConstellation(new Constellation(null, null));
         }
     }
-}
-
 }
