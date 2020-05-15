@@ -12,7 +12,9 @@ import java.util.*;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
-public class ConstellationLoader implements StarCatalogue.Loader {
+public enum ConstellationLoader implements StarCatalogue.Loader {
+
+    INSTANCE;
 
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {

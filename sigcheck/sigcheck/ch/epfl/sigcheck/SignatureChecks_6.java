@@ -22,7 +22,7 @@ final class SignatureChecks_6 {
         List<Asterism> al = null;
         Set<Asterism> as = null;
         List<Integer> il;
-        StarCatalogue c = new StarCatalogue(sl, al);
+        StarCatalogue c = new StarCatalogue(sl, al, null);
         sl = c.stars();
         as = c.asterisms();
         il = c.asterismIndices(a);

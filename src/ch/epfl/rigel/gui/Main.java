@@ -3,6 +3,8 @@ package ch.epfl.rigel.gui;
 import ch.epfl.rigel.astronomy.AsterismLoader;
 import ch.epfl.rigel.astronomy.HygDatabaseLoader;
 import ch.epfl.rigel.astronomy.StarCatalogue;
+import ch.epfl.rigel.bonus.Constellation;
+import ch.epfl.rigel.bonus.ConstellationLoader;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
@@ -125,10 +127,10 @@ public class Main extends Application {
     private Pane createSkyView() {
 
         Pane skyView = new Pane();
-        try (InputStream hs = getClass().getResourceAsStream("/hygdata_v3.csv"); InputStream is = getClass().getResourceAsStream("/asterisms.txt")) {
+        try (InputStream hs = getClass().getResourceAsStream("/hygdata_v3.csv"); InputStream is = getClass().getResourceAsStream("/asterisms.txt"); InputStream cs = getClass().getResourceAsStream("/constellations.txt")) {
 
             StarCatalogue catalogue = new StarCatalogue.Builder()
-                    .loadFrom(hs, HygDatabaseLoader.INSTANCE).loadFrom(is, AsterismLoader.INSTANCE)
+                    .loadFrom(hs, HygDatabaseLoader.INSTANCE).loadFrom(is, AsterismLoader.INSTANCE).loadFrom(cs, ConstellationLoader.INSTANCE)
                     .build();
 
             ObserverLocationBean observerLocationBean = new ObserverLocationBean();

@@ -10,9 +10,7 @@ import ch.epfl.rigel.math.ClosedInterval;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -43,6 +41,8 @@ public class SkyCanvasManager {
     private final ViewingParametersBean viewingParametersBean;
     private final DoubleBinding mouseAzDeg;
     private final DoubleBinding mouseAltDeg;
+    private final BooleanProperty drawAsterism = new SimpleBooleanProperty(true);
+    private final BooleanProperty drawConstellation = new SimpleBooleanProperty(true);
 
     private final ObjectBinding<StereographicProjection> projection;
     private final ObjectBinding<Transform> planeToCanvas;
@@ -164,7 +164,7 @@ public class SkyCanvasManager {
 
     private void updateCanvas() {
         painter.clear();
-        painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+        painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue(), drawAsterism.getValue(), drawConstellation.getValue());
         painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
         painter.drawSun(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
         painter.drawMoon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
