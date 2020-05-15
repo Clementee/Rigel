@@ -19,6 +19,7 @@ public final class Star extends CelestialObject {
     private final float starColorInd;
     private final static ClosedInterval STAR_COLOR_INTERVAL = ClosedInterval.of(-0.5,5.5);
     private int colorTemperature;
+    private final String bayer;
 
     /**
      * Star public constructor returning a celestial object and initializing some values
@@ -29,7 +30,7 @@ public final class Star extends CelestialObject {
      * @param magnitude     (float) : gives the magnitude of the planet
      * @param colorIndex    (float) : gives the index of the color of the star
      */
-    public Star(int hipparcosId, String name, EquatorialCoordinates equatorialPos, float magnitude, float colorIndex) {
+    public Star(int hipparcosId, String name, EquatorialCoordinates equatorialPos, float magnitude, float colorIndex, String bayer) {
 
         super(name, equatorialPos, 0, magnitude);
 
@@ -38,6 +39,11 @@ public final class Star extends CelestialObject {
 
         starNumber = hipparcosId;
         starColorInd = colorIndex;
+        this.bayer = bayer;
+    }
+
+    public String bayer(){
+        return bayer;
     }
 
     /**
