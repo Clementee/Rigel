@@ -11,7 +11,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.transform.Transform;
@@ -41,8 +40,8 @@ public class SkyCanvasManager {
     private final ViewingParametersBean viewingParametersBean;
     private final DoubleBinding mouseAzDeg;
     private final DoubleBinding mouseAltDeg;
-    private final BooleanProperty drawAsterism = new SimpleBooleanProperty(true);
-    private final BooleanProperty drawConstellation = new SimpleBooleanProperty(true);
+    private final BooleanProperty drawAsterism = new SimpleBooleanProperty(false);
+    private final BooleanProperty drawConstellation = new SimpleBooleanProperty(false);
 
     private final ObjectBinding<StereographicProjection> projection;
     private final ObjectBinding<Transform> planeToCanvas;
@@ -54,6 +53,7 @@ public class SkyCanvasManager {
     private Canvas canvas = new Canvas();
     private final SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
     private final ClosedInterval zoomInter = ClosedInterval.of(30, 150);
+
 
     public SkyCanvasManager(StarCatalogue starCatalogue, DateTimeBean dTimeBean, ObserverLocationBean obsLocationBean, ViewingParametersBean vParametersBean) {
 
@@ -146,6 +146,32 @@ public class SkyCanvasManager {
         return objectUnderMouse.get();
     }
 
+    public BooleanProperty getDrawAsterismProperty(){
+        return drawAsterism;
+    }
+
+    public boolean getDrawAsterism(){
+        return drawAsterism.get();
+    }
+
+    public BooleanProperty getDrawConstellationProperty(){
+        return drawConstellation;
+    }
+
+    public boolean getDrawConstellation(){
+        return drawConstellation.get();
+    }
+
+    public void setDrawAsterism(boolean status){
+        drawAsterism.setValue(status);
+        updateCanvas();
+    }
+
+    public void setDrawConstellation(boolean status){
+        drawConstellation.set(status);
+        updateCanvas();
+    }
+
     public ObjectBinding<CelestialObject> objectUnderMouseProperty() {
         return objectUnderMouse;
     }
@@ -182,5 +208,4 @@ public class SkyCanvasManager {
         viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(), ClosedInterval.of(5, 90).clip(newValue)));
 
     }
-
 }
