@@ -1,5 +1,6 @@
 package ch.epfl.rigel.astronomy;
 
+import ch.epfl.rigel.bonus.Constellation;
 import ch.epfl.rigel.coordinates.*;
 
 import java.time.ZonedDateTime;
@@ -206,6 +207,8 @@ public class ObservedSky {
     public List<Integer> asterismIndexList(Asterism asterism) {
         return catalogue.asterismIndices(asterism);
     }
+
+    public Set<Constellation> constellations(){return Set.copyOf(catalogue.constellations());}
 
     /**
      * Method finding the closest Celestial object to a point, here the cursor, or returning nothing if there is no object closest than the minimal distance
