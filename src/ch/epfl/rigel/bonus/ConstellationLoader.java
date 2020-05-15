@@ -20,7 +20,6 @@ public class ConstellationLoader implements StarCatalogue.Loader {
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII); BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
 
             List<Star> starList = builder.stars();
-            List<String[]> inputList = new ArrayList<>();
 
             Map<Integer, Star> constellationsListed = new HashMap<>();
 
@@ -32,20 +31,26 @@ public class ConstellationLoader implements StarCatalogue.Loader {
             while (line != null) {
                 String[] inputLineTab = line.split(",");
 
-                List<Star> constellationsList = new LinkedList<>();
+                List<Star> starsList = new LinkedList<>();
+
+                String name = "";
 
                 for (String string : inputLineTab) {
+                    for (int k = 0; k < inputLineTab.length; k++) {
 
-                    if (Integer.parseInt(string) != 0) {
+                        if (k == 0) {
+                            name = string;
+                        } else if (Integer.parseInt(string) != 0) {
 
-                        constellationsList.
-                                add(constellationsListed.get(Integer.parseInt(string)));
+                            starsList.
+                                    add(constellationsListed.get(Integer.parseInt(string)));
+                        }
                     }
+
+                    builder.addConstellation(new Constellation(name,new Asterism(starsList)));
+                    line = bufferedReader.readLine();
+
                 }
-
-                builder.addAsterism(new Asterism(constellationsList));
-                line = bufferedReader.readLine();
-
             }
         }
     }

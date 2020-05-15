@@ -4,6 +4,7 @@ import ch.epfl.rigel.astronomy.Asterism;
 import ch.epfl.rigel.astronomy.ObservedSky;
 import ch.epfl.rigel.astronomy.Planet;
 import ch.epfl.rigel.astronomy.Star;
+import ch.epfl.rigel.bonus.Constellation;
 import ch.epfl.rigel.coordinates.CartesianCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
@@ -61,42 +62,29 @@ public final class SkyCanvasPainter {
      * @param transform               (Transform) : gives the transformation we will be using to modify the projection
      *                                in the good frame
      */
-    public void drawStars(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform) {
+    public void drawStars(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform, boolean drawAsterism, boolean drawConstellation) {
 
         final Color ASTERISM_COLOR = Color.BLUE;
+        final Color CONSTELLATION_COLOR = Color.RED;
+
         Color starColor;
         Bounds bound = canvas.getBoundsInLocal();
         double[] starPosition = observedSky.starsPosition();
+        if (drawAsterism) {
+            for (Asterism asterism : observedSky.asterism()) {
 
-        for (Asterism asterism : observedSky.asterism()) {
+                List<Star> starFromAsterism = asterism.stars();
 
-            List<Star> starFromAsterism = asterism.stars();
+                drawGroup(observedSky, transform, ASTERISM_COLOR, bound, starPosition, starFromAsterism);
+            }
 
-            ctx.setStroke(ASTERISM_COLOR);
-            ctx.setLineWidth(1);
+        }
+        if(drawConstellation){
+            for (Constellation constellation : observedSky.constellations()) {
 
+                List<Star> starFromAsterism = constellation.asterims().stars();
 
-            for (int i = 0; i < starFromAsterism.size(); i++) {
-
-                Star star = starFromAsterism.get(i);
-                double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
-                double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
-
-                Point2D begTransformed = transform.transform(x1, y1);
-
-                if (i < starFromAsterism.size() - 1) {
-
-                    Star star2 = starFromAsterism.get(i + 1);
-                    int u = observedSky.stars().indexOf(star2);
-                    double x2 = starPosition[2 * u];
-                    double y2 = starPosition[2 * u + 1];
-
-                    Point2D endTransformed = transform.transform(x2, y2);
-
-                    if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
-                        ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
-                    }
-                }
+                drawGroup(observedSky, transform, CONSTELLATION_COLOR, bound, starPosition, starFromAsterism);
             }
         }
 
@@ -112,6 +100,35 @@ public final class SkyCanvasPainter {
 
             ctx.setFill(starColor);
             drawCircle(ctx, point.getX(), point.getY(), starDiameter);
+        }
+    }
+
+    private void drawGroup(ObservedSky observedSky, Transform transform, Color ASTERISM_COLOR, Bounds bound, double[] starPosition, List<Star> starFromAsterism) {
+        ctx.setStroke(ASTERISM_COLOR);
+        ctx.setLineWidth(1);
+
+
+        for (int i = 0; i < starFromAsterism.size(); i++) {
+
+            Star star = starFromAsterism.get(i);
+            double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
+            double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
+
+            Point2D begTransformed = transform.transform(x1, y1);
+
+            if (i < starFromAsterism.size() - 1) {
+
+                Star star2 = starFromAsterism.get(i + 1);
+                int u = observedSky.stars().indexOf(star2);
+                double x2 = starPosition[2 * u];
+                double y2 = starPosition[2 * u + 1];
+
+                Point2D endTransformed = transform.transform(x2, y2);
+
+                if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
+                    ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
+                }
+            }
         }
     }
 
