@@ -3,7 +3,6 @@ package ch.epfl.rigel.gui;
 import ch.epfl.rigel.astronomy.AsterismLoader;
 import ch.epfl.rigel.astronomy.HygDatabaseLoader;
 import ch.epfl.rigel.astronomy.StarCatalogue;
-import ch.epfl.rigel.bonus.Constellation;
 import ch.epfl.rigel.bonus.ConstellationLoader;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
@@ -41,6 +40,8 @@ public class Main extends Application {
     private final String undoString = "\uf0e2";
     private final String pauseString = "\uf04b";
     private final String playString = "\uf04c";
+    private final String onString = "\uf06e";
+    private final String offString = "\uf070";
 
     private final Font fontAwesome;
 
@@ -73,9 +74,11 @@ public class Main extends Application {
 
         HBox observationInstant = createObservationInstant();
 
+        HBox setView = createViewSetter();
+
         Separator separator = new Separator(Orientation.VERTICAL);
 
-        HBox controlBar = new HBox(separator, observationPos, observationInstant, timeAdvancement);
+        HBox controlBar = new HBox(separator, observationPos, observationInstant, timeAdvancement, setView);
         controlBar.setStyle("-fx-spacing: 4; -fx-padding: 4;");
         return controlBar;
     }
@@ -94,6 +97,19 @@ public class Main extends Application {
         position.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
         return position;
     }
+
+    private HBox createViewSetter(){
+        Label viewAst = new Label("Asterism :");
+        Button buttonAst = createAstButton();
+
+        Label viewConstellation = new Label("Constellation :");
+        Button buttonConstellation = createConstButton();
+
+        HBox viewBox = new HBox(viewAst, buttonAst, viewConstellation, buttonConstellation );
+        viewBox.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
+        return viewBox;
+    }
+
 
     private HBox createObservationPosition() {
         Label longitude = new Label("Longitude (°) :");
@@ -266,9 +282,42 @@ public class Main extends Application {
         return playPauseButton;
     }
 
+    private Button createAstButton(){
+        Button astButton = new Button(offString);
+        astButton.setFont(fontAwesome);
+        astButton.setOnAction((e)-> {
+            astButton.setText(astButton.getText().equals(onString) ? offString : onString);
+            astButton.disableProperty().bind(canvasManager.getDrawConstellationProperty());
+            canvasManager.setDrawAsterism(astButton.getText().equals(onString));
+
+        });
+        return astButton;
+    }
+
+    private Button createConstButton(){
+        Button constButton = new Button(offString);
+        constButton.setFont(fontAwesome);
+        constButton.setOnAction((e)-> {
+            constButton.setText(constButton.getText().equals(onString) ? offString : onString);
+            constButton.disableProperty().bind(canvasManager.getDrawAsterismProperty());
+            canvasManager.setDrawConstellation(constButton.getText().equals(onString));
+
+        });
+        return constButton;
+    }
+
     private ComboBox<ZoneId> createZoneIdComboBox() {
         ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.toList())));
         zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
+        zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
+        zoneIdComboBox.setStyle("-fx-pref-width: 180;");
+        zoneIdComboBox.disableProperty().bind(timeAnimator.runningProperty());
+        return zoneIdComboBox;
+    }
+
+    private ComboBox<ZoneId> createViewComboBox() {
+        ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.toList())));
+        zoneIdComboBox.setPromptText(Boolean.toString(canvasManager.getDrawAsterism()));
         zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
         zoneIdComboBox.setStyle("-fx-pref-width: 180;");
         zoneIdComboBox.disableProperty().bind(timeAnimator.runningProperty());
