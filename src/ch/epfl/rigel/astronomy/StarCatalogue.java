@@ -1,5 +1,7 @@
 package ch.epfl.rigel.astronomy;
 
+import ch.epfl.rigel.bonus.Constellation;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -16,6 +18,7 @@ public final class StarCatalogue {
 
     private final List<Star> starList;
     private final Map<Asterism, List<Integer>> asterismMap;
+    private final Map<Constellation, List<Integer>> constellationMap;
 
     /**
      * StarCatalogue public constructor creating and initializing a catalogue of stars
@@ -23,12 +26,13 @@ public final class StarCatalogue {
      * @param stars     (List<Star>) : gives the list of stars
      * @param asterisms (List<Asterism>) : gives the list of asterisms
      */
-    public StarCatalogue(List<Star> stars, List<Asterism> asterisms) {
+    public StarCatalogue(List<Star> stars, List<Asterism> asterisms, List<Constellation> constellations) {
         Map<Asterism, List<Integer>> trans = new HashMap<>();
         starList = List.copyOf(stars);
 
         Map<Star, Integer> starMap = new HashMap<>();
-        Map<Asterism,List<Integer>> astMap = new HashMap<>();
+        Map<Asterism, List<Integer>> astMap = new HashMap<>();
+        Map<Constellation, List<Integer>> constMap = new HashMap<>();
 
         for (Star star : starList) {
             starMap.put(star, starList.indexOf(star));
@@ -45,7 +49,16 @@ public final class StarCatalogue {
             }
             astMap.put(ast, Collections.unmodifiableList(index));
         }
+        for (Constellation constellation : constellations) {
+            List<Integer> index = new ArrayList<>();
+            checkArgument(starList.containsAll(constellation.asterims().stars()));
+            for (Star star : constellation.asterims().stars()) {
+                index.add(starMap.get(star));
+            }
+            constMap.put(constellation, Collections.unmodifiableList(index));
+        }
         asterismMap = Map.copyOf(astMap);
+        constellationMap = Map.copyOf(constMap);
     }
 
     /**
@@ -66,7 +79,6 @@ public final class StarCatalogue {
         return asterismMap.keySet();
     }
 
-
     /**
      * StarCatalogue method stars returning the list of stars
      *
@@ -77,11 +89,16 @@ public final class StarCatalogue {
         return asterismMap.get(asterism);
     }
 
+    public Set<Constellation> constellations(){return constellationMap.keySet();}
+
+    public List<Integer> constellationIndices(Constellation constellation){return constellationMap.get(constellation);}
+
     // A builder of a catalogue of stars
     public static final class Builder {
 
         private List<Star> starBuild;
         private List<Asterism> asterismBuild;
+        private List<Constellation> constBuild;
 
         /**
          * StarCatalogue.Builder public constructor initializing the list of stars and asterisms
@@ -90,6 +107,7 @@ public final class StarCatalogue {
 
             starBuild = new ArrayList<>();
             asterismBuild = new ArrayList<>();
+            constBuild = new ArrayList<>();
         }
 
         /**
@@ -137,6 +155,13 @@ public final class StarCatalogue {
             return Collections.unmodifiableList(asterismBuild);
         }
 
+        public Builder addConstellation(Constellation constellation){
+            constBuild.add(constellation);
+            return  this;
+        }
+
+        public List<Constellation> constellations(){return Collections.unmodifiableList(constBuild);}
+
         /**
          * StarCatalogue.Builder public method loading the input into the loader and throws an IOException
          *
@@ -158,7 +183,7 @@ public final class StarCatalogue {
          * @return builder (Builder) : return the catalogue of star
          */
         public StarCatalogue build() {
-            return new StarCatalogue(starBuild, asterismBuild);
+            return new StarCatalogue(starBuild, asterismBuild, constBuild);
         }
     }
 

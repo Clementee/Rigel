@@ -42,7 +42,7 @@ public final class BonusSkyCanvasPainter {
 
             for (Constellation constellation : observedSky.constellations()) {
 
-                List<Star> starFromConstellations = constellation.stars();
+                List<Star> starFromConstellations = constellation.asterims().stars();
 
                 ctx.setStroke(CONSTELLATION_COLOR);
                 ctx.setLineWidth(1);
