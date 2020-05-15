@@ -1,20 +1,15 @@
 package ch.epfl.rigel.bonus;
 
 import ch.epfl.rigel.astronomy.Asterism;
-import ch.epfl.rigel.astronomy.Star;
-
-import java.util.List;
-
-import static ch.epfl.rigel.Preconditions.checkArgument;
 
 public class Constellation {
-    private final List<Star> constellation;
+    private final Asterism constellation;
     private final String constellationName;
 
 
-    public Constellation(String name, List<Star> stars) {
-        constellationName = name;
-        this.constellation = stars;
+    public Constellation(String fullName, Asterism asterism) {
+        constellationName = fullName;
+        this.constellation = asterism;
     }
 
     /**
@@ -22,7 +17,7 @@ public class Constellation {
      *
      * @return constellation (List<Star>) : return the list of stars composing the constellation
      */
-    public List<Star> stars() {
+    public Asterism stars() {
         return constellation;
     }
 
