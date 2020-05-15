@@ -65,25 +65,84 @@ public final class SkyCanvasPainter {
     public void drawStars(ObservedSky observedSky, StereographicProjection stereographicProjection, Transform transform, boolean drawAsterism, boolean drawConstellation) {
 
         final Color ASTERISM_COLOR = Color.BLUE;
-        final Color CONSTELLATION_COLOR = Color.RED;
-        Color starColor;
+        final Color CONSTELLATION_COLOR = Color.SPRINGGREEN;
         Bounds bound = canvas.getBoundsInLocal();
         double[] starPosition = observedSky.starsPosition();
         if (drawAsterism) {
             for (Asterism asterism : observedSky.asterism()) {
-                drawGroups(observedSky, transform, ASTERISM_COLOR, bound, starPosition, asterism.stars());
+
+                List<Star> starFromAsterism = asterism.stars();
+
+                ctx.setStroke(ASTERISM_COLOR);
+                ctx.setLineWidth(1);
+
+
+                for (int i = 0; i < starFromAsterism.size(); i++) {
+
+                    Star star = starFromAsterism.get(i);
+                    double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
+                    double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
+
+                    Point2D begTransformed = transform.transform(x1, y1);
+                    if (i < starFromAsterism.size() - 1) {
+
+                        Star star2 = starFromAsterism.get(i + 1);
+                        int u = observedSky.stars().indexOf(star2);
+                        double x2 = starPosition[2 * u];
+                        double y2 = starPosition[2 * u + 1];
+
+                        Point2D endTransformed = transform.transform(x2, y2);
+
+                        if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
+                            ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
+                        }
+                    }
+                }
             }
 
         }
-        if (drawConstellation) {
+        if(drawConstellation){
             for (Constellation constellation : observedSky.constellations()) {
-                drawGroups(observedSky, transform, CONSTELLATION_COLOR, bound, starPosition, constellation.asterism().stars());
+
+                List<Star> starFromConstellation = constellation.asterism().stars();
+
+                ctx.setStroke(CONSTELLATION_COLOR);
+                ctx.setLineWidth(1);
+
+
+                for (int i = 0; i < starFromConstellation.size(); i++) {
+                    Star star = starFromConstellation.get(i);
+                    double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
+                    double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
+
+                    ctx.setFill(CONSTELLATION_COLOR);
+                    ctx.setTextAlign(TextAlignment.CENTER);
+                    ctx.setTextBaseline(VPos.TOP);
+
+
+                    Point2D begTransformed = transform.transform(x1, y1);
+                    if(i==0)
+                        ctx.fillText(constellation.getConstellationName(), begTransformed.getX(), begTransformed.getY());
+                    if (i < starFromConstellation.size() - 1) {
+
+                        Star star2 = starFromConstellation.get(i + 1);
+                        int u = observedSky.stars().indexOf(star2);
+                        double x2 = starPosition[2 * u];
+                        double y2 = starPosition[2 * u + 1];
+
+                        Point2D endTransformed = transform.transform(x2, y2);
+
+                        if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
+                            ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
+                        }
+                    }
+                }
             }
         }
 
         for (int i = 0; i < starPosition.length; i += 2) {
             Star star = observedSky.stars().get(i / 2);
-            starColor = BlackBodyColor
+            Color starColor = BlackBodyColor
                     .colorForTemperature(star.colorTemperature());
             double starDiameter = transform.deltaTransform(0, objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
             double x = starPosition[i];
@@ -93,34 +152,6 @@ public final class SkyCanvasPainter {
 
             ctx.setFill(starColor);
             drawCircle(ctx, point.getX(), point.getY(), starDiameter);
-        }
-    }
-
-    private void drawGroups(ObservedSky observedSky, Transform transform, Color CONSTELLATION_COLOR, Bounds bound, double[] starPosition, List<Star> stars) {
-        ctx.setStroke(CONSTELLATION_COLOR);
-        ctx.setLineWidth(1);
-
-
-        for (int i = 1; i < stars.size(); i++) {
-            Star star = stars.get(i);
-            double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
-            double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
-
-            Point2D begTransformed = transform.transform(x1, y1);
-
-            if (i < stars.size() - 1) {
-
-                Star star2 = stars.get(i + 1);
-                int u = observedSky.stars().indexOf(star2);
-                double x2 = starPosition[2 * u];
-                double y2 = starPosition[2 * u + 1];
-
-                Point2D endTransformed = transform.transform(x2, y2);
-
-                if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
-                    ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
-                }
-            }
         }
     }
 

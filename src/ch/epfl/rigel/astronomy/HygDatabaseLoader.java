@@ -30,7 +30,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, US_ASCII); BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
             bufferedReader.readLine();
             String inputLine = bufferedReader.readLine();
-            while (inputLine!=null) {
+            while (inputLine != null) {
                 String[] lineTab = inputLine.split(",");
 
                 int hipparcosID = Integer.parseInt(validOrDefault(lineTab[Index.HIP.ordinal()], lineTab[Index.HIP.ordinal()], "0"));
@@ -42,7 +42,7 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                 EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad, decrad);
                 float magnitude = Float.parseFloat(validOrDefault(lineTab[Index.MAG.ordinal()], lineTab[Index.MAG.ordinal()], "0"));
                 float colorID = Float.parseFloat(validOrDefault(lineTab[Index.CI.ordinal()], lineTab[Index.CI.ordinal()], "0"));
-                String bayer = validOrDefault(lineTab[Index.BAYER.ordinal()],lineTab[Index.BAYER.ordinal()], "? ");
+                String bayer = !(lineTab[Index.CON.ordinal()]).isEmpty() ? lineTab[Index.CON.ordinal()] : "?";
 
                 builder.addStar(new Star(hipparcosID, name, equatorialCoordinates, magnitude, colorID, bayer));
                 inputLine = bufferedReader.readLine();
