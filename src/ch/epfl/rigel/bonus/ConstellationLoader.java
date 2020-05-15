@@ -31,29 +31,25 @@ public enum ConstellationLoader implements StarCatalogue.Loader {
 
             String line = bufferedReader.readLine();
             while (line != null) {
-                String[] inputLineTab = line.split(",");
+                String[] inputLineTab = line.split(" ");
 
                 List<Star> starsList = new LinkedList<>();
 
                 String name = "";
 
-                for (String string : inputLineTab) {
-                    for (int k = 0; k < inputLineTab.length; k++) {
 
-                        if (k == 0) {
-                            name = string;
-                        } else if (Integer.parseInt(string) != 0) {
-
-                            starsList.
-                                    add(constellationsListed.get(Integer.parseInt(string)));
-                        }
+                for (int k = 0; k < inputLineTab.length; k++) {
+                    String string = inputLineTab[k];
+                    if (k == 0) {
+                        name = string;
+                    } else if (Integer.parseInt(string) != 0) {
+                        starsList.add(constellationsListed.get(Integer.parseInt(string)));
                     }
-
-                    builder.addConstellation(new Constellation(name,new Asterism(starsList)));
-                    line = bufferedReader.readLine();
-
                 }
+                builder.addConstellation(new Constellation(name, starsList));
+                line = bufferedReader.readLine();
             }
         }
     }
+
 }

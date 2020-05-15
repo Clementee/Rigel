@@ -51,8 +51,9 @@ public final class StarCatalogue {
         }
         for (Constellation constellation : constellations) {
             List<Integer> index = new ArrayList<>();
-            checkArgument(starList.containsAll(constellation.asterims().stars()));
-            for (Star star : constellation.asterims().stars()) {
+            System.out.println(constellation.getConstellationName());
+            //checkArgument(starList.containsAll(constellation.stars()));
+            for (Star star : constellation.stars()) {
                 index.add(starMap.get(star));
             }
             constMap.put(constellation, Collections.unmodifiableList(index));
@@ -89,9 +90,13 @@ public final class StarCatalogue {
         return asterismMap.get(asterism);
     }
 
-    public Set<Constellation> constellations(){return constellationMap.keySet();}
+    public Set<Constellation> constellations() {
+        return constellationMap.keySet();
+    }
 
-    public List<Integer> constellationIndices(Constellation constellation){return constellationMap.get(constellation);}
+    public List<Integer> constellationIndices(Constellation constellation) {
+        return constellationMap.get(constellation);
+    }
 
     // A builder of a catalogue of stars
     public static final class Builder {
@@ -155,12 +160,16 @@ public final class StarCatalogue {
             return Collections.unmodifiableList(asterismBuild);
         }
 
-        public Builder addConstellation(Constellation constellation){
+        public Builder addConstellation(Constellation constellation) {
+
             constBuild.add(constellation);
-            return  this;
+
+            return this;
         }
 
-        public List<Constellation> constellations(){return Collections.unmodifiableList(constBuild);}
+        public List<Constellation> constellations() {
+            return Collections.unmodifiableList(constBuild);
+        }
 
         /**
          * StarCatalogue.Builder public method loading the input into the loader and throws an IOException

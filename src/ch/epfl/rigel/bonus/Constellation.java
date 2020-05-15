@@ -8,13 +8,13 @@ import java.util.List;
 import static ch.epfl.rigel.Preconditions.checkArgument;
 
 public class Constellation {
-    private final Asterism constellation;
+    private final List<Star> constellation;
     private final String constellationName;
 
 
-    public Constellation(String name, Asterism constellation) {
+    public Constellation(String name, List<Star> stars) {
         constellationName = name;
-        this.constellation = constellation;
+        this.constellation = stars;
     }
 
     /**
@@ -22,7 +22,7 @@ public class Constellation {
      *
      * @return constellation (List<Star>) : return the list of stars composing the constellation
      */
-    public Asterism asterims() {
+    public List<Star> stars() {
         return constellation;
     }
 

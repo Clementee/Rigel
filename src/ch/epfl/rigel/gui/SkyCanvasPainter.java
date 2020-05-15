@@ -66,25 +66,18 @@ public final class SkyCanvasPainter {
 
         final Color ASTERISM_COLOR = Color.BLUE;
         final Color CONSTELLATION_COLOR = Color.RED;
-
         Color starColor;
         Bounds bound = canvas.getBoundsInLocal();
         double[] starPosition = observedSky.starsPosition();
         if (drawAsterism) {
             for (Asterism asterism : observedSky.asterism()) {
-
-                List<Star> starFromAsterism = asterism.stars();
-
-                drawGroup(observedSky, transform, ASTERISM_COLOR, bound, starPosition, starFromAsterism);
+                drawGroups(observedSky, transform, ASTERISM_COLOR, bound, starPosition, asterism.stars());
             }
 
         }
-        if(drawConstellation){
+        if (drawConstellation) {
             for (Constellation constellation : observedSky.constellations()) {
-
-                List<Star> starFromAsterism = constellation.asterims().stars();
-
-                drawGroup(observedSky, transform, CONSTELLATION_COLOR, bound, starPosition, starFromAsterism);
+                drawGroups(observedSky, transform, CONSTELLATION_COLOR, bound, starPosition, constellation.stars());
             }
         }
 
@@ -103,22 +96,23 @@ public final class SkyCanvasPainter {
         }
     }
 
-    private void drawGroup(ObservedSky observedSky, Transform transform, Color ASTERISM_COLOR, Bounds bound, double[] starPosition, List<Star> starFromAsterism) {
-        ctx.setStroke(ASTERISM_COLOR);
+    private void drawGroups(ObservedSky observedSky, Transform transform, Color CONSTELLATION_COLOR, Bounds bound, double[] starPosition, List<Star> stars) {
+        List<Star> starFromConstellation = stars;
+
+        ctx.setStroke(CONSTELLATION_COLOR);
         ctx.setLineWidth(1);
 
 
-        for (int i = 0; i < starFromAsterism.size(); i++) {
-
-            Star star = starFromAsterism.get(i);
+        for (int i = 0; i < starFromConstellation.size(); i++) {
+            Star star = starFromConstellation.get(i);
             double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
             double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
 
             Point2D begTransformed = transform.transform(x1, y1);
 
-            if (i < starFromAsterism.size() - 1) {
+            if (i < starFromConstellation.size() - 1) {
 
-                Star star2 = starFromAsterism.get(i + 1);
+                Star star2 = starFromConstellation.get(i + 1);
                 int u = observedSky.stars().indexOf(star2);
                 double x2 = starPosition[2 * u];
                 double y2 = starPosition[2 * u + 1];
