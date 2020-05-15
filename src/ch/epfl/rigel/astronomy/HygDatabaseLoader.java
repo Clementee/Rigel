@@ -3,7 +3,6 @@ package ch.epfl.rigel.astronomy;
 import ch.epfl.rigel.coordinates.EquatorialCoordinates;
 
 import java.io.*;
-import java.util.ArrayList;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -43,8 +42,9 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
                 EquatorialCoordinates equatorialCoordinates = EquatorialCoordinates.of(rarad, decrad);
                 float magnitude = Float.parseFloat(validOrDefault(lineTab[Index.MAG.ordinal()], lineTab[Index.MAG.ordinal()], "0"));
                 float colorID = Float.parseFloat(validOrDefault(lineTab[Index.CI.ordinal()], lineTab[Index.CI.ordinal()], "0"));
+                String bayer = validOrDefault(lineTab[Index.BAYER.ordinal()],lineTab[Index.BAYER.ordinal()], "? ");
 
-                builder.addStar(new Star(hipparcosID, name, equatorialCoordinates, magnitude, colorID));
+                builder.addStar(new Star(hipparcosID, name, equatorialCoordinates, magnitude, colorID, bayer));
                 inputLine = bufferedReader.readLine();
             }
 
