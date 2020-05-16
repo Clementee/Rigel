@@ -102,6 +102,7 @@ public final class SkyCanvasPainter {
 
         }
         if(drawConstellation){
+            List<String> constellationNameAlreadyUsed = new ArrayList<>();
             for (Constellation constellation : observedSky.constellations()) {
 
                 List<Star> starFromConstellation = constellation.asterism().stars();
@@ -121,8 +122,10 @@ public final class SkyCanvasPainter {
 
 
                     Point2D begTransformed = transform.transform(x1, y1);
-                    if(i==0)
+                    if (i == 0 && !constellationNameAlreadyUsed.contains(constellation.getConstellationName())) {
                         ctx.fillText(constellation.getConstellationName(), begTransformed.getX(), begTransformed.getY());
+                        constellationNameAlreadyUsed.add(constellation.getConstellationName());
+                    }
                     if (i < starFromConstellation.size() - 1) {
 
                         Star star2 = starFromConstellation.get(i + 1);
