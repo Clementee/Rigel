@@ -145,10 +145,18 @@ public final class SkyCanvasPainter {
             Color starColor = BlackBodyColor
                     .colorForTemperature(star.colorTemperature());
             double starDiameter = transform.deltaTransform(0, objectDiameter(star.magnitude(), stereographicProjection)).magnitude();
+
+
             double x = starPosition[i];
             double y = starPosition[i + 1];
 
             Point2D point = transform.transform(x, y);
+
+            if(starDiameter > 4){
+                ctx.setTextAlign(TextAlignment.CENTER);
+                ctx.setTextBaseline(VPos.TOP);
+                ctx.fillText(star.name(),point.getX(),point.getY());
+            }
 
             ctx.setFill(starColor);
             drawCircle(ctx, point.getX(), point.getY(), starDiameter);
