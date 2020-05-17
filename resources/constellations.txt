@@ -65,7 +65,7 @@ Phe,Phoenix
 Pic,Pictor
 Psc,Pisces
 PsA,Pisces Austrinus
-Pup,uppis
+Pup,Puppis
 Pyx,Pyxis
 Ret,Reticulum
 Sge,Sagitta
