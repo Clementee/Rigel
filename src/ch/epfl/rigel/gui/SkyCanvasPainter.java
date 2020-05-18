@@ -20,6 +20,7 @@ import javafx.scene.transform.Transform;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import static ch.epfl.rigel.math.Angle.ofDeg;
@@ -85,19 +86,7 @@ public final class SkyCanvasPainter {
                     double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
 
                     Point2D begTransformed = transform.transform(x1, y1);
-                    if (i < starFromAsterism.size() - 1) {
-
-                        Star star2 = starFromAsterism.get(i + 1);
-                        int u = observedSky.stars().indexOf(star2);
-                        double x2 = starPosition[2 * u];
-                        double y2 = starPosition[2 * u + 1];
-
-                        Point2D endTransformed = transform.transform(x2, y2);
-
-                        if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
-                            ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
-                        }
-                    }
+                    drawLines(observedSky, transform, bound, starPosition, starFromAsterism, i, begTransformed);
                 }
             }
 
@@ -127,19 +116,7 @@ public final class SkyCanvasPainter {
                         ctx.fillText(constellation.getConstellationName(), begTransformed.getX(), begTransformed.getY());
                         constellationNameAlreadyUsed.add(constellation.getConstellationName());
                     }
-                    if (i < starFromConstellation.size() - 1) {
-
-                        Star star2 = starFromConstellation.get(i + 1);
-                        int u = observedSky.stars().indexOf(star2);
-                        double x2 = starPosition[2 * u];
-                        double y2 = starPosition[2 * u + 1];
-
-                        Point2D endTransformed = transform.transform(x2, y2);
-
-                        if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
-                            ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
-                        }
-                    }
+                    drawLines(observedSky, transform, bound, starPosition, starFromConstellation, i, begTransformed);
                 }
             }
         }
@@ -164,6 +141,22 @@ public final class SkyCanvasPainter {
 
             ctx.setFill(starColor);
             drawCircle(ctx, point.getX(), point.getY(), starDiameter);
+        }
+    }
+
+    private void drawLines(ObservedSky observedSky, Transform transform, Bounds bound, double[] starPosition, List<Star> starFromConstellation, int i, Point2D begTransformed) {
+        if (i < starFromConstellation.size() - 1) {
+
+            Star star2 = starFromConstellation.get(i + 1);
+            int u = observedSky.stars().indexOf(star2);
+            double x2 = starPosition[2 * u];
+            double y2 = starPosition[2 * u + 1];
+
+            Point2D endTransformed = transform.transform(x2, y2);
+
+            if (bound.contains(endTransformed) || bound.contains(begTransformed)) {
+                ctx.strokeLine(begTransformed.getX(), begTransformed.getY(), endTransformed.getX(), endTransformed.getY());
+            }
         }
     }
 
