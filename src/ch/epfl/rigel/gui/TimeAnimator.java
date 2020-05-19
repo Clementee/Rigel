@@ -3,6 +3,8 @@ package ch.epfl.rigel.gui;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.*;
 
+import java.time.ZonedDateTime;
+
 /**
  * A time animator
  *
@@ -21,6 +23,7 @@ public final class TimeAnimator extends AnimationTimer {
     private final ObjectProperty<TimeAccelerator> accelerator = new SimpleObjectProperty<>(null);
 
     private final DateTimeBean instantObservation;
+    private ZonedDateTime startTime;
 
     /**
      * TimeAnimator public constructor initializing the date time bean we want to modify
@@ -31,15 +34,6 @@ public final class TimeAnimator extends AnimationTimer {
         instantObservation = dateTimeBean;
     }
 
-    /**
-     * Time Animator public overridden method start representing the first run and the beginning of the simulation
-     */
-    @Override
-    public void start() {
-        super.start();
-        running.setValue(true);
-        firstRun = true;
-    }
 
     /**
      * Time Animator public overridden method stop representing the end of the simulation
@@ -51,24 +45,31 @@ public final class TimeAnimator extends AnimationTimer {
     }
 
     /**
-     * Time Animator public overridden method handle representing the steps of the simulation,
-     * updating the date time bean
+     * Advances time until 'now', given in nanoseconds
      *
-     * @param l (long) : giving the number of milliseconds of the time
+     * @see AnimationTimer#handle(long)
+     * @param now (long) nanoseconds
      */
     @Override
-    public void handle(long l) {
-        
-        if(firstRun){
-            firstTime = l;
-            lastTime = l;
+    public void handle(long now) {
+        if (firstRun) {
+            firstTime = now;
             firstRun = false;
+        } else {
+            instantObservation.setZonedDateTime(accelerator.get().adjust(startTime, now - firstTime));
         }
-        
-        instantObservation.setZonedDateTime(accelerator.getValue().adjust(instantObservation.getZonedDateTime(), l - lastTime));
-        lastTime = l;
     }
 
+    /**
+     * @see AnimationTimer#start()
+     */
+    @Override
+    public void start() {
+        firstRun = true;
+        startTime = instantObservation.getZonedDateTime();
+        super.start();
+        running.set(true);
+    }
     /**
      * TimeAnimator public method returning the accelerator as a property
      *
