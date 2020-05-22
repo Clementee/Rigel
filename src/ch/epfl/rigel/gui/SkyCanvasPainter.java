@@ -72,26 +72,19 @@ public final class SkyCanvasPainter {
         double[] starPosition = observedSky.starsPosition();
         if (drawAsterism) {
             for (Asterism asterism : observedSky.asterism()) {
-
                 List<Star> starFromAsterism = asterism.stars();
 
                 ctx.setStroke(ASTERISM_COLOR);
                 ctx.setLineWidth(1);
 
-
                 for (int i = 0; i < starFromAsterism.size(); i++) {
-
-                    Star star = starFromAsterism.get(i);
-                    double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
-                    double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
-
-                    Point2D begTransformed = transform.transform(x1, y1);
+                    Point2D begTransformed = createTransformedPoint(transform, starFromAsterism, starPosition, observedSky,i);
                     drawLines(observedSky, transform, bound, starPosition, starFromAsterism, i, begTransformed);
                 }
             }
 
         }
-        if(drawConstellation){
+        if (drawConstellation) {
             List<String> constellationNameAlreadyUsed = new ArrayList<>();
             for (Constellation constellation : observedSky.constellations()) {
 
@@ -100,18 +93,13 @@ public final class SkyCanvasPainter {
                 ctx.setStroke(CONSTELLATION_COLOR);
                 ctx.setLineWidth(1);
 
+                ctx.setFill(CONSTELLATION_COLOR);
+                ctx.setTextAlign(TextAlignment.CENTER);
+                ctx.setTextBaseline(VPos.TOP);
 
                 for (int i = 0; i < starFromConstellation.size(); i++) {
-                    Star star = starFromConstellation.get(i);
-                    double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
-                    double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
+                    Point2D begTransformed = createTransformedPoint(transform, starFromConstellation, starPosition, observedSky,i);
 
-                    ctx.setFill(CONSTELLATION_COLOR);
-                    ctx.setTextAlign(TextAlignment.CENTER);
-                    ctx.setTextBaseline(VPos.TOP);
-
-
-                    Point2D begTransformed = transform.transform(x1, y1);
                     if (i == 0 && !constellationNameAlreadyUsed.contains(constellation.getConstellationName())) {
                         ctx.fillText(constellation.getConstellationName(), begTransformed.getX(), begTransformed.getY());
                         constellationNameAlreadyUsed.add(constellation.getConstellationName());
@@ -133,10 +121,10 @@ public final class SkyCanvasPainter {
 
             Point2D point = transform.transform(x, y);
 
-            if(starDiameter > 4){
+            if (starDiameter > 4) {
                 ctx.setTextAlign(TextAlignment.CENTER);
                 ctx.setTextBaseline(VPos.TOP);
-                ctx.fillText(star.name(),point.getX(),point.getY());
+                ctx.fillText(star.name(), point.getX(), point.getY());
             }
 
             ctx.setFill(starColor);
@@ -328,5 +316,12 @@ public final class SkyCanvasPainter {
      */
     private static void drawCircle(GraphicsContext ctx, double x, double y, double d) {
         ctx.fillOval(x - d / 2, y - d / 2, d, d);
+    }
+
+    private Point2D createTransformedPoint(Transform transform, List<Star> starFromConstellation, double[] starPosition, ObservedSky observedSky, int i) {
+        Star star = starFromConstellation.get(i);
+        double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
+        double y1 = starPosition[2 * (observedSky.stars().indexOf(star)) + 1];
+        return transform.transform(x1, y1);
     }
 }
