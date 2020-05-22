@@ -59,16 +59,16 @@ public class BlackBodyColor {
                 
                 String line = bufferedReader.readLine();
                 
-                if (!line.startsWith("#") && !(line.substring(10,15).equals(" 2deg"))){
+                if (!line.startsWith("#") && !(line.startsWith(" 2deg", 10))){
                     
                     String colorLine = line.substring(80, 87);
-                    Integer temperatureLine;
+                    int temperatureLine;
                     
                     if(line.substring(1,6).startsWith(" ")){
-                        temperatureLine = Integer.valueOf(line.substring(2, 6));
+                        temperatureLine = Integer.parseInt(line.substring(2, 6));
                     }
                     else {
-                        temperatureLine = Integer.valueOf(line.substring(1, 6));
+                        temperatureLine = Integer.parseInt(line.substring(1, 6));
                     }
 
                     colorMap.put(temperatureLine, Color.web(colorLine));
