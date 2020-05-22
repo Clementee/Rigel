@@ -10,6 +10,12 @@ public abstract class Interval {
 
     private final double lowerBound, upperBound;
 
+    /**
+     * Protected constructor for Interval
+     * 
+     * @param lowerBound (double) : gives the lower bound of the interval
+     * @param upperBound (double) : gives the upper bound of the interval
+     */
     protected Interval(double lowerBound, double upperBound) {
 
         this.lowerBound = lowerBound;
