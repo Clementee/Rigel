@@ -51,6 +51,14 @@ public enum HygDatabaseLoader implements StarCatalogue.Loader {
         }
     }
 
+    /**
+     * Private method checking if the tested value is valid else return a default value
+     * 
+     * @param toTest (String) : gives the string to test
+     * @param validValue (String) : gives the string of reference, the one we use to compare the tested value
+     * @param defaultValue (String) : gives the default value when the tested value is invalid
+     * @return (String) :  return the tested value if valid else the default value
+     */
     private static String validOrDefault(String toTest, String validValue, String defaultValue) {
         return !toTest.isEmpty() ? validValue : defaultValue;
     }

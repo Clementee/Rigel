@@ -18,6 +18,8 @@ import static java.lang.Math.*;
  */
 public enum PlanetModel implements CelestialObjectModel<Planet> {
 
+    //enumeration of planets and their characteristics
+    
     MERCURY("Mercure", 0.24085, 75.5671, 77.612, 0.205627,
             0.387098, 7.0051, 48.449, 6.74, -0.42),
     VENUS("Vénus", 0.615207, 272.30044, 131.54, 0.006812,
@@ -112,12 +114,26 @@ public enum PlanetModel implements CelestialObjectModel<Planet> {
         return new Planet(frenchName, equatorialCoordinates, (float) theta, (float) m);
     }
 
-    private double l(double daysSinceJ2010, PlanetModel planet){
+    /**
+     * PlanetModel method l, returning an intermediary value
+     *
+     * @param daysSinceJ2010                 (double) : gives the number of days after J2010
+     * @param planet (Planet) : gives the planet studied
+     * @return (double) : returns the intermediary value l
+     */
+     private double l(double daysSinceJ2010, PlanetModel planet){
         double M = (TAU / DAYS_PER_YEAR) * (daysSinceJ2010 / planet.Tp) + planet.epsilon - planet.varpi;
         double v = M + 2 * planet.eccentricity * sin(M);
         return v + planet.varpi;
     }
 
+    /**
+     * PlanetModel method r, returning an intermediary value
+     *
+     * @param daysSinceJ2010                 (double) : gives the number of days after J2010
+     * @param planet (Planet) : gives the planet studied
+     * @return (double) : returns the intermediary value r
+     */
     private double r(double daysSinceJ2010, PlanetModel planet){
         double M = (TAU / DAYS_PER_YEAR) * (daysSinceJ2010 / planet.Tp) + planet.epsilon - planet.varpi;
         double v = M + 2 * planet.eccentricity * sin(M);

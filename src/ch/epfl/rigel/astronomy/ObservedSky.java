@@ -22,12 +22,12 @@ public class ObservedSky {
 
     private static CartesianCoordinates sunCoords, moonCords;
 
-    private StarCatalogue catalogue;
+    private final StarCatalogue catalogue;
 
-    private List<Planet> planetList;
+    private final List<Planet> planetList;
     private List<Star> starList;
-    private List<CartesianCoordinates> planetCoords, starCoords;
-    private Map<CelestialObject, CartesianCoordinates> celestialObjectMap;
+    private final List<CartesianCoordinates> planetCoords, starCoords;
+    private final Map<CelestialObject, CartesianCoordinates> celestialObjectMap;
 
     /**
      * ObservedSky public constructor initializing some values
@@ -69,6 +69,7 @@ public class ObservedSky {
 
         List<PlanetModel> planets = PlanetModel.ALL;
 
+        //iterating over the list of planets to initialize the lists
         for (PlanetModel planet : planets) {
 
             if (!planet.equals(PlanetModel.EARTH)) {
@@ -85,6 +86,7 @@ public class ObservedSky {
 
         starList = catalogue.stars();
 
+        //iterating over the list of stars to intialize the lists
         for (Star star : starList) {
             CartesianCoordinates starCoord = stereographicProjection
                     .apply(equatorialToHorizontalConversion.apply(star.equatorialPos()));
@@ -204,10 +206,21 @@ public class ObservedSky {
         return Set.copyOf(catalogue.asterisms());
     }
 
+    /**
+     * ObservedSky public method returning the indexes of an asterism entered in parameters
+     *
+     * @param asterism (Asterism) : gives the asterism from which we want ot get the parameters
+     * @return (List<Integer>) : return the list of indexes for the selected asterism
+     */
     public List<Integer> asterismIndexList(Asterism asterism) {
         return catalogue.asterismIndices(asterism);
     }
 
+    /**
+     * ObservedSky public method returning the set of constellations in the observed sky
+     *
+     * @return (Set <Constellation>) : return the set of constellations
+     */
     public Set<Constellation> constellations(){return Set.copyOf(catalogue.constellations());}
 
     /**
@@ -243,7 +256,9 @@ public class ObservedSky {
         return Math.hypot(o1.x() - o2.x(), o1.y() - o2.y());
     }
 
-    //Private class MapComparator which role is to compare two maps
+    /*
+     * Private class MapComparator which role is to compare two maps
+     */
     private static class MapComparator implements Comparator {
 
         private CartesianCoordinates pointer;
