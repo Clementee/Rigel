@@ -132,6 +132,17 @@ public final class SkyCanvasPainter {
         }
     }
 
+    /**
+     * Private method used to draw the different lines
+     * 
+     * @param observedSky (ObservedSky) : the observed sky used to paint the canvas
+     * @param transform (Transform) : the transformation used to draw the canvas
+     * @param bound (Bounds) : the bounds for the lines
+     * @param starPosition (double[]) : the array for the star positions
+     * @param starFromConstellation (List<Star>) : the stars in constellations
+     * @param i (int) : index used
+     * @param begTransformed (Point2D) : position of the beginning of the transformation
+     */
     private void drawLines(ObservedSky observedSky, Transform transform, Bounds bound, double[] starPosition, List<Star> starFromConstellation, int i, Point2D begTransformed) {
         if (i < starFromConstellation.size() - 1) {
 
