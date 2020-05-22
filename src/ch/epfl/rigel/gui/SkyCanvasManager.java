@@ -19,21 +19,13 @@ import static ch.epfl.rigel.coordinates.CartesianCoordinates.point2DToCartesianC
 import static ch.epfl.rigel.math.Angle.*;
 import static java.lang.Math.abs;
 
+/**
+ * A sky canvas manager
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public class SkyCanvasManager {
-
-    public final ObjectBinding<CelestialObject> objectUnderMouse;
-
-    public ObserverLocationBean getObserverLocationBean() {
-        return observerLocationBean;
-    }
-
-    public DateTimeBean getDateTimeBean() {
-        return dateTimeBean;
-    }
-
-    public ViewingParametersBean getViewingParametersBean() {
-        return viewingParametersBean;
-    }
 
     private final ObserverLocationBean observerLocationBean;
     private final DateTimeBean dateTimeBean;
@@ -43,6 +35,8 @@ public class SkyCanvasManager {
     private final BooleanProperty drawAsterism = new SimpleBooleanProperty(false);
     private final BooleanProperty drawConstellation = new SimpleBooleanProperty(false);
 
+
+    private final ObjectBinding<CelestialObject> objectUnderMouse;
     private final ObjectBinding<StereographicProjection> projection;
     private final ObjectBinding<Transform> planeToCanvas;
     private final ObjectBinding<ObservedSky> observedSky;
@@ -54,7 +48,14 @@ public class SkyCanvasManager {
     private final SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
     private final ClosedInterval zoomInter = ClosedInterval.of(30, 150);
 
-
+    /**
+     * Public SkyCanvasManager constructor initializing many properties and beans
+     *
+     * @param starCatalogue (StarCatalogue) : the star catalogue used in the canvas
+     * @param dTimeBean (DateTimeBean) : the date-time bean used
+     * @param obsLocationBean (ObservationLocationBean) : the observation location bean used
+     * @param vParametersBean (ViewingParametersBean) : the viewing parameters bean used
+     */
     public SkyCanvasManager(StarCatalogue starCatalogue, DateTimeBean dTimeBean, ObserverLocationBean obsLocationBean, ViewingParametersBean vParametersBean) {
 
         viewingParametersBean = vParametersBean;
@@ -142,52 +143,137 @@ public class SkyCanvasManager {
         });
     }
 
+    /**
+     * Public method getObserverlocationBean returning the Observer location bean
+     * 
+     * @return observerLocationBean(ObserverLocationBean) : the observer location bean from the manager
+     */
+    public ObserverLocationBean getObserverLocationBean() {
+        return observerLocationBean;
+    }
+    
+    /**
+     * Public method getDateTimeBean returning the DateTimeBean
+     *
+     * @return dateTimeBean (DateTimeBean) : the DateTimeBean from the manager
+     */
+    public DateTimeBean getDateTimeBean() {
+        return dateTimeBean;
+    }
+
+    /**
+     * Public method getViewingParametersBean returning the viewing parameters bean
+     *
+     * @return viewingParametersBean (ViewingParametersBean) : the viewing parameters bean from the manager
+     */
+    public ViewingParametersBean getViewingParametersBean() {
+        return viewingParametersBean;
+    }
+
+    /**
+     * Public method getObjectUnderMouse returning the CelestialObject under the mouse
+     *
+     * @return (CelestialObject) : the celestialObject under the mouse
+     */
     public CelestialObject getObjectUnderMouse() {
         return objectUnderMouse.get();
     }
 
+    /**
+     * Public method getDrawAsterismProperty returning the BooleanProperty of the drawAsterismProperty
+     * 
+     * @return drawAsterism (BooleanProperty) : the boolean property if the asterisms are drawn
+     */
     public BooleanProperty getDrawAsterismProperty(){
         return drawAsterism;
     }
 
+    /**
+     * Public method getDrawAsterism returning the Boolean of the drawAsterismProperty
+     *
+     * @return (boolean) : the boolean linked to if the asterisms are drawn
+     */
     public boolean getDrawAsterism(){
         return drawAsterism.get();
     }
 
+    /**
+     * Public method getDrawConstellationProperty returning the BooleanProperty of the drawConstellationProperty
+     *
+     * @return drawConstellation (BooleanProperty) : the boolean property if the constellations are drawn
+     */
     public BooleanProperty getDrawConstellationProperty(){
         return drawConstellation;
     }
 
+    /**
+     * Public method getDrawConstellation returning the Boolean of the drawConstellationProperty
+     *
+     * @return (boolean) : the boolean linked to if the constellations are drawn
+     */
     public boolean getDrawConstellation(){
         return drawConstellation.get();
     }
 
+    /**
+     * Public method setDrawAsterism setting the Boolean of the drawAsterismProperty
+     *
+     * @param status (boolean) : the boolean to set the drawAsterismProperty
+     */
     public void setDrawAsterism(boolean status){
         drawAsterism.setValue(status);
         updateCanvas();
     }
 
+    /**
+     * Public method setDrawConstellation setting the Boolean of the drawConstellationProperty
+     *
+     * @param status (boolean) : the boolean to set the drawConstellationProperty
+     */
     public void setDrawConstellation(boolean status){
         drawConstellation.set(status);
         updateCanvas();
     }
 
+    /**
+     * Public method returning the objectUnderMouseProperty
+     * 
+     * @return objectUnderMouse (ObjectBinding<CelestialObject>) : return the property of the objectUnderMouse
+     */
     public ObjectBinding<CelestialObject> objectUnderMouseProperty() {
         return objectUnderMouse;
     }
 
+    /**
+     * Public method returning the canvas
+     * 
+     * @return canvas (Canvas) : the canvas
+     */
     public Canvas canvas() {
         return canvas;
     }
 
+    /**
+     * Public method returning the mouseAzDegProperty
+     * 
+     * @return mouseAzDeg (DoubleBinding) : the property of the Azimuth of the mouse 
+     */
     public DoubleBinding getMouseAzDegProperty() {
         return mouseAzDeg;
     }
 
+    /**
+     * Public method returning the mouseAltDegProperty
+     *
+     * @return mouseAzDeg (DoubleBinding) : the property of the Altitude of the mouse
+     */
     public DoubleBinding getMouseAltDegProperty() {
         return mouseAltDeg;
     }
 
+    /**
+     * Private method updating the canvas by clearing then redrawing it
+     */
     private void updateCanvas() {
         painter.clear();
         painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue(), drawAsterism.getValue(), drawConstellation.getValue());
@@ -197,15 +283,24 @@ public class SkyCanvasManager {
         painter.drawHorizon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
     }
 
+    /**
+     * Private method used to modify the centerPropertyAzDeg
+     * 
+     * @param valueToAdd (double) : value to add to modify the azimuth of the center property
+     */
     private void modifyCenterPropertyAzDeg(double valueToAdd) {
         double newValue = viewingParametersBean.getCenter().azDeg() + valueToAdd;
         newValue = abs(normalizePositive(ofDeg(newValue)) - TAU) < 10e-6 ? normalizePositive(ofDeg(newValue)) - 10e-4 : normalizePositive(ofDeg(newValue));
         viewingParametersBean.setCenter(HorizontalCoordinates.of(newValue, viewingParametersBean.getCenter().alt()));
     }
 
+    /**
+     * Private method used to modify the centerPropertyAltDeg
+     * 
+     * @param valueToAdd (double) : value to add to modify the altitude of the center
+     */
     private void modifyCenterPropertyAltDeg(double valueToAdd) {
         double newValue = viewingParametersBean.getCenter().altDeg() + valueToAdd;
         viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(), ClosedInterval.of(5, 90).clip(newValue)));
-
     }
 }
