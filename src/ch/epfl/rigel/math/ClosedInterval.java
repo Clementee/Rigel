@@ -79,6 +79,12 @@ public final class ClosedInterval extends Interval {
         } else return Math.min(v, high);
     }
 
+    /**
+     * Public method reducing the closed interval
+     * 
+     * @param v (double) : the value to reduce
+     * @return (double) : the reduced value
+     */
     public double reduce(double v){
 
         double x = v - low;
