@@ -32,6 +32,12 @@ import java.util.Arrays;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
+/**
+ * Main class
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public class Main extends Application {
 
     private SkyCanvasManager canvasManager;
@@ -45,12 +51,22 @@ public class Main extends Application {
 
     private final Font fontAwesome;
 
+    /**
+     * Public main constructor throwing IOException and charging a font
+     *
+     * @throws IOException : throws an IOException
+     */
     public Main() throws IOException {
         try (InputStream inputStream = getClass().getResourceAsStream("/Font Awesome 5 Free-Solid-900.otf")) {
             fontAwesome = Font.loadFont(inputStream, 15);
         }
     }
 
+    /**
+     * Public method start charging the stage and setting the different panes together on the stage
+     *
+     * @param stage (Stage) : the stage we are initializing with the panes
+     */
     @Override
     public void start(Stage stage) {
 
@@ -67,6 +83,11 @@ public class Main extends Application {
         skyView.requestFocus();
     }
 
+    /**
+     * Private controlBarCreator method, used to create the HBox for the control Bar
+     *
+     * @return controlBar (HBox) : return the initialized HBox for the control bar.
+     */
     private HBox controlBarCreator() {
         HBox timeAdvancement = createTimeAnimator();
 
@@ -83,6 +104,11 @@ public class Main extends Application {
         return controlBar;
     }
 
+    /**
+     * Private createObservationInstant method, used to create the HBox for the observation instant
+     *
+     * @return position (HBox) : return the initialized HBox for the moment of observation
+     */
     private HBox createObservationInstant() {
         Label date = new Label("Date :");
         DatePicker datePicker = createDatePicker();
@@ -98,6 +124,11 @@ public class Main extends Application {
         return position;
     }
 
+    /**
+     * Private createViewSetter method, used to create the HBox for the view setter
+     *
+     * @return viewBox (HBox) : return the initialized HBox for the view setter
+     */
     private HBox createViewSetter(){
         Label viewAst = new Label("Asterism :");
         Button buttonAst = createAstButton();
@@ -111,6 +142,11 @@ public class Main extends Application {
     }
 
 
+    /**
+     * Private createObservationPosition method, used to create the HBox for the observation position
+     *
+     * @return observation (HBox) : return the initialized HBox for the position of the observation
+     */
     private HBox createObservationPosition() {
         Label longitude = new Label("Longitude (°) :");
         TextField lonTextField = longitudeTextField();
@@ -124,6 +160,12 @@ public class Main extends Application {
         return observation;
     }
 
+
+    /**
+     * Private createTimeAnimator method, used to create the HBox for the time animator
+     *
+     * @return timeAnimatorBox (HBox) : return the initialized HBox for the time animator
+     */
     private HBox createTimeAnimator() {
 
         timeAnimator = new TimeAnimator(canvasManager.getDateTimeBean());
@@ -140,6 +182,11 @@ public class Main extends Application {
         return timeAnimatorBox;
     }
 
+    /**
+     * Private createSkyVie method, used to create the pane for the view for the sky
+     *
+     * @return skyView (Pane) : return the initialized pane for the sky view
+     */
     private Pane createSkyView() {
 
         Pane skyView = new Pane();
@@ -180,6 +227,11 @@ public class Main extends Application {
     }
 
 
+    /**
+     * Private longitudeTextField method, used to create the TextField for the longitude
+     *
+     * @return lonTextField (TextField) : return the initialized TextField for the longitude
+     */
     private TextField longitudeTextField() {
 
         NumberStringConverter stringConverter =
@@ -210,6 +262,11 @@ public class Main extends Application {
         return lonTextField;
     }
 
+    /**
+     * Private latitudeTextField method, used to create the TextField for the latitude
+     *
+     * @return latTextField (TextField) : return the initialized TextField for the latitude
+     */
     private TextField latitudeTextField() {
 
         NumberStringConverter stringConverter =
@@ -239,6 +296,11 @@ public class Main extends Application {
         return latTextField;
     }
 
+    /**
+     * Private createInformationBar method, used to create the BorderPane for the information Bar
+     *
+     * @return borderPane (BorderPane) : return the initialized BorderPane for the information bar
+     */
     private BorderPane createInformationBar() {
         Text fovText = new Text();
         fovText.textProperty().bind(Bindings.format("Champ de vue : %.1f°", canvasManager.getViewingParametersBean().fieldOfViewDegProperty()));
@@ -251,6 +313,11 @@ public class Main extends Application {
         return borderPane;
     }
 
+    /**
+     * Private createNamedTimeAnimatorChoiceBox method, used to create the ChoiceBox for the time animator
+     *
+     * @return choiceOFTheAnimator (ChoiceBox<NamedTimeAccelerator>) : return the initialized choiceBox for the time accelerator
+     */
     private ChoiceBox<NamedTimeAccelerator> createNamedTimeAnimatorChoiceBox() {
         ChoiceBox<NamedTimeAccelerator> choiceOfTheAnimator = new ChoiceBox<>();
         choiceOfTheAnimator.setItems(FXCollections.observableList(Arrays.asList(NamedTimeAccelerator.values())));
@@ -260,6 +327,11 @@ public class Main extends Application {
         return choiceOfTheAnimator;
     }
 
+    /**
+     * Private createNamedTimeAnimatorChoiceBox method, used to create the ChoiceBox for the time animator
+     *
+     * @return choiceOFTheAnimator (ChoiceBox<NamedTimeAccelerator>) : return the initialized choiceBox for the time accelerator
+     */
     private Button createResetButton() {
         Button resetButton = new Button(undoString);
         resetButton.setOnAction((e) -> canvasManager.getDateTimeBean().setZonedDateTime(ZonedDateTime.now()));
@@ -268,6 +340,11 @@ public class Main extends Application {
         return resetButton;
     }
 
+    /**
+     * Private createPlayPauseButton method, used to create the Button for the play/pause
+     *
+     * @return playPauseButton (Button) : return the initialized Button for the play/pause
+     */
     private Button createPlayPauseButton() {
         Button playPauseButton = new Button(pauseString);
         playPauseButton.setFont(fontAwesome);
@@ -282,6 +359,11 @@ public class Main extends Application {
         return playPauseButton;
     }
 
+    /**
+     * Private createAstButton method, used to create the Button for the asterisms
+     *
+     * @return astButton (Button) : return the initialized Button for the asterisms
+     */
     private Button createAstButton(){
         Button astButton = new Button(offString);
         astButton.setFont(fontAwesome);
@@ -294,6 +376,11 @@ public class Main extends Application {
         return astButton;
     }
 
+    /**
+     * Private createConstButton method, used to create the Button for the constellations
+     *
+     * @return constButton (Button) : return the initialized Button for the constellations
+     */
     private Button createConstButton(){
         Button constButton = new Button(offString);
         constButton.setFont(fontAwesome);
@@ -306,6 +393,11 @@ public class Main extends Application {
         return constButton;
     }
 
+    /**
+     * Private createZoneIdComboBox method, used to create the ComboBox for the zoneId
+     *
+     * @return zoneIdComboBox (ComboBox<ZoneId>) : return the initialized ComboBox for the zoneId
+     */
     private ComboBox<ZoneId> createZoneIdComboBox() {
         ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.toList())));
         zoneIdComboBox.setPromptText(canvasManager.getDateTimeBean().getZone().getId());
@@ -315,15 +407,11 @@ public class Main extends Application {
         return zoneIdComboBox;
     }
 
-    private ComboBox<ZoneId> createViewComboBox() {
-        ComboBox<ZoneId> zoneIdComboBox = new ComboBox<>(FXCollections.observableList(ZoneId.getAvailableZoneIds().stream().sorted().map(ZoneId::of).collect(Collectors.toList())));
-        zoneIdComboBox.setPromptText(Boolean.toString(canvasManager.getDrawAsterism()));
-        zoneIdComboBox.valueProperty().bindBidirectional(canvasManager.getDateTimeBean().zoneProperty());
-        zoneIdComboBox.setStyle("-fx-pref-width: 180;");
-        zoneIdComboBox.disableProperty().bind(timeAnimator.runningProperty());
-        return zoneIdComboBox;
-    }
-
+    /**
+     * Private createDatePicker method, used to create the DatePicker for the date
+     *
+     * @return datePicker (DatePicker) : return the initialized DatePicker for the date
+     */
     private DatePicker createDatePicker() {
         DatePicker datePicker = new DatePicker(canvasManager.getDateTimeBean().getDate());
         datePicker.setStyle("-fx-pref-width: 120;");
@@ -333,6 +421,11 @@ public class Main extends Application {
         return datePicker;
     }
 
+    /**
+     * Private createActHour method, used to create the TextField for the actual hour
+     *
+     * @return actHour (TextField) : return the initialized TextField for the time
+     */
     private TextField createActHour() {
         TextField actHour = new TextField(canvasManager.getDateTimeBean().getTime().toString());
         actHour.setStyle("-fx-pref-width: 75;\n" + "-fx-alignment: baseline-right;");
