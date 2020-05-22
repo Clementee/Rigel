@@ -27,7 +27,7 @@ public final class StarCatalogue {
      * @param asterisms (List<Asterism>) : gives the list of asterisms
      */
     public StarCatalogue(List<Star> stars, List<Asterism> asterisms, List<Constellation> constellations) {
-        Map<Asterism, List<Integer>> trans = new HashMap<>();
+        
         starList = List.copyOf(stars);
 
         Map<Star, Integer> starMap = new HashMap<>();
@@ -85,14 +85,24 @@ public final class StarCatalogue {
      * @return starList (List<Stars>) : returning the list of stars
      */
     public List<Integer> asterismIndices(Asterism asterism) {
-
         return asterismMap.get(asterism);
     }
 
+    /**
+     * Public method constellations returning the set constellations of the star catalogue
+     * 
+     * @return (Set<Constellation>) : returning the set of constellations
+     */
     public Set<Constellation> constellations() {
         return constellationMap.keySet();
     }
 
+    /**
+     * Public method constellationIndices returning the index of the constellation entered in parameters
+     * 
+     * @param constellation
+     * @return
+     */
     public List<Integer> constellationIndices(Constellation constellation) {
         return constellationMap.get(constellation);
     }
@@ -100,9 +110,9 @@ public final class StarCatalogue {
     // A builder of a catalogue of stars
     public static final class Builder {
 
-        private List<Star> starBuild;
-        private List<Asterism> asterismBuild;
-        private List<Constellation> constBuild;
+        private final List<Star> starBuild;
+        private final List<Asterism> asterismBuild;
+        private final List<Constellation> constBuild;
 
         /**
          * StarCatalogue.Builder public constructor initializing the list of stars and asterisms
@@ -159,6 +169,12 @@ public final class StarCatalogue {
             return Collections.unmodifiableList(asterismBuild);
         }
 
+        /**
+         * Public method addConstellation adding a constellation to the list
+         * 
+         * @param constellation (Constellation) : gives the constellation to add to the builder
+         * @return (Builder) : return the builder with the new constellation added
+         */
         public Builder addConstellation(Constellation constellation) {
 
             constBuild.add(constellation);
@@ -166,6 +182,11 @@ public final class StarCatalogue {
             return this;
         }
 
+        /**
+         * Public method constellations returning the list of constellations
+         * 
+         * @return (List<Constellation>) : return the list of constellations 
+         */
         public List<Constellation> constellations() {
             return Collections.unmodifiableList(constBuild);
         }
