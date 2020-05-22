@@ -18,7 +18,6 @@ public final class Star extends CelestialObject {
     private final int starNumber;
     private final float starColorInd;
     private final static ClosedInterval STAR_COLOR_INTERVAL = ClosedInterval.of(-0.5,5.5);
-    private int colorTemperature;
     private final String bayer;
 
     /**
@@ -42,6 +41,11 @@ public final class Star extends CelestialObject {
         this.bayer = bayer;
     }
 
+    /**
+     * Public method bayer returning the bayer string linked to the star
+     * 
+     * @return bayer (String) : the bayer of the star
+     */
     public String bayer(){
         return bayer;
     }
@@ -61,7 +65,6 @@ public final class Star extends CelestialObject {
      * @return colorTemperature (int) : return the temperature of the color of the star in kelvins
      */
     public int colorTemperature() {
-        colorTemperature = (int) Math.floor((4600 * ((1 / (0.92 * starColorInd + 1.7)) + (1 / (0.92 * starColorInd + 0.62)))));
-        return colorTemperature;
+        return (int) Math.floor((4600 * ((1 / (0.92 * starColorInd + 1.7)) + (1 / (0.92 * starColorInd + 0.62)))));
     }
 }
