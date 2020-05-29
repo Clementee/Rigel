@@ -257,7 +257,7 @@ public class Main extends Application {
                 new TextField();
         lonTextField.setTextFormatter(lonTextFormatter);
         lonTextFormatter.valueProperty().bindBidirectional(canvasManager.getObserverLocationBean().lonDegProperty());
-        lonTextField.textProperty().bind(Bindings.format("%.2f", canvasManager.getObserverLocationBean().getLonDeg()));
+        lonTextField.setText(canvasManager.getObserverLocationBean().getLonDeg().toString());
         lonTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
         return lonTextField;
     }
@@ -291,8 +291,7 @@ public class Main extends Application {
         latTextFormatter.valueProperty()
                 .bindBidirectional(canvasManager.getObserverLocationBean().latDegProperty());
         latTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
-        latTextField.textProperty().bind(Bindings.format("%.2f", canvasManager.getObserverLocationBean().getLatDeg()));
-
+        latTextField.setText(canvasManager.getObserverLocationBean().getLatDeg().toString());
         return latTextField;
     }
 
