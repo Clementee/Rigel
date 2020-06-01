@@ -14,6 +14,8 @@ import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Transform;
@@ -284,6 +286,15 @@ public final class SkyCanvasPainter {
         ctx.setLineWidth(2);
         ctx.setStroke(Color.RED);
         ctx.strokeOval(transformedCenter.getX() - radius / 2, transformedCenter.getY() - radius / 2, radius, radius);
+    }
+
+    public void drawElon(){
+        System.out.println("elon is drawing");
+        Image elon = new Image("elon.jpg");
+        ImageView elonView = new ImageView(elon);
+        elonView.setPreserveRatio(true);
+        ctx.drawImage(elon, 0, 0);
+
     }
 
     /**

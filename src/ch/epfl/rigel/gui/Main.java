@@ -2,6 +2,7 @@ package ch.epfl.rigel.gui;
 
 import ch.epfl.rigel.astronomy.AsterismLoader;
 import ch.epfl.rigel.astronomy.HygDatabaseLoader;
+import ch.epfl.rigel.astronomy.PlanetModel;
 import ch.epfl.rigel.astronomy.StarCatalogue;
 import ch.epfl.rigel.bonus.ConstellationLoader;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
@@ -13,15 +14,23 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
 
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalTime;
@@ -50,6 +59,7 @@ public class Main extends Application {
     private final String offString = "\uf070";
 
     private final Font fontAwesome;
+    private Scene mainScene;
 
     /**
      * Public main constructor throwing IOException and charging a font
@@ -70,17 +80,67 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
 
-        stage.setMinWidth(800);
         stage.setMinHeight(600);
+        stage.setMinWidth(800);
 
         Pane skyView = createSkyView();
         HBox controlBar = controlBarCreator();
         Pane informationBar = createInformationBar();
-
         BorderPane mainPane = new BorderPane(skyView, controlBar, null, informationBar, null);
-        stage.setScene(new Scene(mainPane));
+
+//        Media media = new Media(new File("apollo11.mp3").toURI().toString());
+//        MediaPlayer play = new MediaPlayer(media);
+//        play.setAutoPlay(true);
+//        play.setVolume(0.5);
+//
+//        Media land = new Media(new File("armstrong.mp3").toURI().toString());
+//        MediaPlayer landPlay = new MediaPlayer(land);
+
+
+        StackPane stackPane = createHomeScene();
+        Button button = new Button("3, 2, 1, liftoff");
+        button.setStyle("-fx-background-color: transparent");
+        button.setMinSize(350, 200);
+        HBox hbox = new HBox();
+        hbox.getChildren().addAll(button);
+        stackPane.getChildren().add(hbox);
+
+        Scene homeScene = new Scene(stackPane, 1400, 900);
+        mainScene = new Scene(mainPane, 1400, 900);
+
+        stage.setScene(homeScene);
+
+        button.setOnAction(e -> {
+            stage.setScene(mainScene);
+//            play.stop();
+//            landPlay.setAutoPlay(true);
+//            landPlay.setVolume(0.2);
+            skyView.requestFocus();
+            stage.setFullScreen(true);
+        });
+
+        if (stage.getScene() == mainScene /*&& landPlay.getStatus().equals(MediaPlayer.Status.STOPPED)*/) {
+
+        }
+
+        stage.setTitle("Rigel");
         stage.show();
-        skyView.requestFocus();
+    }
+
+
+    private StackPane createHomeScene() {
+
+        Image image = new Image("/rigel.jpg");
+        ImageView views = new ImageView();
+        views.setImage(image);
+        views.setPreserveRatio(false);
+        views.setFitWidth(1400);
+        views.setFitHeight(900);
+
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(views);
+
+        return stackPane;
     }
 
     /**
@@ -129,14 +189,14 @@ public class Main extends Application {
      *
      * @return viewBox (HBox) : return the initialized HBox for the view setter
      */
-    private HBox createViewSetter(){
+    private HBox createViewSetter() {
         Label viewAst = new Label("Asterism :");
         Button buttonAst = createAstButton();
 
         Label viewConstellation = new Label("Constellation :");
         Button buttonConstellation = createConstButton();
 
-        HBox viewBox = new HBox(viewAst, buttonAst, viewConstellation, buttonConstellation );
+        HBox viewBox = new HBox(viewAst, buttonAst, viewConstellation, buttonConstellation);
         viewBox.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
         return viewBox;
     }
@@ -257,7 +317,7 @@ public class Main extends Application {
                 new TextField();
         lonTextField.setTextFormatter(lonTextFormatter);
         lonTextFormatter.valueProperty().bindBidirectional(canvasManager.getObserverLocationBean().lonDegProperty());
-        lonTextField.setText(canvasManager.getObserverLocationBean().getLonDeg().toString());
+        lonTextField.setText(String.format("%.2f", canvasManager.getObserverLocationBean().getLonDeg()));
         lonTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
         return lonTextField;
     }
@@ -291,7 +351,7 @@ public class Main extends Application {
         latTextFormatter.valueProperty()
                 .bindBidirectional(canvasManager.getObserverLocationBean().latDegProperty());
         latTextField.setStyle("-fx-pref-width: 60; -fx-alignment: baseline-right;");
-        latTextField.setText(canvasManager.getObserverLocationBean().getLatDeg().toString());
+        latTextField.setText(String.format("%.2f", canvasManager.getObserverLocationBean().getLatDeg()));
         return latTextField;
     }
 
@@ -305,6 +365,7 @@ public class Main extends Application {
         fovText.textProperty().bind(Bindings.format("Champ de vue : %.1f°", canvasManager.getViewingParametersBean().fieldOfViewDegProperty()));
         Text objectUnderMouseText = new Text();
         objectUnderMouseText.textProperty().bind(canvasManager.objectUnderMouseProperty().asString());
+
         Text azimutText = new Text();
         azimutText.textProperty().bind(Bindings.format("Azimut : %.2f°, hauteur : %.2f°", canvasManager.getMouseAzDegProperty(), canvasManager.getMouseAltDegProperty()));
         BorderPane borderPane = new BorderPane(objectUnderMouseText, null, azimutText, null, fovText);
@@ -360,13 +421,12 @@ public class Main extends Application {
 
     /**
      * Private createAstButton method, used to create the Button for the asterisms
-     *
-     * @return astButton (Button) : return the initialized Button for the asterisms
+     * * @return astButton (Button) : return the initialized Button for the asterisms
      */
-    private Button createAstButton(){
+    private Button createAstButton() {
         Button astButton = new Button(offString);
         astButton.setFont(fontAwesome);
-        astButton.setOnAction((e)-> {
+        astButton.setOnAction((e) -> {
             astButton.setText(astButton.getText().equals(onString) ? offString : onString);
             astButton.disableProperty().bind(canvasManager.getDrawConstellationProperty());
             canvasManager.setDrawAsterism(astButton.getText().equals(onString));
@@ -380,10 +440,10 @@ public class Main extends Application {
      *
      * @return constButton (Button) : return the initialized Button for the constellations
      */
-    private Button createConstButton(){
+    private Button createConstButton() {
         Button constButton = new Button(offString);
         constButton.setFont(fontAwesome);
-        constButton.setOnAction((e)-> {
+        constButton.setOnAction((e) -> {
             constButton.setText(constButton.getText().equals(onString) ? offString : onString);
             constButton.disableProperty().bind(canvasManager.getDrawAsterismProperty());
             canvasManager.setDrawConstellation(constButton.getText().equals(onString));

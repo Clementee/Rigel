@@ -12,8 +12,14 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.transform.Transform;
+
+import javax.imageio.ImageIO;
 
 import static ch.epfl.rigel.coordinates.CartesianCoordinates.point2DToCartesianCoordinates;
 import static ch.epfl.rigel.math.Angle.*;
@@ -47,6 +53,7 @@ public class SkyCanvasManager {
     private Canvas canvas = new Canvas();
     private final SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
     private final ClosedInterval zoomInter = ClosedInterval.of(30, 150);
+    private boolean elon=false;
 
     /**
      * Public SkyCanvasManager constructor initializing many properties and beans
@@ -112,6 +119,20 @@ public class SkyCanvasManager {
         canvas.setOnMousePressed(event -> {
             if (event.isPrimaryButtonDown()) {
                 canvas.requestFocus();
+            }
+            if (event.isSecondaryButtonDown()){
+                if (objectUnderMouse.get() != null) {
+                    if (objectUnderMouse.get().name().equals("Mars")) {
+                        Image elonPic = new Image("elon.jpg");
+                        ImageView elonView = new ImageView();
+                        elonView.setImage(elonPic);
+                        elonView.setPreserveRatio(true);
+                        Scene elonScene = new Scene(new HBox(elonView), 1400, 900);
+                        elon = true;
+                        System.out.println("Elon is coming");
+                        updateCanvas();
+                    }else elon = false;
+                }
             }
         });
 
@@ -276,11 +297,18 @@ public class SkyCanvasManager {
      */
     private void updateCanvas() {
         painter.clear();
-        painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue(), drawAsterism.getValue(), drawConstellation.getValue());
-        painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-        painter.drawSun(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-        painter.drawMoon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-        painter.drawHorizon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+        System.out.println(elon);
+        if (elon){
+            System.out.println(" asking to draw elon");
+            painter.drawElon();
+        }
+         else{
+                painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue(), drawAsterism.getValue(), drawConstellation.getValue());
+                painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+                painter.drawSun(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+                painter.drawMoon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+                painter.drawHorizon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+            }
     }
 
     /**
