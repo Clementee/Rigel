@@ -291,9 +291,7 @@ public final class SkyCanvasPainter {
     public void drawElon(){
         System.out.println("elon is drawing");
         Image elon = new Image("elon.jpg");
-        ImageView elonView = new ImageView(elon);
-        elonView.setPreserveRatio(true);
-        ctx.drawImage(elon, 0, 0);
+        ctx.drawImage(elon, 0, 0, canvas.getWidth(), canvas.getHeight());
 
     }
 

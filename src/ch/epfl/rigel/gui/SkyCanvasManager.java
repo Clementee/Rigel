@@ -53,13 +53,13 @@ public class SkyCanvasManager {
     private Canvas canvas = new Canvas();
     private final SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
     private final ClosedInterval zoomInter = ClosedInterval.of(30, 150);
-    private boolean elon=false;
+    private boolean elon = false;
 
     /**
      * Public SkyCanvasManager constructor initializing many properties and beans
      *
-     * @param starCatalogue (StarCatalogue) : the star catalogue used in the canvas
-     * @param dTimeBean (DateTimeBean) : the date-time bean used
+     * @param starCatalogue   (StarCatalogue) : the star catalogue used in the canvas
+     * @param dTimeBean       (DateTimeBean) : the date-time bean used
      * @param obsLocationBean (ObservationLocationBean) : the observation location bean used
      * @param vParametersBean (ViewingParametersBean) : the viewing parameters bean used
      */
@@ -119,19 +119,22 @@ public class SkyCanvasManager {
         canvas.setOnMousePressed(event -> {
             if (event.isPrimaryButtonDown()) {
                 canvas.requestFocus();
-            }
-            if (event.isSecondaryButtonDown()){
-                if (objectUnderMouse.get() != null) {
-                    if (objectUnderMouse.get().name().equals("Mars")) {
-                        Image elonPic = new Image("elon.jpg");
-                        ImageView elonView = new ImageView();
-                        elonView.setImage(elonPic);
-                        elonView.setPreserveRatio(true);
-                        Scene elonScene = new Scene(new HBox(elonView), 1400, 900);
-                        elon = true;
-                        System.out.println("Elon is coming");
-                        updateCanvas();
-                    }else elon = false;
+                if (!elon) {
+                    if (objectUnderMouse.get() != null) {
+                        if (objectUnderMouse.get().name().equals("Mars")) {
+                            Image elonPic = new Image("elon.jpg");
+                            ImageView elonView = new ImageView();
+                            elonView.setImage(elonPic);
+                            elonView.setPreserveRatio(true);
+                            Scene elonScene = new Scene(new HBox(elonView), 1400, 900);
+                            elon = true;
+                            System.out.println("Elon is coming");
+                            updateCanvas();
+                        }
+                    }
+                } else {
+                    elon = false;
+                    updateCanvas();
                 }
             }
         });
@@ -166,13 +169,13 @@ public class SkyCanvasManager {
 
     /**
      * Public method getObserverlocationBean returning the Observer location bean
-     * 
+     *
      * @return observerLocationBean(ObserverLocationBean) : the observer location bean from the manager
      */
     public ObserverLocationBean getObserverLocationBean() {
         return observerLocationBean;
     }
-    
+
     /**
      * Public method getDateTimeBean returning the DateTimeBean
      *
@@ -202,10 +205,10 @@ public class SkyCanvasManager {
 
     /**
      * Public method getDrawAsterismProperty returning the BooleanProperty of the drawAsterismProperty
-     * 
+     *
      * @return drawAsterism (BooleanProperty) : the boolean property if the asterisms are drawn
      */
-    public BooleanProperty getDrawAsterismProperty(){
+    public BooleanProperty getDrawAsterismProperty() {
         return drawAsterism;
     }
 
@@ -214,7 +217,7 @@ public class SkyCanvasManager {
      *
      * @return (boolean) : the boolean linked to if the asterisms are drawn
      */
-    public boolean getDrawAsterism(){
+    public boolean getDrawAsterism() {
         return drawAsterism.get();
     }
 
@@ -223,7 +226,7 @@ public class SkyCanvasManager {
      *
      * @return drawConstellation (BooleanProperty) : the boolean property if the constellations are drawn
      */
-    public BooleanProperty getDrawConstellationProperty(){
+    public BooleanProperty getDrawConstellationProperty() {
         return drawConstellation;
     }
 
@@ -232,7 +235,7 @@ public class SkyCanvasManager {
      *
      * @return (boolean) : the boolean linked to if the constellations are drawn
      */
-    public boolean getDrawConstellation(){
+    public boolean getDrawConstellation() {
         return drawConstellation.get();
     }
 
@@ -241,7 +244,7 @@ public class SkyCanvasManager {
      *
      * @param status (boolean) : the boolean to set the drawAsterismProperty
      */
-    public void setDrawAsterism(boolean status){
+    public void setDrawAsterism(boolean status) {
         drawAsterism.setValue(status);
         updateCanvas();
     }
@@ -251,14 +254,14 @@ public class SkyCanvasManager {
      *
      * @param status (boolean) : the boolean to set the drawConstellationProperty
      */
-    public void setDrawConstellation(boolean status){
+    public void setDrawConstellation(boolean status) {
         drawConstellation.set(status);
         updateCanvas();
     }
 
     /**
      * Public method returning the objectUnderMouseProperty
-     * 
+     *
      * @return objectUnderMouse (ObjectBinding<CelestialObject>) : return the property of the objectUnderMouse
      */
     public ObjectBinding<CelestialObject> objectUnderMouseProperty() {
@@ -267,7 +270,7 @@ public class SkyCanvasManager {
 
     /**
      * Public method returning the canvas
-     * 
+     *
      * @return canvas (Canvas) : the canvas
      */
     public Canvas canvas() {
@@ -276,8 +279,8 @@ public class SkyCanvasManager {
 
     /**
      * Public method returning the mouseAzDegProperty
-     * 
-     * @return mouseAzDeg (DoubleBinding) : the property of the Azimuth of the mouse 
+     *
+     * @return mouseAzDeg (DoubleBinding) : the property of the Azimuth of the mouse
      */
     public DoubleBinding getMouseAzDegProperty() {
         return mouseAzDeg;
@@ -297,23 +300,21 @@ public class SkyCanvasManager {
      */
     private void updateCanvas() {
         painter.clear();
-        System.out.println(elon);
-        if (elon){
+        if (elon) {
             System.out.println(" asking to draw elon");
             painter.drawElon();
+        } else {
+            painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue(), drawAsterism.getValue(), drawConstellation.getValue());
+            painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+            painter.drawSun(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+            painter.drawMoon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
+            painter.drawHorizon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
         }
-         else{
-                painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue(), drawAsterism.getValue(), drawConstellation.getValue());
-                painter.drawPlanets(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-                painter.drawSun(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-                painter.drawMoon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-                painter.drawHorizon(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue());
-            }
     }
 
     /**
      * Private method used to modify the centerPropertyAzDeg
-     * 
+     *
      * @param valueToAdd (double) : value to add to modify the azimuth of the center property
      */
     private void modifyCenterPropertyAzDeg(double valueToAdd) {
@@ -324,7 +325,7 @@ public class SkyCanvasManager {
 
     /**
      * Private method used to modify the centerPropertyAltDeg
-     * 
+     *
      * @param valueToAdd (double) : value to add to modify the altitude of the center
      */
     private void modifyCenterPropertyAltDeg(double valueToAdd) {
