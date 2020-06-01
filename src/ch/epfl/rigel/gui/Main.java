@@ -88,19 +88,20 @@ public class Main extends Application {
         Pane informationBar = createInformationBar();
         BorderPane mainPane = new BorderPane(skyView, controlBar, null, informationBar, null);
 
-//        Media media = new Media(new File("apollo11.mp3").toURI().toString());
-//        MediaPlayer play = new MediaPlayer(media);
-//        play.setAutoPlay(true);
-//        play.setVolume(0.5);
-//
-//        Media land = new Media(new File("armstrong.mp3").toURI().toString());
-//        MediaPlayer landPlay = new MediaPlayer(land);
+      /*  Media media = new Media(new File("apollo11.mp3").toURI().toString());
+        MediaPlayer play = new MediaPlayer(media);
+        play.setAutoPlay(true);
+        play.setVolume(0.5);
+
+        Media land = new Media(new File("armstrong.mp3").toURI().toString());
+        MediaPlayer landPlay = new MediaPlayer(land);*/
 
 
         StackPane stackPane = createHomeScene();
-        Button button = new Button("3, 2, 1, liftoff");
+
+        Button button = new Button();
         button.setStyle("-fx-background-color: transparent");
-        button.setMinSize(350, 200);
+        button.setMinSize(stage.getMaxWidth(), stage.getMaxHeight());
         HBox hbox = new HBox();
         hbox.getChildren().addAll(button);
         stackPane.getChildren().add(hbox);
@@ -112,15 +113,22 @@ public class Main extends Application {
 
         button.setOnAction(e -> {
             stage.setScene(mainScene);
-//            play.stop();
-//            landPlay.setAutoPlay(true);
-//            landPlay.setVolume(0.2);
+           /* play.stop();
+            landPlay.setAutoPlay(true);
+            landPlay.setVolume(0.2);*/
             skyView.requestFocus();
+            stage.setMinHeight(600);
+            stage.setMinWidth(800);
+            stage.setMaxWidth(4000);
+            stage.setMaxHeight(4000);
             stage.setFullScreen(true);
         });
 
-        if (stage.getScene() == mainScene /*&& landPlay.getStatus().equals(MediaPlayer.Status.STOPPED)*/) {
-
+        if (stage.getScene() == homeScene) {
+            stage.setMinWidth(1400);
+            stage.setMinHeight(900);
+            stage.setMaxHeight(900);
+            stage.setMaxWidth(1400);
         }
 
         stage.setTitle("Rigel");
