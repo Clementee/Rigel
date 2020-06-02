@@ -2,24 +2,21 @@ package ch.epfl.rigel.gui;
 
 import ch.epfl.rigel.astronomy.AsterismLoader;
 import ch.epfl.rigel.astronomy.HygDatabaseLoader;
-import ch.epfl.rigel.astronomy.PlanetModel;
 import ch.epfl.rigel.astronomy.StarCatalogue;
 import ch.epfl.rigel.bonus.ConstellationLoader;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -28,7 +25,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +56,7 @@ public class Main extends Application {
 
     private final Font fontAwesome;
     private Scene mainScene;
+    private Slider volumeSlider;
 
     /**
      * Public main constructor throwing IOException and charging a font
@@ -88,13 +85,12 @@ public class Main extends Application {
         Pane informationBar = createInformationBar();
         BorderPane mainPane = new BorderPane(skyView, controlBar, null, informationBar, null);
 
-      /*  Media media = new Media(new File("apollo11.mp3").toURI().toString());
+        Media media = new Media(new File("apollo11.mp3").toURI().toString());
         MediaPlayer play = new MediaPlayer(media);
         play.setAutoPlay(true);
         play.setVolume(0.5);
-
         Media land = new Media(new File("armstrong.mp3").toURI().toString());
-        MediaPlayer landPlay = new MediaPlayer(land);*/
+        MediaPlayer landPlay = new MediaPlayer(land);
 
 
         StackPane stackPane = createHomeScene();
@@ -111,11 +107,20 @@ public class Main extends Application {
 
         stage.setScene(homeScene);
 
+        volumeSlider.valueProperty().addListener(new InvalidationListener() {
+            public void invalidated(Observable ov) {
+                if (volumeSlider.isValueChanging()) {
+                    landPlay.setVolume(volumeSlider.getValue() / 100.0);
+                }
+            }
+        });
+
+
         button.setOnAction(e -> {
             stage.setScene(mainScene);
-           /* play.stop();
+            play.stop();
             landPlay.setAutoPlay(true);
-            landPlay.setVolume(0.2);*/
+            landPlay.setVolume(0.2);
             skyView.requestFocus();
             stage.setMinHeight(600);
             stage.setMinWidth(800);
@@ -201,10 +206,19 @@ public class Main extends Application {
         Label viewAst = new Label("Asterism :");
         Button buttonAst = createAstButton();
 
+        Label volumeLabel = new Label("Vol : ");
+
+        volumeSlider = new Slider();
+        volumeSlider.setPrefWidth(200);
+        volumeSlider.setMaxWidth(Region.USE_PREF_SIZE);
+        volumeSlider.setMinWidth(40);
+
+
+
         Label viewConstellation = new Label("Constellation :");
         Button buttonConstellation = createConstButton();
 
-        HBox viewBox = new HBox(viewAst, buttonAst, viewConstellation, buttonConstellation);
+        HBox viewBox = new HBox(viewAst, buttonAst, viewConstellation, buttonConstellation, volumeLabel, volumeSlider);
         viewBox.setStyle("-fx-spacing: inherit; -fx-alignment: baseline-left;");
         return viewBox;
     }
