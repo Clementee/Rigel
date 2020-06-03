@@ -17,6 +17,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Transform;
 
@@ -34,7 +35,7 @@ import static ch.epfl.rigel.math.Angle.ofDeg;
  * @author Clement Sanh (311427)
  */
 public final class SkyCanvasPainter {
-
+    private final static ClosedInterval fontInterval = ClosedInterval.of(15, 30);
     private final Canvas canvas;
     private final GraphicsContext ctx;
 
@@ -98,11 +99,13 @@ public final class SkyCanvasPainter {
                 ctx.setFill(CONSTELLATION_COLOR);
                 ctx.setTextAlign(TextAlignment.CENTER);
                 ctx.setTextBaseline(VPos.TOP);
+                ctx.setFont(Font.font(Font.getDefault().toString(), (int) fontInterval.clip(constellation.asterism().stars().size()*2)));
 
+                int moyenne  = (int) (constellation.asterism().stars().size()/2.0);
                 for (int i = 0; i < starFromConstellation.size(); i++) {
                     Point2D begTransformed = createTransformedPoint(transform, starFromConstellation, starPosition, observedSky,i);
 
-                    if (i == 0 && !constellationNameAlreadyUsed.contains(constellation.getConstellationName())) {
+                    if (i == moyenne && !constellationNameAlreadyUsed.contains(constellation.getConstellationName())) {
                         ctx.fillText(constellation.getConstellationName(), begTransformed.getX(), begTransformed.getY());
                         constellationNameAlreadyUsed.add(constellation.getConstellationName());
                     }
@@ -122,7 +125,7 @@ public final class SkyCanvasPainter {
             double y = starPosition[i + 1];
 
             Point2D point = transform.transform(x, y);
-
+            ctx.setFont(Font.font(Font.getDefault().toString(),15));
             if (starDiameter > 4) {
                 ctx.setTextAlign(TextAlignment.CENTER);
                 ctx.setTextBaseline(VPos.TOP);
@@ -288,8 +291,10 @@ public final class SkyCanvasPainter {
         ctx.strokeOval(transformedCenter.getX() - radius / 2, transformedCenter.getY() - radius / 2, radius, radius);
     }
 
+    /**
+     * SkyCanvasPainter public method used to draw the picture of Elon Musk
+     */
     public void drawElon(){
-        System.out.println("elon is drawing");
         Image elon = new Image("elon.jpg");
         ctx.drawImage(elon, 0, 0, canvas.getWidth(), canvas.getHeight());
 

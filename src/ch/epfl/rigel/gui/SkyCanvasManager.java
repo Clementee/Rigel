@@ -6,6 +6,7 @@ import ch.epfl.rigel.astronomy.StarCatalogue;
 import ch.epfl.rigel.coordinates.CartesianCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import ch.epfl.rigel.coordinates.StereographicProjection;
+import ch.epfl.rigel.math.Angle;
 import ch.epfl.rigel.math.ClosedInterval;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -21,9 +22,12 @@ import javafx.scene.transform.Transform;
 
 import javax.imageio.ImageIO;
 
+import java.awt.event.MouseEvent;
+
 import static ch.epfl.rigel.coordinates.CartesianCoordinates.point2DToCartesianCoordinates;
 import static ch.epfl.rigel.math.Angle.*;
 import static java.lang.Math.abs;
+import static java.lang.Math.getExponent;
 
 /**
  * A sky canvas manager
@@ -54,6 +58,9 @@ public class SkyCanvasManager {
     private final SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
     private final ClosedInterval zoomInter = ClosedInterval.of(30, 150);
     private boolean elon = false;
+    private boolean hasStartedDrag = false;
+    private DoubleProperty dragStartX = new SimpleDoubleProperty(0);
+    private DoubleProperty dragStartY = new SimpleDoubleProperty(0);
 
     /**
      * Public SkyCanvasManager constructor initializing many properties and beans
@@ -117,6 +124,8 @@ public class SkyCanvasManager {
         mouseAltDeg = Bindings.createDoubleBinding(() -> mouseHorizontalPosition.get().altDeg(), mouseHorizontalPosition);
 
         canvas.setOnMousePressed(event -> {
+            dragStartX.set(event.getX());
+            dragStartY.set(event.getY());
             if (event.isPrimaryButtonDown()) {
                 canvas.requestFocus();
                 if (!elon) {
@@ -128,7 +137,6 @@ public class SkyCanvasManager {
                             elonView.setPreserveRatio(true);
                             Scene elonScene = new Scene(new HBox(elonView), 1400, 900);
                             elon = true;
-                            System.out.println("Elon is coming");
                             updateCanvas();
                         }
                     }
@@ -138,6 +146,14 @@ public class SkyCanvasManager {
                 }
             }
         });
+
+        canvas.setOnMouseDragged(mouse -> {
+            double k = 0.075;
+            if (mouse.isPrimaryButtonDown())
+                modifyCenterProperty(k*(mouse.getX()-dragStartX.get()), k*(dragStartY.get()-mouse.getY()));
+
+        });
+
 
         canvas.setOnKeyPressed(event -> {
             canvas.requestFocus();
@@ -301,7 +317,6 @@ public class SkyCanvasManager {
     private void updateCanvas() {
         painter.clear();
         if (elon) {
-            System.out.println(" asking to draw elon");
             painter.drawElon();
         } else {
             painter.drawStars(observedSky.getValue(), projection.getValue(), planeToCanvas.getValue(), drawAsterism.getValue(), drawConstellation.getValue());
@@ -330,6 +345,12 @@ public class SkyCanvasManager {
      */
     private void modifyCenterPropertyAltDeg(double valueToAdd) {
         double newValue = viewingParametersBean.getCenter().altDeg() + valueToAdd;
-        viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(), ClosedInterval.of(5, 90).clip(newValue)));
+        viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(), ClosedInterval.of(-90, 90).clip(newValue)));
+    }
+
+    private void modifyCenterProperty(double modX, double modY) {
+        double newX = viewingParametersBean.getCenter().alt() + modX;
+        double newY = viewingParametersBean.getCenter().az() + modY;
+        viewingParametersBean.setCenter(HorizontalCoordinates.of(Angle.normalizePositive(Angle.ofDeg(newX)), Angle.ofDeg(ClosedInterval.of(-90,90).clip(newY))));
     }
 }

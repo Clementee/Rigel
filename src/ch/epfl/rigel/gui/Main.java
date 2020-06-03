@@ -214,7 +214,6 @@ public class Main extends Application {
         volumeSlider.setMinWidth(40);
 
 
-
         Label viewConstellation = new Label("Constellation :");
         Button buttonConstellation = createConstButton();
 
