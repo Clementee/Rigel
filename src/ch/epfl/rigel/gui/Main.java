@@ -7,8 +7,6 @@ import ch.epfl.rigel.bonus.ConstellationLoader;
 import ch.epfl.rigel.coordinates.GeographicCoordinates;
 import ch.epfl.rigel.coordinates.HorizontalCoordinates;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
@@ -70,7 +68,7 @@ public class Main extends Application {
     }
 
     /**
-     * Public method start charging the stage and setting the different panes together on the stage
+     * Public method start charging the stage and setting the different panes together on the stage with sounds
      *
      * @param stage (Stage) : the stage we are initializing with the panes
      */
@@ -107,11 +105,9 @@ public class Main extends Application {
 
         stage.setScene(homeScene);
 
-        volumeSlider.valueProperty().addListener(new InvalidationListener() {
-            public void invalidated(Observable ov) {
-                if (volumeSlider.isValueChanging()) {
-                    landPlay.setVolume(volumeSlider.getValue() / 100.0);
-                }
+        volumeSlider.valueProperty().addListener(ov -> {
+            if (volumeSlider.isValueChanging()) {
+                landPlay.setVolume(volumeSlider.getValue() / 100.0);
             }
         });
 
@@ -140,7 +136,11 @@ public class Main extends Application {
         stage.show();
     }
 
-
+    /**
+     * Public method createHomeScene creating the pane for the home Scene
+     *
+     * @return stackPane (StackPane) : returning the pane for the home scene
+     */
     private StackPane createHomeScene() {
 
         Image image = new Image("/rigel.jpg");
