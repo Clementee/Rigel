@@ -20,14 +20,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.transform.Transform;
 
-import javax.imageio.ImageIO;
-
-import java.awt.event.MouseEvent;
 
 import static ch.epfl.rigel.coordinates.CartesianCoordinates.point2DToCartesianCoordinates;
 import static ch.epfl.rigel.math.Angle.*;
 import static java.lang.Math.abs;
-import static java.lang.Math.getExponent;
 
 /**
  * A sky canvas manager
@@ -58,7 +54,7 @@ public class SkyCanvasManager {
     private final SkyCanvasPainter painter = new SkyCanvasPainter(canvas);
     private final ClosedInterval zoomInter = ClosedInterval.of(30, 150);
     private boolean elon = false;
-    private boolean hasStartedDrag = false;
+    private final boolean hasStartedDrag = false;
     private DoubleProperty dragStartX = new SimpleDoubleProperty(0);
     private DoubleProperty dragStartY = new SimpleDoubleProperty(0);
 
@@ -147,6 +143,7 @@ public class SkyCanvasManager {
             }
         });
 
+        //Using the mouse drag to modify the center of the canvas
         canvas.setOnMouseDragged(mouse -> {
             double k = 0.075;
             if (mouse.isPrimaryButtonDown())
@@ -348,6 +345,12 @@ public class SkyCanvasManager {
         viewingParametersBean.setCenter(HorizontalCoordinates.ofDeg(viewingParametersBean.getCenter().azDeg(), ClosedInterval.of(-90, 90).clip(newValue)));
     }
 
+    /**
+     * Private method used to modify the Center Property
+     *
+     * @param modX (double) : modify the x center coordinate of the double value
+     * @param modY (double) : modify the y center coordinate of the double value
+     */
     private void modifyCenterProperty(double modX, double modY) {
         double newX = viewingParametersBean.getCenter().alt() + modX;
         double newY = viewingParametersBean.getCenter().az() + modY;
