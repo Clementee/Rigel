@@ -12,10 +12,24 @@ import java.util.*;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
+/**
+ * A constellation loader
+ *
+ * @author Baptiste Lecoeur (316223)
+ * @author Clement Sanh (311427)
+ */
 public enum ConstellationLoader implements StarCatalogue.Loader {
-
+    
+    //An instance of constellation loader
     INSTANCE;
 
+    /**
+     * Public method load, loading the constellations into the starCatalogue builder
+     *
+     * @param inputStream (inputStream) : gives the input we want to load into the builder
+     * @param builder     (builder) : gives the builder we want to load with the input given
+     * @throws IOException : throws exception
+     */
     @Override
     public void load(InputStream inputStream, StarCatalogue.Builder builder) throws IOException {
 
