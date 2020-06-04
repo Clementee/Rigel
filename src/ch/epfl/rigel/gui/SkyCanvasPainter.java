@@ -15,15 +15,12 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Transform;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import static ch.epfl.rigel.math.Angle.ofDeg;
@@ -139,7 +136,7 @@ public final class SkyCanvasPainter {
 
     /**
      * Private method used to draw the different lines
-     * 
+     *
      * @param observedSky (ObservedSky) : the observed sky used to paint the canvas
      * @param transform (Transform) : the transformation used to draw the canvas
      * @param bound (Bounds) : the bounds for the lines
@@ -343,6 +340,17 @@ public final class SkyCanvasPainter {
         ctx.fillOval(x - d / 2, y - d / 2, d, d);
     }
 
+    /**
+     * Private method createTransformedPoint transforming the point entered
+     *
+     * @param transform (Transform) : the transformation we use
+     * @param starFromConstellation (List<Star>) : the list of stars from the constellation
+     * @param starPosition (double[]) : the array of positions of the stars
+     * @param observedSky (ObservedSky) : the sky observed
+     * @param i (int) : the position of in the constellation of the star we study
+     *          
+     * @return (Point2D) : the transformed point
+     */
     private Point2D createTransformedPoint(Transform transform, List<Star> starFromConstellation, double[] starPosition, ObservedSky observedSky, int i) {
         Star star = starFromConstellation.get(i);
         double x1 = starPosition[2 * (observedSky.stars().indexOf(star))];
