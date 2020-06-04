@@ -55,8 +55,8 @@ public class SkyCanvasManager {
     private final ClosedInterval zoomInter = ClosedInterval.of(30, 150);
     private boolean elon = false;
     private final boolean hasStartedDrag = false;
-    private DoubleProperty dragStartX = new SimpleDoubleProperty(0);
-    private DoubleProperty dragStartY = new SimpleDoubleProperty(0);
+    private final DoubleProperty dragStartX = new SimpleDoubleProperty(0);
+    private final DoubleProperty dragStartY = new SimpleDoubleProperty(0);
 
     /**
      * Public SkyCanvasManager constructor initializing many properties and beans
@@ -80,9 +80,7 @@ public class SkyCanvasManager {
                 dateTimeBean.dateProperty(), dateTimeBean.zoneProperty(), dateTimeBean.timeProperty(), projection, observerLocationBean.coordinatesProperty()
         );
 
-        observedSky.addListener((e, i, o) -> {
-            updateCanvas();
-        });
+        observedSky.addListener((e, i, o) -> updateCanvas());
 
         canvas = canvas();
 
