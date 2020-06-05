@@ -232,8 +232,13 @@ public class ObservedSky {
      */
     public Optional<CelestialObject> objectClosestTo(CartesianCoordinates coordinates, double distance) {
 
-        MapComparator comp = new MapComparator(celestialObjectMap, coordinates);
-        CelestialObject selectedObject = Collections.min(celestialObjectMap.keySet(), comp);
+        CelestialObject selectedObject = Collections.min(celestialObjectMap.keySet(), new Comparator<CelestialObject>() {
+            @Override
+            public int compare(CelestialObject o1, CelestialObject o2) {
+                return (distance(celestialObjectMap.get(o1), coordinates) < distance(celestialObjectMap.get(o2), coordinates)) ? -1 : (distance(celestialObjectMap.get(o1), coordinates) == distance(celestialObjectMap.get(o2), coordinates)) ? 1 : 0;
+            }
+        });
+
 
         if (celestialObjectMap.containsKey(selectedObject) && (distance(celestialObjectMap.get(selectedObject), coordinates)) <= distance) {
 
@@ -242,8 +247,8 @@ public class ObservedSky {
 
             return Optional.empty();
         }
-    }
 
+    }
     /**
      * ObservedSky private method returning the distance between two coordinates entered in parameters
      *
@@ -254,44 +259,5 @@ public class ObservedSky {
     private static double distance(CartesianCoordinates o1, CartesianCoordinates o2) {
 
         return Math.hypot(o1.x() - o2.x(), o1.y() - o2.y());
-    }
-
-    /*
-     * Private class MapComparator which role is to compare two maps
-     */
-    private static class MapComparator implements Comparator {
-
-        private CartesianCoordinates pointer;
-
-        private Map<CelestialObject, CartesianCoordinates> map;
-
-        /**
-         * MapComparator private constructor initializing some values
-         *
-         * @param map     (Map<CelestialObject, CartesianCoordinates>) : gives the map of celestial objects linked with their coordinates
-         * @param pointer (CartesianCoordinates) : gives the cartesian coordinates of the position from which we observe the sky
-         */
-        private MapComparator(Map<CelestialObject, CartesianCoordinates> map, CartesianCoordinates pointer) {
-
-            this.map = map;
-            this.pointer = pointer;
-        }
-
-        /**
-         * MapComparator public method comparing the distance between two objects and returning a positive value if the distance with the first object is bigger than the other one
-         *
-         * @param o1 (Object) : gives the first object we want to compare
-         * @param o2 (Object) : gives the second object we want to compare
-         * @return (int) : either a positive or a negative value depending on which one of the two objects is closer from the observer
-         */
-        @Override
-        public int compare(Object o1, Object o2) {
-
-            if (distance(map.get(o1), pointer) >= distance(map.get(o2), pointer)) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
     }
 }
